@@ -1,2 +1,2 @@
 # BananaKnights
-Projektet är gjort av Markus, Olle och Khalid
+Projektet är gjort av Khalid, Markus och Olle.
