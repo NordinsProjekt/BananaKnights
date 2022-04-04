@@ -1,0 +1,17 @@
+table {
+    border-collapse: collapse;
+    min-width: 400px;
+    max-width: 800px;
+}
+th {
+    text-align: left;
+}
+.RowHighlight:hover{
+background-color: lightgreen;
+}
+.marked {
+    background-color: green;
+}
+input[type="checkbox"]:checked +.RowHighlight{
+    background-color: green;
+}

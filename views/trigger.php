@@ -1,0 +1,3 @@
+<?php
+    //Fil för knapptryckningar
+?>
