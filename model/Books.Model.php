@@ -8,7 +8,7 @@ class BooksModel extends PDOHandler
     }
     public function GetAll()
     {
-        $stmt = $this->Connect()->prepare("SELECT * FROM tabelnamn");
+        $stmt = $this->Connect()->prepare("SELECT * FROM books");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }

@@ -13,9 +13,15 @@ class BooksController
     {
         
     }
-    function Speak()
+    function Create()
     {
-        echo "hej";
+        require_once "views/books.php";
+        require_once "views/default.php";
+        $page = "";
+        $page .= StartPage("Skapa ny Bok");
+        $page .= CreateNewBook();
+        $page .= EndPage();
+        echo $page;
     }
 
     private function CheckUserInputs($notsafeText)
