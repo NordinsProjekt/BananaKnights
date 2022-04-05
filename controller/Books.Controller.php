@@ -13,6 +13,7 @@ class BooksController
     {
         
     }
+
     function Create()
     {
         require_once "views/books.php";
@@ -22,6 +23,20 @@ class BooksController
         $page .= CreateNewBook();
         $page .= EndPage();
         echo $page;
+    }
+
+    function ShowAll()
+    {
+        $arr = $this->db->GetAll();
+
+        require_once "views/books.php";
+        require_once "views/default.php";
+        $page = "";
+        $page .= StartPage("Skapa ny Bok");
+        $page .= ShowAllBooks($arr);
+        $page .= EndPage();
+        echo $page;
+
     }
 
     private function CheckUserInputs($notsafeText)
