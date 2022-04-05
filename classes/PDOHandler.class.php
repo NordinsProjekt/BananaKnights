@@ -2,7 +2,7 @@
 
 abstract class PDOHandler
 {
-    private $database = "intro";
+    private $database = "bananaknights";
     private $host =  "localhost";
     private $userName = "root";
     private $password = "";

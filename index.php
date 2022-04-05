@@ -9,7 +9,10 @@ if (key_exists('url',$_GET))
 {
     switch(strtolower($_GET['url']))
     {
-        case "test":
+        case "books":
+            require_once "controller/Books.Controller.php";
+            $controller = new BooksController();
+            $controller->Speak();
             break;
         default:
         break;
