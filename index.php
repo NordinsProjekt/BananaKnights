@@ -12,8 +12,18 @@ if (key_exists('url',$_GET))
         case "books/showall":
             require_once "controller/Books.Controller.php";
             $controller = new BooksController();
-            $controller->ShowAll();
+            $controller->ShowAllBooks();
             break;
+        case "books/show";
+        if (key_exists('id',$_GET))
+        {
+            require_once "controller/Books.Controller.php";
+            $controller = new BooksController();
+            $controller->ShowBook($_GET['id']);
+        }
+        else
+        {}
+        break;
         default:
         break;
     }

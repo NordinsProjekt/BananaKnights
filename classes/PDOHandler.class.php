@@ -8,7 +8,7 @@ abstract class PDOHandler
     private $password = "";
     private $charset = "utf8mb4";
 
-    abstract protected function GetAll();
+    //abstract protected function GetAll();
 
     function __destruct()
     {

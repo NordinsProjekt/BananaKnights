@@ -6,6 +6,16 @@ function CreateNewBook()
     $text = "<p>Här lägger vi ett formulär för att skapa en bok</p>";
     return $text;
 }
+
+function ShowBook($book)
+{
+    $text = "<h1>Visa enskild bok</h1>";
+    foreach ($book as $key => $value) {
+        $text .= "<p>".$key.": ".$value."</p>";
+    }
+    return $text;
+}
+
 function ShowAllBooks($arr)
 {
     $text = "<h1>Visa alla böcker</h1>";

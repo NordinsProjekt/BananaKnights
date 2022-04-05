@@ -25,18 +25,58 @@ class BooksController
         echo $page;
     }
 
-    function ShowAll()
+    function ShowBook($id)
     {
-        $arr = $this->db->GetAll();
+        $safetext = $this->CheckUserInputs($id);
+        $result = $this->db->GetBook($id);
+        if ($result)
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= ShowBook($result);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Boken finns inte");
+        }
 
-        require_once "views/books.php";
+    }
+
+    function ShowAllBooks()
+    {
+        if ($arr = $this->db->GetAllBooks())
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= ShowAllBooks($arr);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Fel vid inläsning");
+            $page .= "<h1>FEL</h1><p>Kunde inte hämta Alla Böcker</p>";
+            $page .= EndPage();
+        }
+
+    }
+
+    public function ShowError($errorText)
+    {
         require_once "views/default.php";
         $page = "";
-        $page .= StartPage("Skapa ny Bok");
-        $page .= ShowAllBooks($arr);
+        $page .= StartPage("Fel vid inläsning");
+        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
         $page .= EndPage();
         echo $page;
-
     }
 
     private function CheckUserInputs($notsafeText)
