@@ -26,6 +26,23 @@ function CreateNewBook($arrGenre,$arrAuthor)
     return $text;
 }
 
+function CreateNewGenre()
+{
+        //Skapa Genre formulär
+
+        //Inte editerad ännu
+        $text = "<h1>Skapa ny genre</h1>";
+        $text .= "<form method='post' action='savegenre'>";
+        $text .= "<table><tr><th></th><th></th></tr>";
+        $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
+                  <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30'></textarea></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' id='txtBookPicture' name='BookPicture' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveBook' value='Spara' /></td> </tr>";
+        $text .= "</table></form>";
+        return $text;
+}
 function ShowBook($book)
 {
     $text = "<h1>Visa enskild bok</h1>";

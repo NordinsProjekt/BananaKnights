@@ -42,6 +42,16 @@ if (key_exists('url',$_GET))
             $controller = new BooksController();
             $controller->SaveBook($fakeSession);
             break;
+        case "books/delete":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Books.Controller.php";
+                $controller = new BooksController();
+                $controller->DeleteBook($_GET['id']);
+            }
+            else
+            {}
+            break;
         default:
         break;
     }

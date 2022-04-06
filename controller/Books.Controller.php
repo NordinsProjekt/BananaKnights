@@ -16,6 +16,7 @@ class BooksController
 
     function Create()
     {
+        //TODO Kontrollera behörighet
         require_once "views/books.php";
         require_once "views/default.php";
         $arrGenre = array (
@@ -52,7 +53,18 @@ class BooksController
             $this->ShowError("Boken finns inte");
         }
     }
-
+    function DeleteBook($bookId)
+    {
+        //TODO kontrollera behörighet
+        if($this->db->HideBook($bookId))
+        {
+            echo "Boken är nu borta";
+        }
+        else
+        {
+            $this->ShowError("Boken kunde inte tas bort");
+        }
+    }
     function ShowAllBooks()
     {
         if ($arr = $this->db->GetAllBooks())
@@ -173,7 +185,7 @@ class BooksController
     private function CheckUserInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
-      $safe = str_replace($banlist,"",$notsafeText);
+      $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
 
