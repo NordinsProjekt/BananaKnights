@@ -9,7 +9,7 @@ function CreateNewBook($arrGenre,$arrAuthor)
     $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
     $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
     foreach ($arrAuthor as $key => $value) {
-        $text.= "<option value='1'>".$value."</option>";
+        $text.= "<option value=''>".$value."</option>";
     }    
     $text .= "</select></td> </tr>";
     $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre'>";
@@ -46,8 +46,8 @@ function ShowAllBooks($arr)
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form><input type='submit' name='visaBok' value='Visa' />
-        <input type='hidden' name='bok' value='" .$row['Id'] . " />'</form></td>";
+        $text.= "<td><form method='get' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        </form></td>";
         $text.= "</tr>";
     }
     return $text;

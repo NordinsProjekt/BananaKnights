@@ -42,7 +42,7 @@ class BooksModel extends PDOHandler
         $stmt = $this->Connect()->prepare("INSERT INTO books (UserId,Title,Description,ISBN,ImagePath,IsDeleted,Created)
         VALUES (?,?,?,?,?,?,?);");
         $stmt->execute($arr);
-        return $this->db->lastInsertedId();
+        return $this->Connect()->lastInsertId("Id");
     }
 
     public function UpdateBook($arr)

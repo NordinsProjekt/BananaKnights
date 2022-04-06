@@ -26,6 +26,7 @@ class BooksController
         );
         $page = "";
         $page .= StartPage("Skapa ny Bok");
+        $page .= NavigationPage();
         $page .= CreateNewBook($arrGenre,$arrAuthor);
         $page .= EndPage();
         echo $page;
@@ -41,6 +42,7 @@ class BooksController
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
             $page .= ShowBook($result);
             $page .= EndPage();
             echo $page;
@@ -59,6 +61,7 @@ class BooksController
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
             $page .= ShowAllBooks($arr);
             $page .= EndPage();
             echo $page;
@@ -68,6 +71,7 @@ class BooksController
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Fel vid inläsning");
+            $page .= NavigationPage();
             $page .= "<h1>FEL</h1><p>Kunde inte hämta Alla Böcker</p>";
             $page .= EndPage();
         }
@@ -78,6 +82,7 @@ class BooksController
         require_once "views/default.php";
         $page = "";
         $page .= StartPage("Fel vid inläsning");
+        $page .= NavigationPage();
         $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
         $page .= EndPage();
         echo $page;
@@ -100,10 +105,9 @@ class BooksController
             $result = $this->db->SetBook($arr);
             if (is_numeric($result))
             {
+                echo $result;
                 //sen sätt in genre och författare i sina tabeller
             }
-            
-            
         }
         else
         {
