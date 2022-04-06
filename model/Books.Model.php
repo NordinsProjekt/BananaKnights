@@ -42,7 +42,25 @@ class BooksModel extends PDOHandler
         $stmt = $this->Connect()->prepare("INSERT INTO books (UserId,Title,Description,ISBN,ImagePath,IsDeleted,Created)
         VALUES (?,?,?,?,?,?,?);");
         $stmt->execute($arr);
-        return $this->Connect()->lastInsertId("Id");
+        $stmt = $this->Connect()->prepare("SELECT Id FROM books WHERE ISBN = :isbn AND Title = :title;");
+        $stmt->bindParam(":isbn", $arr[3]);
+        $stmt->bindParam(":title",$arr[1]);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+    public function AddAuthorToBook($arr)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO bookauthors (BookId,AuthorId) 
+        VALUES (?,?);");
+        $stmt->execute($arr);
+        return $stmt->fetch();
+    }
+    public function AddGenreToBook($arr)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO genrebooks (GenreId,BookId) 
+        VALUES (?,?);");
+        $stmt->execute($arr);
+        return $stmt->fetch();
     }
 
     public function UpdateBook($arr)

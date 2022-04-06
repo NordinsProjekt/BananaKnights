@@ -97,22 +97,58 @@ class BooksController
             $session['UserID'],$_POST['BookTitle'],$_POST['BookDescription'],
             $_POST['BookISBN'],"img/".$_POST['BookISBN'],"0",date("Y-m-d H:i:s")
         );
+        
         $cleanArr = $this->ScrubSaveBookArr($arr);
         //Om arrayen inte innehåller något som är tomt
         if(!$this->CheckIfNullOrEmptyArr($cleanArr))
         {
             //result = lastID
             $result = $this->db->SetBook($arr);
-            if (is_numeric($result))
+            if ($this->AddAuthorToBook($result['Id'],$_POST['BookAuthor']))
             {
-                echo $result;
-                //sen sätt in genre och författare i sina tabeller
+                if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
+                {
+                    echo "Boken lades till";
+                }
+                else
+                {
+                    $this->ShowError("Fel i Skapa Bok formuläret Lägga till genre");
+                    //Annars radera boken
+                }
+            }
+            else
+            {
+                $this->ShowError("Fel i Skapa Bok formuläret lägga till author");
+                //Annars radera boken
             }
         }
         else
         {
             $this->ShowError("Fel i Skapa Bok formuläret validering av data");
         }
+    }
+    private function AddGenreToBook($bookId,$genreId)
+    {
+        $arr = array($genreId,$bookId);
+        $cleanArr = $this->ScrubSaveBookArr($arr);
+        if (!$this->CheckIfNullOrEmptyArr($cleanArr))
+        {
+            $this->db->AddGenreToBook($cleanArr);
+            return true;
+        }
+        return false;
+    }
+
+    private function AddAuthorToBook($bookId,$authorId)
+    {
+        $arr = array($bookId,$authorId);
+        $cleanArr = $this->ScrubSaveBookArr($arr);
+        if (!$this->CheckIfNullOrEmptyArr($cleanArr))
+        {
+            $this->db->AddAuthorToBook($cleanArr);
+            return true;
+        }
+        return false;
     }
 
     private function ScrubSaveBookArr($arr)
