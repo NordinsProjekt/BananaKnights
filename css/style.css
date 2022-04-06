@@ -12,3 +12,7 @@ input[type="checkbox"]:checked +.RowHighlight{
     background-color: green;
 }
 
+/* BOOKS CSS*/
+#txtBookDescription {
+    resize: none;
+}
