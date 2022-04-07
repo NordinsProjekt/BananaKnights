@@ -26,7 +26,22 @@ if (key_exists('url',$_GET))
         else
         {}
         break;
+        case "authors/showall":
+            require_once "controller/Authors.Controller.php"; 
+            $controller = new AuthorsController();
+            $controller->ShowAllAuthors();
+            break;
         default:
+        break;
+        case "authors/show";
+        if (key_exists('id',$_GET))
+        {
+            require_once "controller/Authors.Controller.php";
+            $controller = new AuthorsController();
+        $controller->ShowAuthor($_GET['id']);
+        }
+        else
+        {}
         break;
     }
 }
