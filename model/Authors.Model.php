@@ -28,6 +28,15 @@ class AuthorsModel extends PDOHandler
         return $stmt->fetch();
     }
 
+    public function InsertAuthor($inputArr)
+    {
+        $stmt = $this->Connect()->prepare(
+            "INSERT INTO authors (Firstname, Lastname, Country, Created, Born, Death)
+            VALUES (?,?,?,?,?,?)
+            ");
+        $stmt->execute($inputArr);
+    }
+
 
 
 

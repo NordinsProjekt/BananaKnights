@@ -53,6 +53,38 @@ class AuthorsController
         }
     }
 
+    function NewAuthor()
+    {
+        require_once "views/authors.php";
+        require_once "views/default.php";
+        $page = "";
+        $page .= StartPage("Skapa ny Författare");
+        $page .= AddNewAuthor();
+        $page .= EndPage();
+        echo $page;
+    }
+
+    function AddAuthor($session)
+    {
+        $inputArr = array (
+            $_POST['Fname'],$_POST['Lname'],
+            $_POST['Country'], date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
+        );
+
+        //saknas validering
+
+        $result = $this->db->InsertAuthor($inputArr);
+        if (!$result)
+        {
+            echo "Författaren lades till";
+        }
+        else
+        {
+            $this->ShowError("Något gick snett i formuläret!");
+        }
+        
+    }
+
 
 
         public function ShowError($errorText)
