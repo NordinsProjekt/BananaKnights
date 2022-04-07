@@ -27,6 +27,7 @@ if (key_exists('url',$_GET))
                 $controller = new BooksController();
                 $controller->ShowBook($_GET['id']);
             }
+            //hej
             else
             {}
             break;
