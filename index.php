@@ -62,9 +62,24 @@ if (key_exists('url',$_GET))
             require_once "controller/Books.Controller.php";
             $controller = new BooksController();
             $controller->SaveGenre($fakeSession);
-            break;
-        default:
         break;
+        case "authors/showall":
+            require_once "controller/Authors.Controller.php"; 
+            $controller = new AuthorsController();
+            $controller->ShowAllAuthors();
+            break;   
+        case "authors/show";
+        if (key_exists('id',$_GET))
+        {
+            require_once "controller/Authors.Controller.php";
+            $controller = new AuthorsController();
+        $controller->ShowAuthor($_GET['id']);
+        }
+        else
+        {}
+        break;
+        default:
+          break;
     }
 }
 else
