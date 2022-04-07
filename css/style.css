@@ -16,6 +16,10 @@ input[type="checkbox"]:checked +.RowHighlight{
 #txtBookDescription {
     resize: none;
 }
+#txtGenreDescription {
+    resize: none;
+}
+
 a {
     padding: 10px;
 }

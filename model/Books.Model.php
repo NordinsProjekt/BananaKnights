@@ -82,5 +82,13 @@ class BooksModel extends PDOHandler
         $stmt->execute($arr);
         return true;
     }
+    public function DeleteGenre($genreId)
+    {
+        //Delete eller hide, det är frågan
+        $stmt = $this->Connect()->prepare("DELETE FROM genres WHERE Id = :id;");
+        $stmt->bindParam(":id",$genreId);
+        $stmt->execute();
+        return true;
+    }
 }
 ?>

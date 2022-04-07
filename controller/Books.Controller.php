@@ -168,7 +168,12 @@ class BooksController
         {
             $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
         }
+    }
+    public function DeleteGenre($id)
+    {
+        $cleanId = $this->CheckUserInputs($id);
         
+        $this->db->DeleteGenre($id);
     }
 
     private function AddGenreToBook($bookId,$genreId)
