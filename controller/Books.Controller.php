@@ -14,7 +14,7 @@ class BooksController
         
     }
 
-    function Create()
+    function CreateBook()
     {
         //TODO Kontrollera behörighet
         require_once "views/books.php";
@@ -29,6 +29,18 @@ class BooksController
         $page .= StartPage("Skapa ny Bok");
         $page .= NavigationPage();
         $page .= CreateNewBook($arrGenre,$arrAuthor);
+        $page .= EndPage();
+        echo $page;
+    }
+    function CreateGenre()
+    {
+        //TODO Kontrollera behörighet
+        require_once "views/books.php";
+        require_once "views/default.php";
+        $page = "";
+        $page .= StartPage("Skapa ny Genre");
+        $page .= NavigationPage();
+        $page .= CreateNewGenre();
         $page .= EndPage();
         echo $page;
     }
@@ -139,6 +151,26 @@ class BooksController
             $this->ShowError("Fel i Skapa Bok formuläret validering av data");
         }
     }
+    function SaveGenre($session)
+    {
+        //Behöver validering endast admin ska kunna detta
+        //(Name,Description,Created)
+        $arr = array(
+            $_POST['BookGenre'],$_POST['GenreDescription'],date("Y-m-d H:i:s")
+        );
+        $cleanArr = $this->ScrubSaveBookArr($arr);
+        if (!$this->CheckIfNullOrEmptyArr($cleanArr))
+        {
+            $this->db->SetGenre($arr);
+            echo "Genre lades till";
+        }
+        else
+        {
+            $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+        }
+        
+    }
+
     private function AddGenreToBook($bookId,$genreId)
     {
         $arr = array($genreId,$bookId);

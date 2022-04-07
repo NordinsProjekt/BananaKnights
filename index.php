@@ -29,12 +29,12 @@ if (key_exists('url',$_GET))
             }
             else
             {}
-        break;
+            break;
 
-        case "books/create":
+        case "books/createbook":
             require_once "controller/Books.Controller.php";
             $controller = new BooksController();
-            $controller->Create();
+            $controller->CreateBook();
             break;
         //Hit kommer man från SparaBok formuläret
         case "books/savebook":
@@ -42,6 +42,7 @@ if (key_exists('url',$_GET))
             $controller = new BooksController();
             $controller->SaveBook($fakeSession);
             break;
+        //Borde vara POST inte GET
         case "books/delete":
             if (key_exists('id',$_GET))
             {
@@ -51,6 +52,16 @@ if (key_exists('url',$_GET))
             }
             else
             {}
+            break;
+        case "books/creategenre":
+            require_once "controller/Books.Controller.php";
+            $controller = new BooksController();
+            $controller->CreateGenre();
+            break;
+        case "books/savegenre":
+            require_once "controller/Books.Controller.php";
+            $controller = new BooksController();
+            $controller->SaveGenre($fakeSession);
             break;
         default:
         break;

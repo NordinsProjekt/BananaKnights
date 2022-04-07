@@ -29,17 +29,13 @@ function CreateNewBook($arrGenre,$arrAuthor)
 function CreateNewGenre()
 {
         //Skapa Genre formulär
-
-        //Inte editerad ännu
         $text = "<h1>Skapa ny genre</h1>";
         $text .= "<form method='post' action='savegenre'>";
         $text .= "<table><tr><th></th><th></th></tr>";
-        $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
-        $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
-                  <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30'></textarea></td> </tr>";
-        $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN' /></td> </tr>";
-        $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' id='txtBookPicture' name='BookPicture' /></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveBook' value='Spara' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' name='BookGenre' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
+                  <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30'></textarea></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveGenre' value='Spara' /></td> </tr>";
         $text .= "</table></form>";
         return $text;
 }

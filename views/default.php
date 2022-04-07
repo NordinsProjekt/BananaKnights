@@ -31,7 +31,8 @@ function NavigationPage()
 {
     $text = "";
     $text .= "<header><a href='showall'>Visa alla böcker</a>";
-    $text .= "<a href='create'>Skapa ny bok</a>";
+    $text .= "<a href='createbook'>Skapa ny bok</a>";
+    $text .= "<a href='creategenre'>Skapa ny genre</a>";
     $text .= "</header>";
     return $text;
 }
