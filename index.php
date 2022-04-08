@@ -27,6 +27,7 @@ if (key_exists('url',$_GET))
                 $controller = new BooksController();
                 $controller->ShowBook($_GET['id']);
             }
+            //hej
             else
             {}
             break;
@@ -63,6 +64,28 @@ if (key_exists('url',$_GET))
             $controller = new BooksController();
             $controller->SaveGenre($fakeSession);
         break;
+        //Visar registreringsformuläret
+        case "user/create":
+            require_once "controller/User.Controller.php";
+            $controller = new UserController();
+            $controller->CreateUser();
+            break;
+        //Sparar användaren från formuläret
+        case "user/saveuser":
+            require_once "controller/User.Controller.php";
+            $controller = new UserController();
+            $controller->SaveUser();
+            break;
+        case "user/loginpage":
+            require_once "controller/User.Controller.php";
+            $controller = new UserController();
+            $controller->LoginPage();
+            break;
+        case "user/loginuser":
+            require_once "controller/User.Controller.php";
+            $controller = new UserController();
+            $controller->Login();
+            break;
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 
             $controller = new AuthorsController();
