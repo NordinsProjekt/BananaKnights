@@ -19,12 +19,10 @@ class BooksController
         //TODO Kontrollera behörighet
         require_once "views/books.php";
         require_once "views/default.php";
-        $arrGenre = array (
-            "Skräck", "Fantasy"
-        );
-        $arrAuthor = array (
-            "H.P Lovecraft", "JK Rowling"
-        );
+        require_once "model/Authors.Model.php";
+        $arrGenre = $this->db->GetAllGenres();
+        $authorTable = new AuthorsModel();
+        $arrAuthor = $authorTable->GetAllAuthors();
         $page = "";
         $page .= StartPage("Skapa ny Bok");
         $page .= NavigationPage();
@@ -118,7 +116,7 @@ class BooksController
         //Har inte med validering för varje specifik fält
         //Om $_POST saknar info så visa felmeddelande direkt
         $arr = array (
-            $session['UserID'],$_POST['BookTitle'],$_POST['BookDescription'],
+            $session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],$_POST['BookDescription'],
             $_POST['BookISBN'],"img/".$_POST['BookISBN'],"0",date("Y-m-d H:i:s")
         );
         
@@ -172,7 +170,6 @@ class BooksController
     public function DeleteGenre($id)
     {
         $cleanId = $this->CheckUserInputs($id);
-        
         $this->db->DeleteGenre($id);
     }
 

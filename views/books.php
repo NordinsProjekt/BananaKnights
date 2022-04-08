@@ -9,14 +9,15 @@ function CreateNewBook($arrGenre,$arrAuthor)
     $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
     $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
     foreach ($arrAuthor as $key => $value) {
-        $text.= "<option value='1'>".$value."</option>";
+        $text.= "<option value='".$value['Id']."'>".$value['Firstname']." ".$value['Lastname']."</option>";
     }    
     $text .= "</select></td> </tr>";
     $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre'>";
     foreach ($arrGenre as $key => $value) {
-        $text.= "<option value='1'>".$value."</option>";
+        $text.= "<option value='" . $value['Id'] . "'>".$value['Name']."</option>";
     }    
     $text .= "</select></td> </tr>";
+    $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' id='pubYear' name='BookYear' /></td>";
     $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
               <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30'></textarea></td> </tr>";
     $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN' /></td> </tr>";
@@ -51,10 +52,11 @@ function ShowBook($book)
 function ShowAllBooks($arr)
 {
     $text = "<h1>Visa alla böcker</h1>";
-    $text .= "<table><tr> <th>Titel</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th></tr>";
+    $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th></tr>";
     foreach ($arr as $key => $row) {
         $text.= "<tr>";
         $text.= "<td>".$row['Title']."</td>";
+        $text.= "<td>".$row['PublicationYear']."</td>";
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
