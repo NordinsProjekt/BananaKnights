@@ -30,16 +30,50 @@ class UserController
 
     public function SaveUser()
     {
+        if ($_POST['Password'] != $_POST['ConfirmPassword'])
+        {
+            $this->ShowError("Lösenord stämmer inte");
+            exit();
+        }
+        if (count($_POST['Password']) <=7)
+        {
+            $this->ShowError("Lösenord måste ha minst 8 tecken");
+            exit();
+        }
+        
         $hashpassword = password_hash($_POST['Password'], PASSWORD_DEFAULT);
         $user = new User($_POST['Email'],0,$hashpassword,
         NULL,0,0,NULL,0,0,$_POST['Username']);
         if ($user->Validated())
         {
             $result = $this->db->SetUser($user->ToArray());
+            if ($result)
+            {
+                echo "Användaren lades till";
+            }
+            else
+            {
+                $this->ShowError("Avändaren kunde inte läggas till");
+                exit();
+            }
             
         }
+        else
+        {
+            $this->ShowError("Validering av UserForm misslyckades");
+            exit();
+        }
     }
-
+    private function ShowError($errorText)
+    {
+        require_once "views/default.php";
+        $page = "";
+        $page .= StartPage("Fel vid inläsning");
+        $page .= NavigationPage();
+        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
+        $page .= EndPage();
+        echo $page;
+    }
     public function LoginPage()
     {
         require_once "views/users.php";

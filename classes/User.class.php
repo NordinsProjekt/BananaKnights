@@ -11,7 +11,7 @@ class User
     private $lockoutEnabled;
     private $accessFailedCount;
     private $username;
-    private $validate = true;
+    private $validated = true;
 
     public function __construct($email, $emailConfirmed,$passwordHash,$phoneNumber,$phoneNumberConfirmed,
     $twoFactorEnabled,$lockoutEndDateUtc,$lockoutEnabled,$accessFailedCount,$username)

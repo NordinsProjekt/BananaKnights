@@ -20,10 +20,15 @@ class UserModel extends PDOHandler
 
     public function SetUser($arr)
     {
-        $stmt = $this->Connect()->prepare("INSERT INTO users () 
+        $stmt = $this->Connect()->prepare("INSERT INTO users (Email,EmailConfirmed,PasswordHash,PhoneNumber,PhoneNumberConfirmed,
+        TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName) 
         VALUES (?,?,?,?,?,?,?,?,?,?);");
         $result = $stmt->execute($arr);
         return $result;
+    }
+    public function SetUserGroup($userId,$userGroup)
+    {
+        
     }
 }
 ?>
