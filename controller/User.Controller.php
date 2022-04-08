@@ -3,7 +3,7 @@ require_once "model/User.Model.php";
 require_once "classes/User.class.php";
 class UserController
 {
-    private $db,$user;
+    private $db;
 
     function __construct()
     {
@@ -30,9 +30,14 @@ class UserController
 
     public function SaveUser()
     {
-        var_dump($_POST);
-        $this->user = new User();
         $hashpassword = password_hash($_POST['Password'], PASSWORD_DEFAULT);
+        $user = new User($_POST['Email'],0,$hashpassword,
+        NULL,0,0,NULL,0,0,$_POST['Username']);
+        if ($user->Validated())
+        {
+            $result = $this->db->SetUser($user->ToArray());
+            
+        }
     }
 
     public function LoginPage()
@@ -50,7 +55,7 @@ class UserController
     public function Login()
     {
         var_dump($_POST);
-        
+
 
     }
 

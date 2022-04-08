@@ -20,6 +20,7 @@ function SignUpForm($message)
     $text .= "<tr> <td></td><td><input type='submit' id='btnRegisterUser 'name='RegisterUser' value='Registrera konto' /></td></tr>";
     return $text;
 }
+
 function LoginForm($message)
 {
     $text ="<h1>Logga in</h1>";

@@ -12,9 +12,18 @@ class UserModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
     public function GetUser($arr)
     {
         $stmt = $this->Connect()->prepare("SELECT * FROM users");
+    }
+
+    public function SetUser($arr)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO users () 
+        VALUES (?,?,?,?,?,?,?,?,?,?);");
+        $result = $stmt->execute($arr);
+        return $result;
     }
 }
 ?>
