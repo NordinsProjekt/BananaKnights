@@ -29,6 +29,27 @@ function ShowAuthor($author)
 }
 
 
+function AddNewAuthor()
+{
+        //Skapa Bok formuläret
+        $text = "<h1>Skapa ny författare</h1>";
+        $text .= "<form method='post' action='addauthor'>";
+        $text .= "<table>";
+
+        $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' id='firstname' name='Fname' /></td> </tr>";  
+        $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' id='lastname' name='Lname' /></td> </tr>"; 
+        $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' id='country' name='Country' /></td> </tr>"; 
+        $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' id='born' name='Born' /></td> </tr>"; 
+        $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' id='death' name='Death' /></td> </tr>"; 
+
+        // behöver lägga till bild table i db
+        //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='addauthor' value='add' /></td> </tr>";
+        $text .= "</table></form>";
+        return $text;
+}
+
+
 
 
 

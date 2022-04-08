@@ -78,12 +78,24 @@ if (key_exists('url',$_GET))
         else
         {}
         break;
+        case "author/newauthor":
+            require_once "controller/Authors.Controller.php";
+            $controller = new AuthorsController();
+            $controller->NewAuthor();
+            break;
+
+        case "author/addauthor":
+            require_once "controller/Authors.Controller.php";
+            $controller = new AuthorsController();
+            $controller->AddAuthor($fakeSession);
+            break;
         default:
           break;
     }
 }
 else
 {
+    echo "<h1>Detta är startsidan</h1>";
     exit();
 }
 ?>
