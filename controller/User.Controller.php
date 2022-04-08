@@ -51,6 +51,7 @@ class UserController
     {
         var_dump($_POST);
         
+
     }
 
     public function Logout()
