@@ -5,7 +5,6 @@ require_once "classes/User.class.php";
 class UserController
 {
     private $db;
-    public $prefix = "/bananaknights/";
     function __construct()
     {
         $this->db = new UserModel();
@@ -18,7 +17,6 @@ class UserController
 
     public function CreateUser()
     {
-        //TODO Kontrollera behörighet
         require_once "views/users.php";
         require_once "views/default.php";
         $page = "";
@@ -31,6 +29,8 @@ class UserController
 
     public function SaveUser()
     {
+        global $prefix;
+        //Olika kontroller innan försök att skapa användaren.
         if ($_POST['Password'] != $_POST['ConfirmPassword'])
         {
             $this->ShowError("Lösenord stämmer inte");
@@ -48,23 +48,27 @@ class UserController
             exit();
         }
 
+        //Hashar lösenordet
         $hashpassword = password_hash($_POST['Password'], PASSWORD_DEFAULT);
+        //Skapar ett user objekt för att kontrollera inmatningsdatan
         $user = new User($_POST['Email'],0,$hashpassword,
         NULL,0,0,NULL,0,0,$_POST['Username']);
+        //Validering
         if ($user->Validated())
         {
             $result = $this->db->SetUser($user->ToArray());
-            if ($result)
+            if ($result) //Om användaren skapades
             {
                 $groupId = $this->db->GetUserGroupID("User");
-                
                 $userId = $this->db->GetUserID($user->getUsername(),$user->getPasswordHash());
+                //Hämtar information för att lägga användaren i en usergroup.
                 if (isset($groupId['Id']) && isset($userId['Id']))
                 {
                     $result = $this->db->SetUserGroup($groupId['Id'],$userId['Id']);
                     if ($result)
                     {
-                        header("Location: ". $this->prefix ."user/loginpage");
+                        //Skickar användaren till inloggningssidan
+                        header("Location: ". $prefix ."user/loginpage");
                     }
                     else
                     {
@@ -93,7 +97,7 @@ class UserController
         }
     }
 
-    private function ShowError($errorText)
+    private function ShowError($errorText) //Sida som visar fel
     {
         require_once "views/default.php";
         $page = "";
@@ -104,11 +108,11 @@ class UserController
         echo $page;
     }
 
-    private function ShowSuccess($message)
+    private function ShowSuccess($message) //Sida som visas när något går bra.
     {
         require_once "views/default.php";
         $page = "";
-        $page .= StartPage("Fel vid inläsning");
+        $page .= StartPage("Main");
         $page .= NavigationPage();
         $page .= "<h1>Lyckades</h1><p>" . $message . "</p>";
         $page .= EndPage();
@@ -127,10 +131,8 @@ class UserController
         echo $page;
     }
 
-    public function Login()
+    public function Login() //Logga in användaren
     {
-        //Validering, kolla om användare är inloggad.
-
         $row = $this->db->GetUserFromUsername($this->ScrubInputs($_POST['Username']));
         if (isset($row['Id']))
         {
@@ -164,8 +166,9 @@ class UserController
     }
     public function Logout()
     {
+        global $prefix;
         session_destroy();
-        $this->ShowSuccess("Du loggades ut");
+        header("Location:".$prefix);
     }
 
     private function ScrubInputs($notsafeText)

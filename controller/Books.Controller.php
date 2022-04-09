@@ -43,9 +43,9 @@ class BooksController
         echo $page;
     }
 
-    function ShowBook($id)
+    function ShowBook()
     {
-        $safetext = $this->ScrubInputs($id);
+        $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
         if ($result)
         {
@@ -62,11 +62,12 @@ class BooksController
         {
             $this->ShowError("Boken finns inte");
         }
-    }
-    function DeleteBook($bookId)
+    }      
+
+    function DeleteBook()
     {
         //TODO kontrollera behörighet
-        $safetext = $this->ScrubInputs($bookId);
+        $safetext = $this->ScrubInputs($_POST['id']);
         if($this->db->HideBook($safetext))
         {
             echo "Boken är nu borta";
@@ -76,6 +77,7 @@ class BooksController
             $this->ShowError("Boken kunde inte tas bort");
         }
     }
+
     function ShowAllBooks()
     {
         if ($arr = $this->db->GetAllBooks())

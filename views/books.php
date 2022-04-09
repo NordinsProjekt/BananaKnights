@@ -60,7 +60,7 @@ function ShowAllBooks($arr)
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form method='get' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
         $text.= "</tr>";
     }
