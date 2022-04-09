@@ -1,5 +1,6 @@
 <?php
 session_start();
+$prefix = "/bananaknights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
@@ -85,6 +86,11 @@ if (key_exists('url',$_GET))
             require_once "controller/User.Controller.php";
             $controller = new UserController();
             $controller->Login();
+            break;
+        case "user/logoutuser":
+            require_once "controller/User.Controller.php";
+            $controller = new UserController();
+            $controller->Logout();
             break;
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 

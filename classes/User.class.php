@@ -131,6 +131,15 @@ class User
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    public function getPasswordHash()
+    {
+        return $this->passwordHash;
+    }
 
     public function Validated()
     {
