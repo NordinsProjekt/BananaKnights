@@ -134,7 +134,7 @@ class UserController
         $row = $this->db->GetUserFromUsername($this->ScrubInputs($_POST['Username']));
         if (isset($row['Id']))
         {
-             if (password_verify($this->ScrubInputs($_POST['Password']), $row['PasswordHash']))
+             if (password_verify($_POST['Password'], $row['PasswordHash']))
              {
                 //Användaren har loggat in.
                 $_SESSION['is_logged_in'] = TRUE;
