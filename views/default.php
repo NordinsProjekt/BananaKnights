@@ -36,4 +36,13 @@ function NavigationPage()
     $text .= "</header>";
     return $text;
 }
+
+function ReviewNavigation()
+{
+    $text = "<div>";
+    $text .= "<a href='newreview'>Skriv en recension</a>";
+    $text .= "<a href='readreviews'>Visa alla recensioner</a>";
+    $text .= "<div>";
+    return $text;
+}
 ?>

@@ -106,12 +106,25 @@ if (key_exists('url',$_GET))
             $controller = new AuthorsController();
             $controller->NewAuthor();
             break;
-
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
             $controller->AddAuthor($fakeSession);
             break;
+
+        case "review/newreview":
+            require_once "controller/Reviews.Controller.php";
+            $controller = new ReviewsController();
+            $controller->NewReview();
+            break;
+        case "review/addreview":
+            require_once "controller/Reviews.Controller.php";
+            require_once "controller/Books.Controller.php";
+            $controller = new ReviewsController();
+            $controller->AddReview(/*$_GET['id']*/1, $fakeSession);
+            break;
+
+
         default:
           break;
     }
