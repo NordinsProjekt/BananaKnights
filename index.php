@@ -127,13 +127,13 @@ function UserRoute($action)
         case "saveuser": //Spara CreateUserForm
             $controller->SaveUser();
         case "loginpage":
-            $controller->LoginPage();
+            $controller->LoginPage(); //Visar loginformuläret
             break;
         case "loginuser":
-            $controller->Login();
+            $controller->Login(); //kontrollerar loginformulär
             break;
         case "logoutuser":
-            $controller->Logout();
+            $controller->Logout(); //Loggar ut och förstör session
             break;
     }
     exit();

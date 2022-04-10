@@ -29,7 +29,6 @@ class UserController
 
     public function SaveUser()
     {
-        global $prefix;
         //Olika kontroller innan försök att skapa användaren.
         if ($_POST['Password'] != $_POST['ConfirmPassword'])
         {
@@ -68,7 +67,7 @@ class UserController
                     if ($result)
                     {
                         //Skickar användaren till inloggningssidan
-                        header("Location: ". $prefix ."user/loginpage");
+                        header("Location: ". prefix ."user/loginpage");
                     }
                     else
                     {
@@ -166,9 +165,8 @@ class UserController
     }
     public function Logout()
     {
-        global $prefix;
         session_destroy();
-        header("Location:".$prefix);
+        header("Location:".prefix);
     }
 
     private function ScrubInputs($notsafeText)
