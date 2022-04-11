@@ -1,6 +1,6 @@
 <?php
 session_start();
-const prefix = "/bananaknights/";
+const prefix = "/BananaKnights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
@@ -80,8 +80,6 @@ if (key_exists('url',$_GET))
             $controller = new ReviewsController();
             $controller->AddReview(/*$_GET['id']*/1, $fakeSession);
             break;
-
-
         default:
           break;
     }

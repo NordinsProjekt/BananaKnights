@@ -1,28 +1,27 @@
 <?php
 class UploadController
 {
-    function AddImage($folderPath)
+    function AddImage($folderPath,$uploadedFile)
     {
         //Bygger sökvägen
-        $target_dir = $folderPath;
-        $this->CreateFolder($target_dir);
-        $file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+        $this->CreateFolder($folderPath);
+        $file = $folderPath ."/" . basename($uploadedFile["name"]);
         //Kontroller för att se om filen är ok.
-        if(!$this->CheckFileExists($file))
+        if($this->CheckFileExists($file))
         {
-            if(!$this->CheckFileSize($file))
+            if($this->CheckFileSize($file))
             {
-                if(!$this->CheckFileFormat($file))
+                if($this->CheckFileFormat($file))
                 {
-                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $file))
+                    if (move_uploaded_file($uploadedFile["tmp_name"], $file))
                     {
                         $_SESSION['Message'] = "File". $file . "has been uploaded";
-                        unset($_FILES['fileToUpload']);
+                        return true;
                     }
                     else
                     {
                         $_SESSION['Message'] = "Unknown error, could not upload";
-                        unset($_FILES['fileToUpload']);
+                        return false;
                     }
                 }
                 else
@@ -40,12 +39,16 @@ class UploadController
             $_SESSION['Message'] = "Filen finns redan, ".$file;
 
         }
+        return false;
     }
 
     private function CreateFolder($folder)
     {
+        echo "inne i createfolder";
+        var_dump($folder);
         if (!file_exists($folder)) 
         { 
+            echo "nu skapar vi katalogen";
             mkdir($folder, 0777, true); 
         }
     }
@@ -55,13 +58,15 @@ class UploadController
         {
             return false;
         }
+        return true;
     }
 
     private function CheckFileSize()
     {
-        if ($_FILES["fileToUpload"]["size"] > 2000000) {
+        if ($_FILES["BookPicture"]["size"] > 2000000) {
             return false;
         }
+        return true;
     }
 
     private function CheckFileFormat($file)
@@ -71,6 +76,7 @@ class UploadController
         {
           return false;
         }
+        return true;
     }
 
     function DeleteProductImage($folderPath, $file){ //tabort produktbild

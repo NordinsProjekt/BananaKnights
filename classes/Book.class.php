@@ -110,7 +110,10 @@ class Book
     {
         return $this->validated;
     }
-
+    public function getISBN()
+    {
+        return $this->bookISBN;
+    }
     public function ToArray()
     {
         $arr = array (
