@@ -78,41 +78,5 @@ class UploadController
         }
         return true;
     }
-
-    function DeleteProductImage($folderPath, $file){ //tabort produktbild
-
-        $imgpath = $folderPath.'/'.$file;
-
-        //kollar om Filen existerar
-        if(!$this->CheckFileExists($file))
-        {
-            //tar bort bilden
-            if(unlink($imgpath)){
-                $_SESSION['message'] =  $imgpath." DELETED";
-            } else {
-                $_SESSION['message'] =  "Gick inte att ta bort".$imgpath;
-            }
-
-        }        
-    }
-
-    function ListProductIDimagePaths($productID){ //returnerar alla sökvägar för en produkts bilder
-        
-        $dir = 'img/products/' .$productID;
-
-        //kollar om directory:t existerar
-        if (file_exists($dir)) {
-            $imagePaths = scandir($dir);
-            
-            //tvättar arrayen
-            unset($imagePaths[0]);
-            unset($imagePaths[1]);
-            
-            return  $imagePaths;    
-        } 
-        else {
-            return (bool)0;
-        }
-    }
 }
 ?>
