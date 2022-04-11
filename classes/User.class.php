@@ -39,8 +39,8 @@ class User
 
     private function setEmail($email)
     {
-        $this->email = $this->ScrubInputs($email);
-        if (empty($this->email) || $this->email == "") 
+        $this->email = filter_var($email, FILTER_SANITIZE_EMAIL);
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL))  
         {
             $this->validated = false;
         }

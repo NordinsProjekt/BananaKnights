@@ -1,6 +1,6 @@
 <?php
 session_start();
-$prefix = "/bananaknights/";
+const prefix = "/bananaknights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
@@ -15,7 +15,6 @@ if (key_exists('url',$_GET))
     $url = explode("/",$_GET['url']);
     switch(strtolower($url[0]))
     {
-        //Route books/showall
         case "books":
             if (count($url) == 2)
             {
@@ -35,6 +34,9 @@ if (key_exists('url',$_GET))
             {
                 UserRoute("");
             }
+            break;
+        case "admin":
+            AdminRoute("");
             break;
     }
 
@@ -64,6 +66,7 @@ if (key_exists('url',$_GET))
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
+            echo "inne i authors";
             $controller->AddAuthor($fakeSession);
             break;
         default:
@@ -134,6 +137,18 @@ function UserRoute($action)
             break;
         case "logoutuser":
             $controller->Logout(); //Loggar ut och förstör session
+            break;
+    }
+    exit();
+}
+function AdminRoute($action)
+{
+    require_once "controller/Admin.Controller.php";
+    $controller = new AdminController();
+    switch ($action)
+    {
+        case "":
+            $controller->Show();
             break;
     }
     exit();

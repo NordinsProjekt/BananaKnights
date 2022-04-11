@@ -29,20 +29,20 @@ function EndPage()
 }
 function NavigationPage()
 {
-    global $prefix;
     $text = "";
-    $text .= "<header><a href='".$prefix."books/showall'>Visa alla böcker</a>";
-    $text .= "<a href='".$prefix."books/createbook'>Skapa ny bok</a>";
-    $text .= "<a href='".$prefix."books/creategenre'>Skapa ny genre</a>";
-    $text .= "<a href='".$prefix."user/create'>Skapa användare</a>";
+    $text .= "<header><a href='".prefix."books/showall'>Visa alla böcker</a>";
+    //$text .= "<a href='".$prefix."books/createbook'>Skapa ny bok</a>";
+    //$text .= "<a href='".$prefix."books/creategenre'>Skapa ny genre</a>";
+    $text .= "<a href='".prefix."user/create'>Skapa användare</a>";
     if (isset($_SESSION['is_logged_in']))
     {
-        $text .= "<a href='".$prefix."user/logoutuser'>Logga ut</a>";
+        $text .= "<a href='".prefix."user/logoutuser'>Logga ut</a>";
     }
     else
     {
-        $text .= "<a href='".$prefix."user/loginpage'>Logga in</a>";
+        $text .= "<a href='".prefix."user/loginpage'>Logga in</a>";
     }
+    $text .= "<a href='".prefix."admin'>Adminsidan</a>";
     $text .= "</header>";
     return $text;
 }

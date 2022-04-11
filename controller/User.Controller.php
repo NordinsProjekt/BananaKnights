@@ -35,11 +35,14 @@ class UserController
             $this->ShowError("Lösenord stämmer inte");
             exit();
         }
+
         if (strlen($_POST['Password']) <=7)
         {
             $this->ShowError("Lösenord måste ha minst 8 tecken");
             exit();
         }
+
+        //Lösa detta med en databas kontroll.
         $result = $this->db->DoesUserExist($_POST['Username']);
         if ($result['NumberOfUsers'] != 0)
         {
@@ -47,6 +50,12 @@ class UserController
             exit();
         }
 
+        $result = $this->db->DoesUserExist($_POST['Email']);
+        if ($result['NumberOfUsers'] != 0)
+        {
+            $this->ShowError("Email är redan registrerad");
+            exit();
+        }
         //Hashar lösenordet
         $hashpassword = password_hash($_POST['Password'], PASSWORD_DEFAULT);
         //Skapar ett user objekt för att kontrollera inmatningsdatan
@@ -148,15 +157,12 @@ class UserController
              {
                  //Användarnman stämmer men inte lösenord
                  $this->ShowError("Lösenordet är fel");
-                 var_dump($_POST);
              }
         }
         else
         {
             //Användarnamn stämmer inte.
             $this->ShowError("Användarnman stämmer inte.");
-            var_dump($row);
-            var_dump($_POST);
         }         
     }
     private function ShowMainPage()

@@ -33,9 +33,8 @@ function AddNewAuthor()
 {
         //Skapa Bok formuläret
         $text = "<h1>Skapa ny författare</h1>";
-        $text .= "<form method='post' action='addauthor'>";
+        $text .= "<form method='post' action='".prefix."author/addauthor'>";
         $text .= "<table>";
-
         $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' id='firstname' name='Fname' /></td> </tr>";  
         $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' id='lastname' name='Lname' /></td> </tr>"; 
         $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' id='country' name='Country' /></td> </tr>"; 

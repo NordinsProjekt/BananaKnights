@@ -70,7 +70,6 @@ class AuthorsController
             $_POST['Fname'],$_POST['Lname'],
             $_POST['Country'], date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
         );
-
         //saknas validering
 
         $result = $this->db->InsertAuthor($inputArr);
