@@ -40,6 +40,12 @@ function CreateNewGenre()
         $text .= "</table></form>";
         return $text;
 }
+
+function DeleteGenre()
+{
+
+}
+
 function ShowBook($book)
 {
     $text = "<h1>Visa enskild bok</h1>";
@@ -51,6 +57,7 @@ function ShowBook($book)
 
 function ShowAllBooks($arr)
 {
+    global $prefix;
     $text = "<h1>Visa alla böcker</h1>";
     $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th></tr>";
     foreach ($arr as $key => $row) {
@@ -60,8 +67,31 @@ function ShowAllBooks($arr)
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form method='get' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
+        $text.= "</tr>";
+    }
+    return $text;
+}
+function ShowAllBooksAdmin($arr)
+{
+    $text = "<h1>Visa alla böcker</h1>";
+    $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> 
+    <th>Författare</th> <th>Visa</th> <th>Ändra</th> <th>Radera</th> </tr>";
+    foreach ($arr as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['Title']."</td>";
+        $text.= "<td>".$row['PublicationYear']."</td>";
+        $text.= "<td>".$row['Description']."</td>";
+        $text.= "<td>".$row['GenreName']."</td>";
+        $text.= "<td>".$row['AuthorName']."</td>";
+        $text.= "<td><form method='post' action='". prefix ."books/show'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
+        </form></td>";
+        $text.= "<td><form method='post' action='".prefix."books/edit'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
+        </form></td>";
+        $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
+        </form></td>";
+
         $text.= "</tr>";
     }
     return $text;

@@ -43,10 +43,10 @@ class BooksController
         echo $page;
     }
 
-    function ShowBook($id)
+    function ShowBook()
     {
-        $safetext = $this->CheckUserInputs($id);
-        $result = $this->db->GetBook($id);
+        $safetext = $this->ScrubInputs($_POST['id']);
+        $result = $this->db->GetBook($safetext);
         if ($result)
         {
             require_once "views/books.php";
@@ -62,11 +62,13 @@ class BooksController
         {
             $this->ShowError("Boken finns inte");
         }
-    }
-    function DeleteBook($bookId)
+    }      
+
+    function DeleteBook()
     {
         //TODO kontrollera behörighet
-        if($this->db->HideBook($bookId))
+        $safetext = $this->ScrubInputs($_POST['id']);
+        if($this->db->HideBook($safetext))
         {
             echo "Boken är nu borta";
         }
@@ -75,6 +77,7 @@ class BooksController
             $this->ShowError("Boken kunde inte tas bort");
         }
     }
+
     function ShowAllBooks()
     {
         if ($arr = $this->db->GetAllBooks())
@@ -112,20 +115,16 @@ class BooksController
 
     public function SaveBook($session)
     {
+        require_once "classes/Book.class.php";
+        $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
+        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'],"0",date("Y-m-d H:i:s"));
         //TODO:
-        //Har inte med validering för varje specifik fält
-        //Om $_POST saknar info så visa felmeddelande direkt
-        $arr = array (
-            $session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],$_POST['BookDescription'],
-            $_POST['BookISBN'],"img/".$_POST['BookISBN'],"0",date("Y-m-d H:i:s")
-        );
-        
-        $cleanArr = $this->ScrubSaveBookArr($arr);
-        //Om arrayen inte innehåller något som är tomt
-        if(!$this->CheckIfNullOrEmptyArr($cleanArr))
+        //Om $_POST saknar info så visa felmeddelande direkt AJAX
+        //Om arrayen inte innehåller något som är tomt eller felaktig data
+        if($book->Validated())
         {
             //result = lastID
-            $result = $this->db->SetBook($arr);
+            $result = $this->db->SetBook($book->ToArray());
             if ($this->AddAuthorToBook($result['Id'],$_POST['BookAuthor']))
             {
                 if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
@@ -149,15 +148,21 @@ class BooksController
             $this->ShowError("Fel i Skapa Bok formuläret validering av data");
         }
     }
+    private function ValidateSaveGenre($arr)
+    {
+        if (empty($arr['BookGenre']) || $arr['BookGenre'] == "") {return false;}
+        if (empty($arr['GenreDescription']) || $arr['GenreDescription'] == "") {return false;}
+        return true;
+    }
     function SaveGenre($session)
     {
         //Behöver validering endast admin ska kunna detta
-        //(Name,Description,Created)
         $arr = array(
-            $_POST['BookGenre'],$_POST['GenreDescription'],date("Y-m-d H:i:s")
+            "BookGenre"=>$this->ScrubInputs($_POST['BookGenre']),
+            "GenreDescription"=>$this->ScrubInputs($_POST['GenreDescription']),
+            date("Y-m-d H:i:s")
         );
-        $cleanArr = $this->ScrubSaveBookArr($arr);
-        if (!$this->CheckIfNullOrEmptyArr($cleanArr))
+        if ($this->ValidateSaveGenre($arr))
         {
             $this->db->SetGenre($arr);
             echo "Genre lades till";
@@ -169,8 +174,12 @@ class BooksController
     }
     public function DeleteGenre($id)
     {
-        $cleanId = $this->CheckUserInputs($id);
-        $this->db->DeleteGenre($id);
+        $cleanId = $this->ScrubInputs($id);
+        $result = $this->db->DeleteGenre($cleanId);
+        if ($result)
+        {
+            
+        }
     }
 
     private function AddGenreToBook($bookId,$genreId)
@@ -201,10 +210,11 @@ class BooksController
     {
         $cleanArr = array();
         for ($i=0; $i < count($arr); $i++) { 
-            $cleanArr[] = $this->CheckUserInputs($arr[$i]);
+            $cleanArr[] = $this->ScrubInputs($arr[$i]);
         }
         return $cleanArr;
     }
+
     private function CheckIfNullOrEmptyArr($arr)
     {
         for ($i=0; $i < count($arr); $i++) { 
@@ -216,7 +226,7 @@ class BooksController
         return false;
     }
 
-    private function CheckUserInputs($notsafeText)
+    private function ScrubInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));

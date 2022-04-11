@@ -1,5 +1,6 @@
 <?php
 session_start();
+const prefix = "/bananaknights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
@@ -11,81 +12,36 @@ $fakeSession = array (
 //var_dump($_GET);
 if (key_exists('url',$_GET))
 {
-    switch(strtolower($_GET['url']))
+    $url = explode("/",$_GET['url']);
+    switch(strtolower($url[0]))
     {
-        //Route books/showall
-        case "books/showall":
-            require_once "controller/Books.Controller.php";
-            $controller = new BooksController();
-            $controller->ShowAllBooks();
-            break;
-        //Route books/show?id=1
-        case "books/show";
-            if (key_exists('id',$_GET))
+        case "books":
+            if (count($url) == 2)
             {
-                require_once "controller/Books.Controller.php";
-                $controller = new BooksController();
-                $controller->ShowBook($_GET['id']);
+                BooksRoute($url[1]);
             }
-            //hej
             else
-            {}
+            {
+                BooksRoute("");
+            }
             break;
+        case "user":
+            if (count($url) == 2)
+            {
+                UserRoute($url[1]);
+            }
+            else
+            {
+                UserRoute("");
+            }
+            break;
+        case "admin":
+            AdminRoute("");
+            break;
+    }
 
-        case "books/createbook":
-            require_once "controller/Books.Controller.php";
-            $controller = new BooksController();
-            $controller->CreateBook();
-            break;
-        //Hit kommer man från SparaBok formuläret
-        case "books/savebook":
-            require_once "controller/Books.Controller.php";
-            $controller = new BooksController();
-            $controller->SaveBook($fakeSession);
-            break;
-        //Borde vara POST inte GET
-        case "books/delete":
-            if (key_exists('id',$_GET))
-            {
-                require_once "controller/Books.Controller.php";
-                $controller = new BooksController();
-                $controller->DeleteBook($_GET['id']);
-            }
-            else
-            {}
-            break;
-        case "books/creategenre":
-            require_once "controller/Books.Controller.php";
-            $controller = new BooksController();
-            $controller->CreateGenre();
-            break;
-        case "books/savegenre":
-            require_once "controller/Books.Controller.php";
-            $controller = new BooksController();
-            $controller->SaveGenre($fakeSession);
-        break;
-        //Visar registreringsformuläret
-        case "user/create":
-            require_once "controller/User.Controller.php";
-            $controller = new UserController();
-            $controller->CreateUser();
-            break;
-        //Sparar användaren från formuläret
-        case "user/saveuser":
-            require_once "controller/User.Controller.php";
-            $controller = new UserController();
-            $controller->SaveUser();
-            break;
-        case "user/loginpage":
-            require_once "controller/User.Controller.php";
-            $controller = new UserController();
-            $controller->LoginPage();
-            break;
-        case "user/loginuser":
-            require_once "controller/User.Controller.php";
-            $controller = new UserController();
-            $controller->Login();
-            break;
+    switch (strtolower($_GET['url']))
+    {
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 
             $controller = new AuthorsController();
@@ -109,6 +65,7 @@ if (key_exists('url',$_GET))
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
+            echo "inne i authors";
             $controller->AddAuthor($fakeSession);
             break;
 
@@ -132,6 +89,81 @@ if (key_exists('url',$_GET))
 else
 {
     echo "<h1>Detta är startsidan</h1>";
+    exit();
+}
+?>
+<?php
+function BooksRoute($action)
+{
+    require_once "controller/Books.Controller.php";
+    $controller = new BooksController();
+    switch(strtolower($action))
+    {
+        case "showall":
+            $controller->ShowAllBooks();
+            break;
+        case "show":
+            if (key_exists('id',$_POST))
+            {
+                $controller->ShowBook($_POST['id']);
+            }
+            break;
+        case "createbook":
+            $controller->CreateBook();
+            break;
+        case "savebook":
+            $controller->SaveBook($fakeSession);
+        case "delete":
+            if (key_exists('id',$_POST))
+            {
+                $controller->DeleteBook($_POST['id']);
+            }
+            break;
+        case "creategenre":
+            $controller->CreateGenre();
+            break;
+        case "savegenre":
+            $controller->SaveGenre($fakeSession);
+            break;
+        default:
+            break;
+    }
+    exit();
+}
+
+function UserRoute($action)
+{
+    require_once "controller/User.Controller.php";
+    $controller = new UserController();
+    switch(strtolower($action))
+    {
+        case "create"://Visar CreateUserForm
+            $controller->CreateUser();
+            break;
+        case "saveuser": //Spara CreateUserForm
+            $controller->SaveUser();
+        case "loginpage":
+            $controller->LoginPage(); //Visar loginformuläret
+            break;
+        case "loginuser":
+            $controller->Login(); //kontrollerar loginformulär
+            break;
+        case "logoutuser":
+            $controller->Logout(); //Loggar ut och förstör session
+            break;
+    }
+    exit();
+}
+function AdminRoute($action)
+{
+    require_once "controller/Admin.Controller.php";
+    $controller = new AdminController();
+    switch ($action)
+    {
+        case "":
+            $controller->Show();
+            break;
+    }
     exit();
 }
 ?>
