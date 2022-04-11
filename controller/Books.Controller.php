@@ -118,6 +118,11 @@ class BooksController
         require_once "classes/Book.class.php";
         $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
         $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'],"0",date("Y-m-d H:i:s"));
+        var_dump($_FILES['BookPicture']['name']);
+        if (!empty($_POST['BookPicture']))
+        {
+            var_dump($_FILES['BookPicture']['name']);
+        }
         //TODO:
         //Om $_POST saknar info så visa felmeddelande direkt AJAX
         //Om arrayen inte innehåller något som är tomt eller felaktig data

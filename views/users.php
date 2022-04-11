@@ -7,7 +7,7 @@ function SignUpForm($message)
     {
         $text.= "<p>" . $message . "</p>";
     }
-    $text .= "<form method='post' action='SaveUser'><table>";
+    $text .= "<form method='post' action='".prefix."user/SaveUser'><table>";
     $text .= "<tr> <th></th><th></th> </tr>";
     $text .= "<tr> <td><label for='txtUsername' />Användarnamn </label></td>
     <td><input type='text' id='txtUsername'name='Username' /></td></tr>";
@@ -28,7 +28,7 @@ function LoginForm($message)
     {
         $text.= "<p>" . $message . "</p>";
     }
-    $text .= "<form method='post' action='loginuser'><table>";
+    $text .= "<form method='post' action='".prefix."user/loginuser'><table>";
     $text .= "<tr> <th></th><th></th> </tr>";
     $text .= "<tr> <td><label for='txtUsername' />Användarnamn </label></td>
     <td><input type='text' id='txtUsername'name='Username' /></td></tr>";

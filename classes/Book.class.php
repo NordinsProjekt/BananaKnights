@@ -62,7 +62,7 @@ class Book
 
     private function setBookISBN($bookISBN)
     {
-        $this->bookISBN = $this->ScrubInputs($bookISBN);
+        $this->bookISBN = $this->ScrubInputsISBN($bookISBN);
         if (empty($this->bookISBN) || $this->bookISBN == "") 
         {
             $this->validated = false;
@@ -71,7 +71,7 @@ class Book
 
     private function setImgPath($imgPath)
     {
-        $this->imgPath = $this->ScrubInputs($imgPath);
+        $this->imgPath = $this->ScrubInputsISBN($imgPath);
         if (empty($this->imgPath) || $this->imgPath == "") 
         {
             $this->validated = false;
@@ -95,6 +95,13 @@ class Book
     private function ScrubInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $safe = trim(str_replace($banlist,"",$notsafeText));
+      return $safe;
+    }
+
+    private function ScrubInputsISBN($notsafeText)
+    {
+      $banlist = array("\t","."," ",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }

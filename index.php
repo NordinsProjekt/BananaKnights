@@ -95,6 +95,9 @@ else
 <?php
 function BooksRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/Books.Controller.php";
     $controller = new BooksController();
     switch(strtolower($action))
@@ -133,6 +136,9 @@ function BooksRoute($action)
 
 function UserRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/User.Controller.php";
     $controller = new UserController();
     switch(strtolower($action))
@@ -156,6 +162,9 @@ function UserRoute($action)
 }
 function AdminRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/Admin.Controller.php";
     $controller = new AdminController();
     switch ($action)
