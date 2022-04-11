@@ -31,7 +31,6 @@ function ShowAuthor($author)
 
 function AddNewAuthor()
 {
-        //Skapa Bok formuläret
         $text = "<h1>Skapa ny författare</h1>";
         $text .= "<form method='post' action='".prefix."author/addauthor'>";
         $text .= "<table>";
