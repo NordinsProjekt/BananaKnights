@@ -67,22 +67,35 @@ class AuthorsController
     function AddAuthor($session)
     {
         $inputArr = array (
-            $_POST['Fname'],$_POST['Lname'],
-            $_POST['Country'], date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
+            $_POST['Fname'],$_POST['Lname'],$_POST['Country'], 
+            date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
         );
 
-        //saknas validering
+        $cleanArr = $this->ScrubSaveAuthorArr($inputArr);
 
-        $result = $this->db->InsertAuthor($inputArr);
-        if (!$result)
+        for($i=0; $i < count($cleanArr); $i++)
         {
-            echo "Författaren lades till";
-        }
-        else
-        {
-            $this->ShowError("Något gick snett i formuläret!");
-        }
-        
+            //saknas validering för tom input
+            if(is_numeric($cleanArr[$i]))
+            {
+                echo "Wrong input! Try again";
+                break;
+            }
+            else
+            {
+                $result = $this->db->InsertAuthor($cleanArr);
+                if (!$result)
+                {
+                    echo "Författaren lades till";
+                    break;
+                }
+                else
+                {
+                    $this->ShowError("Något gick snett i formuläret!");
+                    break;
+                }
+            }
+        }      
     }
 
 
@@ -95,6 +108,22 @@ class AuthorsController
         $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
         $page .= EndPage();
         echo $page;
+    }
+
+    private function ScrubSaveAuthorArr($arr)
+    {
+        $cleanArr = array();
+        for ($i=0; $i < count($arr); $i++) { 
+            $cleanArr[] = $this->CheckUserInputs($arr[$i]);
+        }
+        return $cleanArr;
+    }
+
+    private function CheckUserInputs($notsafeText)
+    {
+      $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $safe = trim(str_replace($banlist,"",$notsafeText));
+      return $safe;
     }
 
 }
