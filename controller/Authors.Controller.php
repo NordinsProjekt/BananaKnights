@@ -17,10 +17,15 @@ class AuthorsController
         {
             require_once "views/authors.php";
             require_once "views/default.php";
+            $role = "User";
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
             $page = "";
             $page .= NavigationPage();
             $page .= StartPage("Visa alla Författare");
-            $page .= ShowAllAuthors($arr);
+            $page .= ShowAllAuthors($arr,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -43,6 +48,7 @@ class AuthorsController
             require_once "views/authors.php";
             require_once "views/default.php";
             $page = "";
+            $page .= NavigationPage();
             $page .= StartPage("Visa Författare");
             $page .= ShowAuthor($result);
             $page .= EndPage();
@@ -114,9 +120,17 @@ class AuthorsController
    
     }
 
+    public function EditAuthor($id)
+    {
 
+    }
 
-        public function ShowError($errorText)
+    public function DeleteAuthor($id)
+    {
+
+    }
+
+    public function ShowError($errorText)
     {
         require_once "views/default.php";
         $page = "";

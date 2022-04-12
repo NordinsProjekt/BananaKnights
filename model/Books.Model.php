@@ -93,7 +93,7 @@ class BooksModel extends PDOHandler
     }
     public function GetAllGenres()
     {
-        $stmt = $this->Connect()->prepare("SELECT Id, Name FROM genres");
+        $stmt = $this->Connect()->prepare("SELECT Id, Name, Description, Created FROM genres");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }

@@ -38,26 +38,6 @@ class BooksController
         }
 
     }
-    function CreateGenre()
-    {
-        //TODO Kontrollera behörighet
-        if ($this->VerifyUserRole("Admin"))
-        {
-            require_once "views/books.php";
-            require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Skapa ny Genre");
-            $page .= NavigationPage();
-            $page .= CreateNewGenre();
-            $page .= EndPage();
-            echo $page;
-        }
-        else
-        {
-            $this->ShowError("Kan inte visa sidan");
-        }
-
-    }
 
     function ShowBook()
     {
@@ -140,7 +120,99 @@ class BooksController
             echo $page;
         }
     }
+    function CreateGenre()
+    {
+        //TODO Kontrollera behörighet
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Genre");
+            $page .= NavigationPage();
+            $page .= CreateNewGenre();
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Kan inte visa sidan");
+        }
 
+    }
+
+    function SaveGenre()
+    {
+        //Slarvig funktion men funkar.
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $arr = array(
+                $this->ScrubInputs($_POST['BookGenre']),
+                $this->ScrubInputs($_POST['GenreDescription']),
+                date("Y-m-d H:i:s")
+            );
+            if ($this->ValidateSaveGenre($arr))
+            {
+                $this->db->SetGenre($arr);
+                echo "Genre lades till";
+            }
+            else
+            {
+                $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            }
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter att göra detta");
+        }
+
+    }
+
+    function ShowGenre()
+    {
+
+    }
+
+    function EditGenre()
+    {
+
+    }
+
+    function UpdateGenre()
+    {
+
+    }
+
+    function ShowAllGenre()
+    {
+        $role = "User";
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $role = "Admin";
+        }
+        $result = $this->db->GetAllGenres();
+        if ($result)
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
+            $page .= ShowAllGenre($result,$role);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Fel vid inläsning");
+            $page .= NavigationPage();
+            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
+            $page .= EndPage();
+            echo $page;
+        }
+    }
     public function ShowError($errorText)
     {
         require_once "views/default.php";
@@ -227,39 +299,21 @@ class BooksController
         if (empty($arr[0]) || $arr[0] == "") {return false;}
         return true;
     }
-    function SaveGenre()
+
+    public function DeleteGenre()
     {
-        //Slarvig funktion men funkar.
         if ($this->VerifyUserRole("Admin"))
         {
-            $arr = array(
-                $this->ScrubInputs($_POST['BookGenre']),
-                $this->ScrubInputs($_POST['GenreDescription']),
-                date("Y-m-d H:i:s")
-            );
-            if ($this->ValidateSaveGenre($arr))
+            $cleanId = $this->ScrubInputs($_POST['id']);
+            $result = $this->db->DeleteGenre($cleanId);
+            if ($result)
             {
-                $this->db->SetGenre($arr);
-                echo "Genre lades till";
-            }
-            else
-            {
-                $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            
             }
         }
         else
         {
-            $this->ShowError("Inga rättigheter att göra detta");
-        }
-
-    }
-    public function DeleteGenre($id)
-    {
-        $cleanId = $this->ScrubInputs($id);
-        $result = $this->db->DeleteGenre($cleanId);
-        if ($result)
-        {
-            
+            $this->ShowError("Kräver högre rättighet för detta");
         }
     }
 

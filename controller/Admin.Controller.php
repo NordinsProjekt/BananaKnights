@@ -24,6 +24,7 @@ class AdminController
             require_once "views/default.php";
             require_once "views/books.php";
             require_once "views/authors.php";
+            require_once "views/reviews.php";
             require_once "model/Books.Model.php";
             require_once "model/Authors.Model.php";
             $booksTable = new BooksModel();
@@ -35,7 +36,8 @@ class AdminController
             $page .= NavigationPage();
             $page .= "<div class='AdminBook'><div class='genre'>" . CreateNewGenre() . "</div>";
             $page .= "<div class='author'>". AddNewAuthor() . "</div>";
-            $page .= "<div class'book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
+            $page .= "<div class='book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
+            $page .= "<div class='review'>" .AddNewReview() . "</div>";
             $page .= "</div>";
             $page.= EndPage();
             echo $page;

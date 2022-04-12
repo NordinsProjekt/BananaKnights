@@ -94,27 +94,36 @@ function ShowAllBooks($arr,$role)
     }
     return $text;
 }
-function ShowAllBooksAdmin($arr)
+
+function ShowAllGenre($arr,$role)
 {
-    $text = "<h1>Visa alla böcker</h1>";
-    $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> 
-    <th>Författare</th> <th>Visa</th> <th>Ändra</th> <th>Radera</th> </tr>";
+    $text = "<h1>Visa alla genre</h1>";
+    if ($role == "Admin")
+    {
+        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
+    }
+    else
+    {
+        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Visa</th></tr>";
+    }
+    
     foreach ($arr as $key => $row) {
         $text.= "<tr>";
-        $text.= "<td>".$row['Title']."</td>";
-        $text.= "<td>".$row['PublicationYear']."</td>";
+        $text.= "<td>".$row['Name']."</td>";
         $text.= "<td>".$row['Description']."</td>";
-        $text.= "<td>".$row['GenreName']."</td>";
-        $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form method='post' action='". prefix ."books/show'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."books/showgenre'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
-        $text.= "<td><form method='post' action='".prefix."books/edit'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
-        </form></td>";
-        $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Visa</button>
-        </form></td>";
-
+        if ($role == "Admin")
+        {
+            $text.= "<td><form method='post' action='".prefix."books/editgenre'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            </form></td>";
+            $text.= "<td><form method='post' action='".prefix."books/deletegenre'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            </form></td>";
+        }
         $text.= "</tr>";
     }
     return $text;
 }
+
 ?>
