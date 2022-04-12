@@ -65,5 +65,17 @@ class UserModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetch();
     }
+    public function DoesUserHaveRole($roleName,$userId)
+    {
+        //Borde returnera 
+        $stmt = $this->Connect()->prepare("SELECT COUNT(u.Id) AS NumberOfUsers FROM users AS u 
+        INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
+        INNER JOIN roles AS r ON ug.RolesID = r.Id
+        WHERE r.Name = :roleName AND u.Id = :userId;");
+        $stmt->bindParam(":roleName",$roleName,PDO::PARAM_STR);
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
 }
 ?>

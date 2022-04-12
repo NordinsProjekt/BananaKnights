@@ -4,7 +4,7 @@ function CreateNewBook($arrGenre,$arrAuthor)
 {
     //Skapa Bok formuläret
     $text = "<h1>Skapa ny bok</h1>";
-    $text .= "<form method='post' action='savebook'>";
+    $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data'>";
     $text .= "<table><tr><th></th><th></th></tr>";
     $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
     $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
@@ -31,7 +31,7 @@ function CreateNewGenre()
 {
         //Skapa Genre formulär
         $text = "<h1>Skapa ny genre</h1>";
-        $text .= "<form method='post' action='savegenre'>";
+        $text .= "<form method='post' action='".prefix."books/savegenre'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' name='BookGenre' /></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
@@ -67,7 +67,7 @@ function ShowAllBooks($arr)
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form method='post' action='show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."books/show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
         $text.= "</tr>";
     }

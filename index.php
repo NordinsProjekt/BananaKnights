@@ -1,6 +1,6 @@
 <?php
 session_start();
-const prefix = "/bananaknights/";
+const prefix = "/BananaKnights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
@@ -80,8 +80,6 @@ if (key_exists('url',$_GET))
             $controller = new ReviewsController();
             $controller->AddReview(/*$_GET['id']*/1, $fakeSession);
             break;
-
-
         default:
           break;
     }
@@ -101,6 +99,9 @@ else
 <?php
 function BooksRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/Books.Controller.php";
     $controller = new BooksController();
     switch(strtolower($action))
@@ -139,6 +140,9 @@ function BooksRoute($action)
 
 function UserRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/User.Controller.php";
     $controller = new UserController();
     switch(strtolower($action))
@@ -162,6 +166,9 @@ function UserRoute($action)
 }
 function AdminRoute($action)
 {
+    $fakeSession = array (
+        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
+    );
     require_once "controller/Admin.Controller.php";
     $controller = new AdminController();
     switch ($action)
