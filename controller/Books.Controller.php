@@ -145,7 +145,7 @@ class BooksController
         echo $page;
     }
 
-    public function SaveBook($session)
+    public function SaveBook()
     {
         require_once "classes/Book.class.php";
         $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
@@ -193,17 +193,19 @@ class BooksController
     }
     private function ValidateSaveGenre($arr)
     {
-        if (empty($arr['BookGenre']) || $arr['BookGenre'] == "") {return false;}
-        if (empty($arr['GenreDescription']) || $arr['GenreDescription'] == "") {return false;}
+        //Kontrollerar Genre arrayen innan databasen
+        if (empty($arr[0]) || $arr[0] == "") {return false;}
+        if (empty($arr[0]) || $arr[0] == "") {return false;}
         return true;
     }
-    function SaveGenre($session)
+    function SaveGenre()
     {
+        //Slarvig funktion men funkar.
         if ($this->VerifyUserRole("Admin"))
         {
             $arr = array(
-                "BookGenre"=>$this->ScrubInputs($_POST['BookGenre']),
-                "GenreDescription"=>$this->ScrubInputs($_POST['GenreDescription']),
+                $this->ScrubInputs($_POST['BookGenre']),
+                $this->ScrubInputs($_POST['GenreDescription']),
                 date("Y-m-d H:i:s")
             );
             if ($this->ValidateSaveGenre($arr))
@@ -278,13 +280,13 @@ class BooksController
 
     private function VerifyUserRole($roleName)
     {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserID']))
+        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
         {
             if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
             {
                 require_once "model/User.Model.php";
                 $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserID']) == 1)
+                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
                 {
                     return true;
                 }

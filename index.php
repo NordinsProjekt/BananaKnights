@@ -119,7 +119,7 @@ function BooksRoute($action)
             $controller->CreateBook();
             break;
         case "savebook":
-            $controller->SaveBook($fakeSession);
+            $controller->SaveBook();
         case "delete":
             if (key_exists('id',$_POST))
             {
@@ -130,7 +130,7 @@ function BooksRoute($action)
             $controller->CreateGenre();
             break;
         case "savegenre":
-            $controller->SaveGenre($fakeSession);
+            $controller->SaveGenre();
             break;
         default:
             break;

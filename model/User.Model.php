@@ -75,7 +75,8 @@ class UserModel extends PDOHandler
         $stmt->bindParam(":roleName",$roleName,PDO::PARAM_STR);
         $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+        return $result['NumberOfUsers'];
     }
 }
 ?>

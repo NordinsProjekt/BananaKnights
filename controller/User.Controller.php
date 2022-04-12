@@ -149,7 +149,7 @@ class UserController
                 //Användaren har loggat in.
                 $_SESSION['is_logged_in'] = TRUE;
                 $_SESSION['Username'] = $row['UserName'];
-                $_SESSION['UserID'] = $row['Id'];
+                $_SESSION['UserId'] = $row['Id'];
                 //Ladda in homepage
                 $this->ShowSuccess("Du loggades in");
              }
