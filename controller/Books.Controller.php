@@ -17,30 +17,46 @@ class BooksController
     function CreateBook()
     {
         //TODO Kontrollera behörighet
-        require_once "views/books.php";
-        require_once "views/default.php";
-        require_once "model/Authors.Model.php";
-        $arrGenre = $this->db->GetAllGenres();
-        $authorTable = new AuthorsModel();
-        $arrAuthor = $authorTable->GetAllAuthors();
-        $page = "";
-        $page .= StartPage("Skapa ny Bok");
-        $page .= NavigationPage();
-        $page .= CreateNewBook($arrGenre,$arrAuthor);
-        $page .= EndPage();
-        echo $page;
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            require_once "model/Authors.Model.php";
+            $arrGenre = $this->db->GetAllGenres();
+            $authorTable = new AuthorsModel();
+            $arrAuthor = $authorTable->GetAllAuthors();
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
+            $page .= CreateNewBook($arrGenre,$arrAuthor);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Kan inte visa sidan");
+        }
+
     }
     function CreateGenre()
     {
         //TODO Kontrollera behörighet
-        require_once "views/books.php";
-        require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Skapa ny Genre");
-        $page .= NavigationPage();
-        $page .= CreateNewGenre();
-        $page .= EndPage();
-        echo $page;
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Genre");
+            $page .= NavigationPage();
+            $page .= CreateNewGenre();
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Kan inte visa sidan");
+        }
+
     }
 
     function ShowBook()
@@ -75,16 +91,23 @@ class BooksController
 
     function DeleteBook()
     {
-        //TODO kontrollera behörighet
-        $safetext = $this->ScrubInputs($_POST['id']);
-        if($this->db->HideBook($safetext))
+        if ($this->VerifyUserRole("Admin"))
         {
-            echo "Boken är nu borta";
+            $safetext = $this->ScrubInputs($_POST['id']);
+            if($this->db->HideBook($safetext))
+            {
+                echo "Boken är nu borta";
+            }
+            else
+            {
+                $this->ShowError("Boken kunde inte tas bort");
+            }
         }
         else
         {
-            $this->ShowError("Boken kunde inte tas bort");
+            $this->ShowError("Inga rättigheter för detta");
         }
+
     }
 
     function ShowAllBooks()
@@ -176,21 +199,28 @@ class BooksController
     }
     function SaveGenre($session)
     {
-        //Behöver validering endast admin ska kunna detta
-        $arr = array(
-            "BookGenre"=>$this->ScrubInputs($_POST['BookGenre']),
-            "GenreDescription"=>$this->ScrubInputs($_POST['GenreDescription']),
-            date("Y-m-d H:i:s")
-        );
-        if ($this->ValidateSaveGenre($arr))
+        if ($this->VerifyUserRole("Admin"))
         {
-            $this->db->SetGenre($arr);
-            echo "Genre lades till";
+            $arr = array(
+                "BookGenre"=>$this->ScrubInputs($_POST['BookGenre']),
+                "GenreDescription"=>$this->ScrubInputs($_POST['GenreDescription']),
+                date("Y-m-d H:i:s")
+            );
+            if ($this->ValidateSaveGenre($arr))
+            {
+                $this->db->SetGenre($arr);
+                echo "Genre lades till";
+            }
+            else
+            {
+                $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            }
         }
         else
         {
-            $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            $this->ShowError("Inga rättigheter att göra detta");
         }
+
     }
     public function DeleteGenre($id)
     {
@@ -241,6 +271,23 @@ class BooksController
             if (is_null($arr[$i]) || $arr[$i] == "" )
             {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private function VerifyUserRole($roleName)
+    {
+        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserID']))
+        {
+            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
+            {
+                require_once "model/User.Model.php";
+                $userDB = new UserModel();
+                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserID']) == 1)
+                {
+                    return true;
+                }
             }
         }
         return false;
