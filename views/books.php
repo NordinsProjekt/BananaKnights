@@ -46,12 +46,18 @@ function DeleteGenre()
 
 }
 
-function ShowBook($book)
+function ShowBook($book,$imageLink)
 {
     $text = "<h1>Visa enskild bok</h1>";
-    foreach ($book as $key => $value) {
-        $text .= "<p>".$key.": ".$value."</p>";
-    }
+    $text .= "<h2>".$book['Title']."</h2>";
+    $text .= "<img src='".$imageLink."' />";
+    $text .= "<p><b>Författare:</b> ".$book['AuthorName']."<br />";
+    $text .= "<b>Genre:</b> " .$book['GenreName']."<br />";
+    $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
+    $text .= "<b>ISBN: </b>".$book['ISBN']."<br /></p>";
+    $text .= "<h3>Beskrivning</h3>";
+    $text .= "<p>".$book['Description']."</p>";
+    $text .= "";
     return $text;
 }
 

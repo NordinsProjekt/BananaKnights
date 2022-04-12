@@ -49,12 +49,21 @@ class BooksController
         $result = $this->db->GetBook($safetext);
         if ($result)
         {
+            if (file_exists("img/books/". $result['ImagePath']))
+            {
+                $pictures = scandir("img/books/". $result['ImagePath']);
+                $imageLink = prefix."img/books/". $result['ImagePath'] ."/". $pictures[2];
+            }
+            else
+            {
+                $imageLink = prefix."img/books/noimage.jpg";
+            }
             require_once "views/books.php";
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
             $page .= NavigationPage();
-            $page .= ShowBook($result);
+            $page .= ShowBook($result,$imageLink);
             $page .= EndPage();
             echo $page;
         }

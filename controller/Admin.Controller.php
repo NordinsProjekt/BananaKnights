@@ -18,6 +18,7 @@ class AdminController
     {
         //TODO VALIDERA
         //Inloggad och vara admin
+        
         //Visa upp adminpanelen.
         require_once "views/default.php";
         require_once "views/books.php";
