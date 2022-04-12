@@ -88,7 +88,13 @@ if (key_exists('url',$_GET))
 }
 else
 {
-    echo "<h1>Detta är startsidan</h1>";
+    include_once "views/default.php";
+
+    StartPage("Index Page");
+    IndexNav();
+    IndexTop();
+    IndexCards();
+    EndPage();
     exit();
 }
 ?>
