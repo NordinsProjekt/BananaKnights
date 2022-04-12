@@ -18,6 +18,7 @@ class AuthorsController
             require_once "views/authors.php";
             require_once "views/default.php";
             $page = "";
+            $page .= NavigationPage();
             $page .= StartPage("Visa alla Författare");
             $page .= ShowAllAuthors($arr);
             $page .= EndPage();

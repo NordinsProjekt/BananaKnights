@@ -112,14 +112,20 @@ class BooksController
 
     function ShowAllBooks()
     {
-        if ($arr = $this->db->GetAllBooks())
+        $role = "User";
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $role = "Admin";
+        }
+        $result = $this->db->GetAllBooks();
+        if ($result)
         {
             require_once "views/books.php";
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
             $page .= NavigationPage();
-            $page .= ShowAllBooks($arr);
+            $page .= ShowAllBooks($result,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -129,8 +135,9 @@ class BooksController
             $page = "";
             $page .= StartPage("Fel vid inläsning");
             $page .= NavigationPage();
-            $page .= "<h1>FEL</h1><p>Kunde inte hämta Alla Böcker</p>";
+            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
             $page .= EndPage();
+            echo $page;
         }
     }
 
@@ -147,6 +154,15 @@ class BooksController
 
     public function SaveBook()
     {
+        if ($this->VerifyUserRole("Admin"))
+        {
+
+        }
+        else
+        {
+            $this->ShowError("Du har inga rättigheter för detta");
+            exit();
+        }
         require_once "classes/Book.class.php";
         $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
         $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'],"0",date("Y-m-d H:i:s"));
@@ -191,6 +207,19 @@ class BooksController
             $this->ShowError("Fel i Skapa Bok formuläret validering av data");
         }
     }
+
+    public function EditBook()
+    {
+        if ($this->VerifyUserRole("Admin"))
+        {
+            echo "Visa Edit formulär";
+        }
+        else
+        {
+            $this->ShowError("Du har inga rättigheter för detta");
+        }
+    }
+
     private function ValidateSaveGenre($arr)
     {
         //Kontrollerar Genre arrayen innan databasen

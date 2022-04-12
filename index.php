@@ -112,7 +112,7 @@ function BooksRoute($action)
         case "show":
             if (key_exists('id',$_POST))
             {
-                $controller->ShowBook($_POST['id']);
+                $controller->ShowBook();
             }
             break;
         case "createbook":
@@ -123,7 +123,13 @@ function BooksRoute($action)
         case "delete":
             if (key_exists('id',$_POST))
             {
-                $controller->DeleteBook($_POST['id']);
+                $controller->DeleteBook();
+            }
+            break;
+        case "edit":
+            if (key_exists('id',$_POST))
+            {
+                $controller->EditBook();
             }
             break;
         case "creategenre":
