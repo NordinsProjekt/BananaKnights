@@ -17,7 +17,8 @@ function CreateNewBook($arrGenre,$arrAuthor)
         $text.= "<option value='" . $value['Id'] . "'>".$value['Name']."</option>";
     }    
     $text .= "</select></td> </tr>";
-    $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' id='pubYear' name='BookYear' /></td>";
+    $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' 
+    id='pubYear' name='BookYear' pattern ='[0-9]'/></td>";
     $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
               <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30'></textarea></td> </tr>";
     $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN' /></td> </tr>";
