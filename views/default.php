@@ -82,16 +82,24 @@ function IndexNav()
                 <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="#">About</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link disabled">Disabled</a>
+                <a class="nav-link" href="#">Contact</a>
                 </li>
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            <form class="d-flex me-auto">
+            <input class="form-control me-2 mt-3" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success mt-3" type="submit">Search</button>
+        </form>
+            <ul class="navbar-nav mb-2 mb-lg-0">
+                <li>
+                <a class="nav-link" href="#">login</a>
+                </li>
+                <li>
+                <a class="nav-link" href="#">Register</a>
+                </li>
+            </ul>
             </div>
         </div>
         </nav>
@@ -115,10 +123,11 @@ function IndexTop()
         $bookinfo[] = $value;
     }
 
-    $text = "<div class='card mb-3 center-div' style='max-width: 100%;'>
+
+    $text = "<br><div class='card center-div' style='max-width: 100%;'>
         <div class='row g-0'>
         <div class='col-md-4'>
-            <img src='' class='img-fluid rounded-start' alt='book photo'>
+            <img src='" . $bookinfo[7] . "' class='img-fluid rounded-start' alt='book photo'>
         </div>
         <div class='col-md-8'>
             <div class='card-body'>
@@ -127,11 +136,11 @@ function IndexTop()
             <p class='card-text'>" . $bookinfo[4] ."</p>
             <p class='card-text'>" . $bookinfo[5] ."</p>
             <p class='card-text'>" . $bookinfo[2] ."</p>
-            <p class='card-text'><small class='text-muted'>tillagd den 2022-04-11 </small></p>
+            <p class='card-text'><small class='text-muted'>tillagd den " . $bookinfo[8] . "</small></p>
             </div>
         </div>
         </div>
-        </div>";   
+        </div><br><br>";   
     echo $text;
 }
 
@@ -143,23 +152,24 @@ function IndexCards()
     require_once "views/books.php";
 
     $model = new BooksModel();
-    $result = $model->GetAllBooks();
-    foreach ($result as $value) {
-        $books[] = $value;
-    }
-
-    print_r($books);
-
+    $sorted = $model->GetAllBooksSorted();
+    
     $text = 
-    "<div class='card' style='width: 18rem;'>
-    <img src='' class='card-img-top' alt='book photo'>
-    <div class='card-body'>
-      <h5 class='card-title'>" . $books[0]["Title"] . "</h5>
-      <p class='card-text'>" .  $books[0]["GenreName"] . "</p>
-      <p class='card-text'>" .  $books[0]["AuthorName"] . "</p>
-      <a href='#' class='btn btn-primary'>Läs mer</a>
-    </div>
-  </div>";
-echo $text;
+    "<div class='container-fluid'>
+    <div class='row' style='text-align: center'>
+    <br>";
+    for($i = 0; $i < count($sorted); $i++)
+    {
+    $text .= 
+    "<div class='col text-white bg-secondary'><br>
+    <img src='" . $sorted[$i]["ImagePath"] . "' alt='book bild'><br>"
+    . $sorted[$i]["Title"] . "<br>"
+    . $sorted[$i]["Name"] . "<br>
+    <button type='button' class='btn btn-primary'>Läs mer</button><br>
+    </div><br>";
+    }
+    $text .= "</div></div><br>";
+
+    echo $text;
 }
 ?>
