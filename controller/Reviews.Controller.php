@@ -63,7 +63,25 @@ class ReviewsController extends BaseController
 
     public function ShowAllReviews()
     {
-        
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $result = $this->db->GetAll();
+            if ($result)
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav("Admin",$user['Username']);
+                echo ShowAllReviews($result,"Admin");
+                echo EndPage();
+            }
+
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet att se detta");
+        }
     }
 
 

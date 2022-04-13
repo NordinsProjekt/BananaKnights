@@ -82,7 +82,7 @@ function IndexNav($role,$username)
             if ($role == "Admin")
             {
                 $text .= "<li><a class='nav-link' href='".prefix."books/showall'>Böcker</a></li>";
-                $text .= "<li><a class='nav-link' href='".prefix."'>Recensioner</a></li>";
+                $text .= "<li><a class='nav-link' href='".prefix."review/showall'>Recensioner</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."authors/showall'>Författare</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."books/showallgenre'>Genre</a></li>";
             }

@@ -33,8 +33,6 @@ abstract class BaseController
             );
             return $userArr;
         }
-
-        //return $userArr;
     }
 
     public function ShowError($errorText) //Sida som visar fel
@@ -63,6 +61,7 @@ abstract class BaseController
             echo EndPage();
         }
     }
+
     public function VerifyUserRole($roleName)
     {
         if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))

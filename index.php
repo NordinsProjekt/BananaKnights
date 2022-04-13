@@ -105,6 +105,11 @@ if (key_exists('url',$_GET))
                 $controller->AddReview();
             }
             break;
+        case "review/showall":
+            require_once "controller/Reviews.Controller.php";
+            $controller = new ReviewsController();
+            $controller->ShowAllReviews();
+            break;
         default:
           break;
     }
