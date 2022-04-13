@@ -91,7 +91,11 @@ else
     StartPage("Index Page");
     IndexNav();
     IndexTop();
-    IndexCards();
+   // for($i =0; $i < 8; $i++)
+   // {
+        IndexCards(); 
+        IndexCards(); 
+   // }
     EndPage();
     exit();
 }

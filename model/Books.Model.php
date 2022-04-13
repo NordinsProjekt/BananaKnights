@@ -9,8 +9,8 @@ class BooksModel extends PDOHandler
     public function GetBook($id)
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
-        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName FROM books AS b 
-        
+        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, b.ISBN,b.ImagePath, b.Created FROM books AS b 
+
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
@@ -94,6 +94,22 @@ class BooksModel extends PDOHandler
     public function GetAllGenres()
     {
         $stmt = $this->Connect()->prepare("SELECT Id, Name FROM genres");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
+    public function GetAllBooksSorted()
+    {
+        $stmt = $this->Connect()->prepare(
+            "SELECT b.Id,b.Title,b.Description,b.PublicationYear,b.ISBN,b.Created,b.ImagePath,g.Name
+            FROM books AS b
+            INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+            INNER JOIN genres AS g ON g.Id = gb.GenreId
+            INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+            INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+            ORDER BY Created DESC
+            LIMIT 8
+            ");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
