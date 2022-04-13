@@ -2,17 +2,31 @@
 
 
 
-function ShowAllAuthors($arr)
+function ShowAllAuthors($arr,$role)
 {
     $text = "<h1>Visa alla författare</h1>";
-    $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th></tr>";
+    if ($role == "Admin")
+    {
+        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
+    }
+    else
+    {
+        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th></tr>";
+    }
     
     foreach ($arr as $key => $row) {
         $text.= "<tr>";
         $text.= "<td>".$row['Firstname']."</td>";
         $text.= "<td>".$row['Lastname']."</td>";
-        $text.= "<td><form><input type='submit' name='visaAuthor' value='Visa' />
-        <input type='hidden' name='author' value='" .$row['Id'] . " />'</form></td>";
+        $text.= "<td><form method='post' action='".prefix."authors/show'><button type='submit' name='id' 
+        value='".$row['Id']."'>Visa</input></form></td>";
+        if ($role == "Admin")
+        {
+            $text.= "<td><form method='post' action='".prefix."authors/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            </form></td>";
+            $text.= "<td><form method='post' action='".prefix."authors/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            </form></td>";
+        }
         $text.= "</tr>";
     }
     return $text;

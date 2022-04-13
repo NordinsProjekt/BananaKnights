@@ -17,44 +17,54 @@ class BooksController
     function CreateBook()
     {
         //TODO Kontrollera behörighet
-        require_once "views/books.php";
-        require_once "views/default.php";
-        require_once "model/Authors.Model.php";
-        $arrGenre = $this->db->GetAllGenres();
-        $authorTable = new AuthorsModel();
-        $arrAuthor = $authorTable->GetAllAuthors();
-        $page = "";
-        $page .= StartPage("Skapa ny Bok");
-        $page .= NavigationPage();
-        $page .= CreateNewBook($arrGenre,$arrAuthor);
-        $page .= EndPage();
-        echo $page;
-    }
-    function CreateGenre()
-    {
-        //TODO Kontrollera behörighet
-        require_once "views/books.php";
-        require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Skapa ny Genre");
-        $page .= NavigationPage();
-        $page .= CreateNewGenre();
-        $page .= EndPage();
-        echo $page;
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            require_once "model/Authors.Model.php";
+            $arrGenre = $this->db->GetAllGenres();
+            $authorTable = new AuthorsModel();
+            $arrAuthor = $authorTable->GetAllAuthors();
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
+            $page .= CreateNewBook($arrGenre,$arrAuthor);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Kan inte visa sidan");
+        }
+
     }
 
     function ShowBook()
     {
+        $role = "";
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+        }
         $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
         if ($result)
         {
+            if (file_exists("img/books/". $result['ImagePath']))
+            {
+                $pictures = scandir("img/books/". $result['ImagePath']);
+                $imageLink = prefix."img/books/". $result['ImagePath'] ."/". $pictures[2];
+            }
+            else
+            {
+                $imageLink = prefix."img/books/noimage.jpg";
+            }
             require_once "views/books.php";
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
             $page .= NavigationPage();
-            $page .= ShowBook($result);
+            $page .= ShowBook($result,$imageLink,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -66,28 +76,41 @@ class BooksController
 
     function DeleteBook()
     {
-        //TODO kontrollera behörighet
-        $safetext = $this->ScrubInputs($_POST['id']);
-        if($this->db->HideBook($safetext))
+        if ($this->VerifyUserRole("Admin"))
         {
-            echo "Boken är nu borta";
+            $safetext = $this->ScrubInputs($_POST['id']);
+            if($this->db->HideBook($safetext))
+            {
+                echo "Boken är nu borta";
+            }
+            else
+            {
+                $this->ShowError("Boken kunde inte tas bort");
+            }
         }
         else
         {
-            $this->ShowError("Boken kunde inte tas bort");
+            $this->ShowError("Inga rättigheter för detta");
         }
+
     }
 
     function ShowAllBooks()
     {
-        if ($arr = $this->db->GetAllBooks())
+        $role = "User";
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $role = "Admin";
+        }
+        $result = $this->db->GetAllBooks();
+        if ($result)
         {
             require_once "views/books.php";
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Skapa ny Bok");
             $page .= NavigationPage();
-            $page .= ShowAllBooks($arr);
+            $page .= ShowAllBooks($result,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -97,11 +120,104 @@ class BooksController
             $page = "";
             $page .= StartPage("Fel vid inläsning");
             $page .= NavigationPage();
-            $page .= "<h1>FEL</h1><p>Kunde inte hämta Alla Böcker</p>";
+            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
             $page .= EndPage();
+            echo $page;
         }
     }
+    function CreateGenre()
+    {
+        //TODO Kontrollera behörighet
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Genre");
+            $page .= NavigationPage();
+            $page .= CreateNewGenre();
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Kan inte visa sidan");
+        }
 
+    }
+
+    function SaveGenre()
+    {
+        //Slarvig funktion men funkar.
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $arr = array(
+                $this->ScrubInputs($_POST['BookGenre']),
+                $this->ScrubInputs($_POST['GenreDescription']),
+                date("Y-m-d H:i:s")
+            );
+            if ($this->ValidateSaveGenre($arr))
+            {
+                $this->db->SetGenre($arr);
+                echo "Genre lades till";
+            }
+            else
+            {
+                $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            }
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter att göra detta");
+        }
+
+    }
+
+    function ShowGenre()
+    {
+
+    }
+
+    function EditGenre()
+    {
+
+    }
+
+    function UpdateGenre()
+    {
+
+    }
+
+    function ShowAllGenre()
+    {
+        $role = "User";
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $role = "Admin";
+        }
+        $result = $this->db->GetAllGenres();
+        if ($result)
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Bok");
+            $page .= NavigationPage();
+            $page .= ShowAllGenre($result,$role);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Fel vid inläsning");
+            $page .= NavigationPage();
+            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
+            $page .= EndPage();
+            echo $page;
+        }
+    }
     public function ShowError($errorText)
     {
         require_once "views/default.php";
@@ -113,22 +229,21 @@ class BooksController
         echo $page;
     }
 
-    public function SaveBook($session)
+    public function SaveBook()
     {
+        if ($this->VerifyUserRole("Admin"))
+        {
+
+        }
+        else
+        {
+            $this->ShowError("Du har inga rättigheter för detta");
+            exit();
+        }
         require_once "classes/Book.class.php";
-        $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
-        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'],"0",date("Y-m-d H:i:s"));
-            require_once "controller/Upload.Controller.php";
-            $uploadController = new UploadController();
-            if ($uploadController->AddImage("img/books/".$book->getISBN(),$_FILES['BookPicture']))
-            {
-                echo "Allt gick bra";
-            }
-            else
-            {
-                echo "Något var fel med bilden";
-            }
-            var_dump($_SESSION['Message']);
+        $book = new Book($_SESSION['UserId'],$_POST['BookTitle'],$_POST['BookYear'],
+        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'].$_POST['BookTitle'],"0",date("Y-m-d H:i:s"));
+
         //TODO:
         //Om $_POST saknar info så visa felmeddelande direkt AJAX
         //Om arrayen inte innehåller något som är tomt eller felaktig data
@@ -140,7 +255,16 @@ class BooksController
             {
                 if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
                 {
-                    echo "Boken lades till";
+                    require_once "controller/Upload.Controller.php";
+                    $uploadController = new UploadController();
+                    if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
+                    {
+                        echo "Allt gick bra";
+                    }
+                    else
+                    {
+                        echo "Något var fel med bilden";
+                    }
                 }
                 else
                 {
@@ -159,37 +283,41 @@ class BooksController
             $this->ShowError("Fel i Skapa Bok formuläret validering av data");
         }
     }
-    private function ValidateSaveGenre($arr)
+
+    public function EditBook()
     {
-        if (empty($arr['BookGenre']) || $arr['BookGenre'] == "") {return false;}
-        if (empty($arr['GenreDescription']) || $arr['GenreDescription'] == "") {return false;}
-        return true;
-    }
-    function SaveGenre($session)
-    {
-        //Behöver validering endast admin ska kunna detta
-        $arr = array(
-            "BookGenre"=>$this->ScrubInputs($_POST['BookGenre']),
-            "GenreDescription"=>$this->ScrubInputs($_POST['GenreDescription']),
-            date("Y-m-d H:i:s")
-        );
-        if ($this->ValidateSaveGenre($arr))
+        if ($this->VerifyUserRole("Admin"))
         {
-            $this->db->SetGenre($arr);
-            echo "Genre lades till";
+            echo "Visa Edit formulär";
         }
         else
         {
-            $this->ShowError("Genre kunde inte skapas, valideringsfel av data");
+            $this->ShowError("Du har inga rättigheter för detta");
         }
     }
-    public function DeleteGenre($id)
+
+    private function ValidateSaveGenre($arr)
     {
-        $cleanId = $this->ScrubInputs($id);
-        $result = $this->db->DeleteGenre($cleanId);
-        if ($result)
+        //Kontrollerar Genre arrayen innan databasen
+        if (empty($arr[0]) || $arr[0] == "") {return false;}
+        if (empty($arr[0]) || $arr[0] == "") {return false;}
+        return true;
+    }
+
+    public function DeleteGenre()
+    {
+        if ($this->VerifyUserRole("Admin"))
         {
+            $cleanId = $this->ScrubInputs($_POST['id']);
+            $result = $this->db->DeleteGenre($cleanId);
+            if ($result)
+            {
             
+            }
+        }
+        else
+        {
+            $this->ShowError("Kräver högre rättighet för detta");
         }
     }
 
@@ -232,6 +360,23 @@ class BooksController
             if (is_null($arr[$i]) || $arr[$i] == "" )
             {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private function VerifyUserRole($roleName)
+    {
+        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
+        {
+            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
+            {
+                require_once "model/User.Model.php";
+                $userDB = new UserModel();
+                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
+                {
+                    return true;
+                }
             }
         }
         return false;

@@ -17,9 +17,15 @@ class AuthorsController
         {
             require_once "views/authors.php";
             require_once "views/default.php";
+            $role = "User";
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
             $page = "";
+            $page .= NavigationPage();
             $page .= StartPage("Visa alla Författare");
-            $page .= ShowAllAuthors($arr);
+            $page .= ShowAllAuthors($arr,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -42,6 +48,7 @@ class AuthorsController
             require_once "views/authors.php";
             require_once "views/default.php";
             $page = "";
+            $page .= NavigationPage();
             $page .= StartPage("Visa Författare");
             $page .= ShowAuthor($result);
             $page .= EndPage();
@@ -55,51 +62,75 @@ class AuthorsController
 
     function NewAuthor()
     {
-        require_once "views/authors.php";
-        require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Skapa ny Författare");
-        $page .= AddNewAuthor();
-        $page .= EndPage();
-        echo $page;
+        if ($this->VerifyUserRole("Admin"))
+        {
+            require_once "views/authors.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Skapa ny Författare");
+            $page .= AddNewAuthor();
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter till detta");
+        }
+
     }
 
     function AddAuthor($session)
     {
-        $inputArr = array (
-            $_POST['Fname'],$_POST['Lname'],$_POST['Country'], 
-            date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
-        );
-        $cleanArr = $this->ScrubSaveAuthorArr($inputArr);
-
-        for($i=0; $i < count($cleanArr); $i++)
+        if ($this->VerifyUserRole("Admin"))
         {
-            //saknas validering för tom input
-            if(is_numeric($cleanArr[$i]))
+            $inputArr = array (
+                $_POST['Fname'],$_POST['Lname'],$_POST['Country'], 
+                date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
+            );
+            $cleanArr = $this->ScrubSaveAuthorArr($inputArr);
+    
+            for($i=0; $i < count($cleanArr); $i++)
             {
-                echo "Wrong input! Try again";
-                break;
-            }
-            else
-            {
-                $result = $this->db->InsertAuthor($cleanArr);
-                if (!$result)
+                //saknas validering för tom input
+                if(is_numeric($cleanArr[$i]))
                 {
-                    echo "Författaren lades till";
+                    echo "Wrong input! Try again";
                     break;
                 }
                 else
                 {
-                    $this->ShowError("Något gick snett i formuläret!");
-                    break;
+                    $result = $this->db->InsertAuthor($cleanArr);
+                    if (!$result)
+                    {
+                        echo "Författaren lades till";
+                        break;
+                    }
+                    else
+                    {
+                        $this->ShowError("Något gick snett i formuläret!");
+                        break;
+                    }
                 }
-            }
-        }      
+            }   
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter för detta");
+        }
+   
     }
 
+    public function EditAuthor($id)
+    {
 
+    }
 
-        public function ShowError($errorText)
+    public function DeleteAuthor($id)
+    {
+
+    }
+
+    public function ShowError($errorText)
     {
         require_once "views/default.php";
         $page = "";
@@ -123,6 +154,23 @@ class AuthorsController
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
+    }
+
+    private function VerifyUserRole($roleName)
+    {
+        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
+        {
+            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
+            {
+                require_once "model/User.Model.php";
+                $userDB = new UserModel();
+                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -67,7 +67,7 @@ class UserModel extends PDOHandler
     }
     public function DoesUserHaveRole($roleName,$userId)
     {
-        //Borde returnera 
+        //Borde returnera 1 om användaren har den specifika rollen
         $stmt = $this->Connect()->prepare("SELECT COUNT(u.Id) AS NumberOfUsers FROM users AS u 
         INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
         INNER JOIN roles AS r ON ug.RolesID = r.Id
@@ -75,7 +75,8 @@ class UserModel extends PDOHandler
         $stmt->bindParam(":roleName",$roleName,PDO::PARAM_STR);
         $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch();
+        $result = $stmt->fetch();
+        return $result['NumberOfUsers'];
     }
 }
 ?>

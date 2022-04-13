@@ -19,7 +19,9 @@ input[type="checkbox"]:checked +.RowHighlight{
 #txtGenreDescription {
     resize: none;
 }
-
+#ReviewText {
+    resize: none;
+}
 a {
     padding: 10px;
 }

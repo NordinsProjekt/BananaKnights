@@ -48,15 +48,35 @@ if (key_exists('url',$_GET))
             $controller->ShowAllAuthors();
             break;   
         case "authors/show";
-        if (key_exists('id',$_GET))
-        {
-            require_once "controller/Authors.Controller.php";
-            $controller = new AuthorsController();
-        $controller->ShowAuthor($_GET['id']);
-        }
-        else
-        {}
-        break;
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $controller->ShowAuthor($_POST['id']);
+            }
+            else
+            {}
+            break;
+        case "authors/edit";
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $controller->EditAuthor($_POST['id']);
+            }
+            else
+            {}
+            break;
+        case "authors/delete";
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $controller->DeleteAuthor($_POST['id']);
+            }
+            else
+            {}
+            break;
         case "author/newauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
@@ -70,15 +90,21 @@ if (key_exists('url',$_GET))
             break;
 
         case "review/newreview":
-            require_once "controller/Reviews.Controller.php";
-            $controller = new ReviewsController();
-            $controller->NewReview();
+            if (key_exists('bookId',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->NewReview();
+            }
             break;
         case "review/addreview":
-            require_once "controller/Reviews.Controller.php";
-            require_once "controller/Books.Controller.php";
-            $controller = new ReviewsController();
-            $controller->AddReview(/*$_GET['id']*/1, $fakeSession);
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                require_once "controller/Books.Controller.php";
+                $controller = new ReviewsController();
+                $controller->AddReview();
+            }
             break;
         default:
           break;
@@ -116,25 +142,58 @@ function BooksRoute($action)
         case "show":
             if (key_exists('id',$_POST))
             {
-                $controller->ShowBook($_POST['id']);
+                $controller->ShowBook();
             }
             break;
         case "createbook":
             $controller->CreateBook();
             break;
         case "savebook":
-            $controller->SaveBook($fakeSession);
+            $controller->SaveBook();
         case "delete":
             if (key_exists('id',$_POST))
             {
-                $controller->DeleteBook($_POST['id']);
+                $controller->DeleteBook();
+            }
+            break;
+        case "edit":
+            if (key_exists('id',$_POST))
+            {
+                $controller->EditBook();
             }
             break;
         case "creategenre":
             $controller->CreateGenre();
             break;
         case "savegenre":
-            $controller->SaveGenre($fakeSession);
+            $controller->SaveGenre();
+            break;
+        case "showgenre":
+            if (key_exists('id',$_POST))
+            {
+                $controller->ShowGenre();
+            }
+            break;
+        case "editgenre":
+            if (key_exists('id',$_POST))
+            {
+                $controller->EditGenre();
+            }
+            break;
+        case "updategenre":
+            if (key_exists('id',$_POST))
+            {
+                $controller->UpdateGenre();
+            }
+            break;
+        case "deletegenre":
+            if (key_exists('id',$_POST))
+            {
+                $controller->DeleteGenre();
+            }
+            break;
+        case "showallgenre":
+            $controller->ShowAllGenre();
             break;
         default:
             break;
