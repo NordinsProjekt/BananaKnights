@@ -1,6 +1,7 @@
 <?php
 require_once "model/Admin.Model.php";
-class AdminController
+require_once "classes/Base.Controller.class.php";
+class AdminController extends BaseController
 {
     private $db;
 
@@ -18,7 +19,8 @@ class AdminController
     {
         //TODO VALIDERA
         //Inloggad och vara admin
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             //Visa upp adminpanelen.
             require_once "views/default.php";
@@ -31,15 +33,13 @@ class AdminController
             $authorTable = new AuthorsModel();
             $arrGenre = $booksTable->GetAllGenres();
             $arrAuthor =  $authorTable->GetAllAuthors();
-            $page = "";
-            $page .= StartPage("Adminpanel");
-            $page .= NavigationPage();
-            $page .= "<div class='AdminBook'><div class='genre'>" . CreateNewGenre() . "</div>";
-            $page .= "<div class='author'>". AddNewAuthor() . "</div>";
-            $page .= "<div class='book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
-            $page .= "</div>";
-            $page.= EndPage();
-            echo $page;
+            echo StartPage("Adminpanel");
+            IndexNav("Admin",$user['Username']);
+            echo "<div class='AdminBook'><div class='genre'>" . CreateNewGenre() . "</div>";
+            echo "<div class='author'>". AddNewAuthor() . "</div>";
+            echo "<div class='book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
+            echo "</div>";
+            echo EndPage();
         }
         else
         {
@@ -48,34 +48,7 @@ class AdminController
 
     }
 
-    private function ShowError($errorText) //Sida som visar fel
-    {
-        $role = "";
-        require_once "views/default.php";
-        echo StartPage("Fel vid inläsning");
-        if ($this->VerifyUserRole("User"))
-        {
-            $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            if ($this->VerifyUserRole("Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($role,$user['UserName']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-        else
-        {
-            IndexNav("","");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-    }
-
-    private function VerifyUserRole($roleName)
+    public function VerifyUserRole($roleName)
     {
         if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
         {

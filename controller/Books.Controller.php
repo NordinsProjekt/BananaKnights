@@ -1,6 +1,7 @@
 <?php
 require_once "model/Books.Model.php";
-class BooksController
+require_once "classes/Base.Controller.class.php";
+class BooksController extends BaseController
 {
     private $db;
 
@@ -17,20 +18,21 @@ class BooksController
     function CreateBook()
     {
         //TODO Kontrollera behörighet
-        if ($this->VerifyUserRole("Admin"))
+        $role = "";
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
+            $role = "Admin";
             require_once "views/books.php";
             require_once "views/default.php";
             require_once "model/Authors.Model.php";
             $arrGenre = $this->db->GetAllGenres();
             $authorTable = new AuthorsModel();
             $arrAuthor = $authorTable->GetAllAuthors();
-            $page = "";
-            $page .= StartPage("Skapa ny Bok");
-            $page .= NavigationPage();
-            $page .= CreateNewBook($arrGenre,$arrAuthor);
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Skapa ny Bok");
+            IndexNav($role,$user['Username']);            
+            echo CreateNewBook($arrGenre,$arrAuthor);
+            echo EndPage();
         }
         else
         {
@@ -42,14 +44,10 @@ class BooksController
     function ShowBook()
     {
         $role = "";
-        $userName = "";
-        if ($this->VerifyUserRole("User"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"User"))
         {
             $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            $userName = $user['UserName'];
         }
         $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
@@ -67,7 +65,7 @@ class BooksController
             require_once "views/books.php";
             require_once "views/default.php";
             echo StartPage("Visa bok");
-            IndexNav($role,$userName);
+            IndexNav($role,$user['Username']);
             echo ShowBook($result,$imageLink,$role);
             echo EndPage();
           }
@@ -79,7 +77,8 @@ class BooksController
 
     function DeleteBook()
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $safetext = $this->ScrubInputs($_POST['id']);
             if($this->db->HideBook($safetext))
@@ -100,8 +99,9 @@ class BooksController
 
     function ShowSearchBook($searchinput)
     {
-        $role = "User";
-        if ($this->VerifyUserRole("Admin"))
+        $role = "";
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $role = "Admin";
         }
@@ -111,29 +111,27 @@ class BooksController
         {
             require_once "views/books.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Sök Resultat");
-            $page .= NavigationPage();
-            $page .= ShowAllBooks($result,$role);
-            $page .= EndPage();
-            echo $page;
+
+            echo StartPage("Sök Resultat");
+            IndexNav($role,$user['Username']);
+            echo ShowAllBooks($result,$role);
+            echo EndPage();
         }
         else
         {
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Fel vid inläsning");
-            $page .= NavigationPage();
-            $page .= "<h1>Sök Resultat</h1><p>'".$_POST['search']."' gav inga resultat!</p>";
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Fel vid inläsning");
+            IndexNav($role,$user['Username']);
+            echo "<h1>Sök Resultat</h1><p>'".$_POST['search']."' gav inga resultat!</p>";
+            echo EndPage();
         }
     }
 
     function ShowAllBooks()
     {
         $role = "User";
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $role = "Admin";
         }
@@ -142,37 +140,32 @@ class BooksController
         {
             require_once "views/books.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Skapa ny Bok");
-            $page .= NavigationPage();
-            $page .= ShowAllBooks($result,$role);
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Skapa ny Bok");
+            IndexNav($role,$user['Username']);
+            echo ShowAllBooks($result,$role);
+            echo EndPage();
         }
         else
         {
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Fel vid inläsning");
-            $page .= NavigationPage();
-            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Fel vid inläsning");
+            IndexNav($role,$user['Username']);
+            echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
+            echo EndPage();
         }
     }
     function CreateGenre()
     {
         //TODO Kontrollera behörighet
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             require_once "views/books.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Skapa ny Genre");
-            $page .= NavigationPage();
-            $page .= CreateNewGenre();
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Skapa ny Genre");
+            IndexNav("Admin",$user['Username']);
+            echo CreateNewGenre();
+            echo EndPage();
         }
         else
         {
@@ -195,6 +188,7 @@ class BooksController
             {
                 $this->db->SetGenre($arr);
                 echo "Genre lades till";
+                header("Location:".prefix."books/showallgenre");
             }
             else
             {
@@ -226,7 +220,8 @@ class BooksController
     function ShowAllGenre()
     {
         $role = "User";
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $role = "Admin";
         }
@@ -235,47 +230,17 @@ class BooksController
         {
             require_once "views/books.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Skapa ny Bok");
-            $page .= NavigationPage();
-            $page .= ShowAllGenre($result,$role);
-            $page .= EndPage();
-            echo $page;
-        }
-        else
-        {
-            require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Fel vid inläsning");
-            $page .= NavigationPage();
-            $page .= "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
-            $page .= EndPage();
-            echo $page;
-        }
-    }
-    private function ShowError($errorText) //Sida som visar fel
-    {
-        $role = "";
-        require_once "views/default.php";
-        echo StartPage("Fel vid inläsning");
-        if ($this->VerifyUserRole("User"))
-        {
-            $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            if ($this->VerifyUserRole("Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($role,$user['UserName']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo StartPage("Skapa ny Bok");
+            IndexNav($role,$user['Username']);
+            echo ShowAllGenre($result,$role);
             echo EndPage();
         }
         else
         {
-            IndexNav("","");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            require_once "views/default.php";
+            echo StartPage("Fel vid inläsning");
+            IndexNav($role,$user['Username']);
+            echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
             echo EndPage();
         }
     }
@@ -316,6 +281,7 @@ class BooksController
                     {
                         echo "Något var fel med bilden";
                     }
+                    header("Location: ".prefix."books/showall");
                 }
                 else
                 {

@@ -121,9 +121,6 @@ else
 <?php
 function BooksRoute($action)
 {
-    $fakeSession = array (
-        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-    );
     require_once "controller/Books.Controller.php";
     $controller = new BooksController();
     switch(strtolower($action))
