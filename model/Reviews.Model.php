@@ -16,9 +16,6 @@ class ReviewsModel extends PDOHandler
         $stmt->execute($inputArr);
     }
 
-
-
-
 }
 
 ?>

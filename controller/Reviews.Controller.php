@@ -59,6 +59,11 @@ class ReviewsController
         }
     }
 
+    public function ShowAllReviews()
+    {
+        
+    }
+
 
     private function ScrubSaveAuthorArr($arr)
     {
