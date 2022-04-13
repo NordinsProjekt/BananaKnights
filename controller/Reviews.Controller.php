@@ -82,24 +82,5 @@ class ReviewsController extends BaseController
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
-
-
-    private function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
 ?>

@@ -2,7 +2,7 @@
 require_once "model/User.Model.php";
 require_once "classes/User.class.php";
 
-class UserController
+class UserController extends BaseController
 {
     private $db;
     function __construct()
@@ -103,44 +103,6 @@ class UserController
         }
     }
 
-    private function ShowError($errorText) //Sida som visar fel
-    {
-        $role = "";
-        require_once "views/default.php";
-        echo StartPage("Fel vid inläsning");
-        if ($this->VerifyUserRole("User"))
-        {
-            $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            if ($this->VerifyUserRole("Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($role,$user['UserName']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-        else
-        {
-            IndexNav("","");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-    }
-
-    private function ShowSuccess($message) //Sida som visas när något går bra.
-    {
-        require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Main");
-        $page .= NavigationPage();
-        $page .= "<h1>Lyckades</h1><p>" . $message . "</p>";
-        $page .= EndPage();
-        echo $page;
-    }
-
     public function LoginPage()
     {
         require_once "views/users.php";
@@ -177,10 +139,7 @@ class UserController
             $this->ShowError("Användarnman stämmer inte.");
         }         
     }
-    private function ShowMainPage()
-    {
 
-    }
     public function Logout()
     {
         session_destroy();
@@ -192,23 +151,6 @@ class UserController
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
-    }
-
-    private function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
 ?>

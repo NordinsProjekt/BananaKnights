@@ -16,6 +16,12 @@ class ReviewsModel extends PDOHandler
         $stmt->execute($inputArr);
     }
 
+    public function GetAll()
+    {
+        $stmt = $this->Connect()->prepare("SELECT * FROM rewviews;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
 
 ?>
