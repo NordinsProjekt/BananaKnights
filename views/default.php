@@ -110,35 +110,43 @@ function IndexTop()
     require_once "model/Books.Model.php";
     require_once "views/books.php";
 
-    $rnd = rand(1,4);
-
     $model = new BooksModel;
     $result = $model->GetAllBooks();
-    //var_dump($result);
-
-    // foreach ($result as $value) {
-    //     $bookinfo[] = $value;
-    // }
+    
+    $rnd = rand(0,count($result)-1);
 
 
-    // $text = "<br><div class='card center-div' style='max-width: 100%;'>
-    //     <div class='row g-0'>
-    //     <div class='col-md-4'>
-    //         <img src='" . $bookinfo[7] . "' class='img-fluid rounded-start' alt='book photo'>
-    //     </div>
-    //     <div class='col-md-8'>
-    //         <div class='card-body'>
-    //         <h5 class='card-title'>" . $bookinfo[1] . "</h5>
-    //         <p class='card-text'>" . $bookinfo[3] ."</p>
-    //         <p class='card-text'>" . $bookinfo[4] ."</p>
-    //         <p class='card-text'>" . $bookinfo[5] ."</p>
-    //         <p class='card-text'>" . $bookinfo[2] ."</p>
-    //         <p class='card-text'><small class='text-muted'>tillagd den " . $bookinfo[8] . "</small></p>
-    //         </div>
-    //     </div>
-    //     </div>
-    //     </div><br><br>";   
-    // echo $text;
+    foreach ($result as $value) {
+        $bookinfo[] = $value;
+    }
+
+    if (file_exists("img/books/". $bookinfo[$rnd]['ImagePath']))
+    {
+        $pictures = scandir("img/books/". $sorted[$rnd]['ImagePath']);
+        $imageLink = prefix."img/books/". $sorted[$rnd]['ImagePath'] ."/". $pictures[2];
+    }
+    else
+    {
+        $imageLink = prefix."img/books/noimage.jpg";
+    }
+    $text = "<br><div class='card'>
+        <div class='row'><br>
+        <div class='col'><br>
+
+            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='100px'>
+        </div>
+        <div class='col-md-10'>
+            <div class='card-body'><br><br>
+            <h5 class='card-title'>" . $bookinfo[$rnd]["Title"] . "</h5>
+            <p class='card-text'>" . $bookinfo[$rnd]["Description"] ."</p>
+            <p class='card-text'>" . $bookinfo[$rnd]["GenreName"] ."</p>
+            <p class='card-text'>" . $bookinfo[$rnd]["AuthorName"] ."</p>
+            <p class='card-text'><small class='text-muted'>tillagd den " . $bookinfo[$rnd]["Created"] . "</small></p>
+            </div>
+        </div>
+        </div>
+        </div><br><br>";   
+    echo $text;
 }
 
 
@@ -167,10 +175,10 @@ function IndexCards()
             $imageLink = prefix."img/books/noimage.jpg";
         }
     $text .= 
-    "<div class='col text-white bg-secondary'><br>
+    "<div class='col text-white bg-secondary' style='border-radius: 8px'><br>
     <img src='" . $imageLink . "' alt='book bild' height='100px'><br>"
     . $sorted[$i]["Title"] . "<br>"
-    . $sorted[$i]["Name"] . "<br>
+    . $sorted[$i]["Name"] . "<br><br>
     <form method='post' action='".prefix."books/show'><button type='submit' class='btn btn-primary' name='id' value='".$sorted[$i]['Id']."'>Läs mer</button></form><br>
     </div><br>";
     }

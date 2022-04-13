@@ -24,7 +24,7 @@ class BooksModel extends PDOHandler
     public function GetAllBooks()
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
-        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName FROM books AS b 
+        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, b.Created, b.ImagePath FROM books AS b 
         
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
