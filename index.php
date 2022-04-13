@@ -117,11 +117,8 @@ else
     StartPage("Index Page");
     IndexNav();
     IndexTop();
-   // for($i =0; $i < 8; $i++)
-   // {
         IndexCards(); 
         IndexCards(); 
-   // }
     EndPage();
     exit();
 }
@@ -194,6 +191,9 @@ function BooksRoute($action)
             break;
         case "showallgenre":
             $controller->ShowAllGenre();
+            break;
+        case "search":
+            $controller->ShowSearchBook($_POST['search']);
             break;
         default:
             break;

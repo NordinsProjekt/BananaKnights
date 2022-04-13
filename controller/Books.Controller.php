@@ -95,6 +95,38 @@ class BooksController
 
     }
 
+    function ShowSearchBook($searchinput)
+    {
+        $role = "User";
+        if ($this->VerifyUserRole("Admin"))
+        {
+            $role = "Admin";
+        }
+        $safetext = $this->ScrubInputs($searchinput);
+        $result = $this->db->GetAllBooksSearch($safetext);
+        if ($result)
+        {
+            require_once "views/books.php";
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Sök Resultat");
+            $page .= NavigationPage();
+            $page .= ShowAllBooks($result,$role);
+            $page .= EndPage();
+            echo $page;
+        }
+        else
+        {
+            require_once "views/default.php";
+            $page = "";
+            $page .= StartPage("Fel vid inläsning");
+            $page .= NavigationPage();
+            $page .= "<h1>Sök Resultat</h1><p>'".$_POST['search']."' gav inga resultat!</p>";
+            $page .= EndPage();
+            echo $page;
+        }
+    }
+
     function ShowAllBooks()
     {
         $role = "User";

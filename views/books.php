@@ -136,4 +136,9 @@ function ShowAllGenre($arr,$role)
     return $text;
 }
 
+function ShowSearch()
+{
+    
+}
+
 ?>
