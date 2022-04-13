@@ -15,9 +15,6 @@ function StartPage($titel)
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <link rel='stylesheet' type='text/css' href='/bananaknights/css/style.css' media='screen' />
-        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css'>
-        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script>
-        <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js'></script>
         <title>". $titel ."</title>
     </head>
     <body>";
@@ -88,8 +85,8 @@ function IndexNav()
                 <a class="nav-link" href="#">Contact</a>
                 </li>
             </ul>
-            <form class="d-flex me-auto">
-            <input class="form-control me-2 mt-3" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex me-auto" method='post' action='/BananaKnights/books/search'>
+            <input class="form-control me-2 mt-3" type="search" placeholder="Search" aria-label="Search" name="search">
             <button class="btn btn-outline-success mt-3" type="submit">Search</button>
         </form>
             <ul class="navbar-nav mb-2 mb-lg-0">
