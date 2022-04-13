@@ -111,5 +111,22 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
+    public function GetAllBooksSearch($searchinput)
+    {
+        $stmt = $this->Connect()->prepare(
+            "SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
+            CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName
+            FROM books AS b
+            INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+            INNER JOIN genres AS g ON g.Id = gb.GenreId
+            INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+            INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+            WHERE (b.Title LIKE :title) AND (b.IsDeleted = 0)
+            ");
+        $stmt->bindParam(":title", $searchinput, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
 }
 ?>

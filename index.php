@@ -116,16 +116,6 @@ else
     $controller = new HomeController();
     $controller->ShowHomePage();
     //include_once "views/default.php";
-
-    //StartPage("Index Page");
-    //IndexNav("");
-    //IndexTop();
-   // for($i =0; $i < 8; $i++)
-   // {
-       // IndexCards(); 
-   // }
-    //EndPage();
-    //exit();
 }
 ?>
 <?php
@@ -196,6 +186,9 @@ function BooksRoute($action)
             break;
         case "showallgenre":
             $controller->ShowAllGenre();
+            break;
+        case "search":
+            $controller->ShowSearchBook($_POST['search']);
             break;
         default:
             break;
