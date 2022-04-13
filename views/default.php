@@ -122,8 +122,8 @@ function IndexTop()
 
     if (file_exists("img/books/". $bookinfo[$rnd]['ImagePath']))
     {
-        $pictures = scandir("img/books/". $sorted[$rnd]['ImagePath']);
-        $imageLink = prefix."img/books/". $sorted[$rnd]['ImagePath'] ."/". $pictures[2];
+        $pictures = scandir("img/books/". $bookinfo[$rnd]['ImagePath']);
+        $imageLink = prefix."img/books/". $bookinfo[$rnd]['ImagePath'] ."/". $pictures[2];
     }
     else
     {
