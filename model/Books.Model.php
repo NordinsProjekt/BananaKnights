@@ -62,7 +62,6 @@ class BooksModel extends PDOHandler
         $stmt->execute($arr);
         return true;
     }
-
     public function UpdateBook($arr)
     {
 

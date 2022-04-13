@@ -42,9 +42,14 @@ class BooksController
     function ShowBook()
     {
         $role = "";
+        $userName = "";
         if ($this->VerifyUserRole("User"))
         {
             $role = "User";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            $userName = $user['UserName'];
         }
         $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
@@ -61,13 +66,11 @@ class BooksController
             }
             require_once "views/books.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= StartPage("Skapa ny Bok");
-            $page .= NavigationPage();
-            $page .= ShowBook($result,$imageLink,$role);
-            $page .= EndPage();
-            echo $page;
-        }
+            echo StartPage("Visa bok");
+            IndexNav($role,$userName);
+            echo ShowBook($result,$imageLink,$role);
+            echo EndPage();
+          }
         else
         {
             $this->ShowError("Boken finns inte");
@@ -218,15 +221,31 @@ class BooksController
             echo $page;
         }
     }
-    public function ShowError($errorText)
+    private function ShowError($errorText) //Sida som visar fel
     {
+        $role = "";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Fel vid inläsning");
-        $page .= NavigationPage();
-        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Fel vid inläsning");
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
+            IndexNav($role,$user['UserName']);
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
+        else
+        {
+            IndexNav("","");
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
     }
 
     public function SaveBook()

@@ -112,18 +112,20 @@ if (key_exists('url',$_GET))
 }
 else
 {
-    include_once "views/default.php";
+    require_once "controller/Home.Controller.php";
+    $controller = new HomeController();
+    $controller->ShowHomePage();
+    //include_once "views/default.php";
 
-    StartPage("Index Page");
-    IndexNav();
-    IndexTop();
+    //StartPage("Index Page");
+    //IndexNav("");
+    //IndexTop();
    // for($i =0; $i < 8; $i++)
    // {
-        IndexCards(); 
-        IndexCards(); 
+       // IndexCards(); 
    // }
-    EndPage();
-    exit();
+    //EndPage();
+    //exit();
 }
 ?>
 <?php

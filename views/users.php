@@ -21,13 +21,9 @@ function SignUpForm($message)
     return $text;
 }
 
-function LoginForm($message)
+function LoginForm()
 {
     $text ="<h1>Logga in</h1>";
-    if ($message != "")
-    {
-        $text.= "<p>" . $message . "</p>";
-    }
     $text .= "<form method='post' action='".prefix."user/loginuser'><table>";
     $text .= "<tr> <th></th><th></th> </tr>";
     $text .= "<tr> <td><label for='txtUsername' />Användarnamn </label></td>
