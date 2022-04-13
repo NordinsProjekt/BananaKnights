@@ -188,7 +188,7 @@ function BooksRoute($action)
             $controller->ShowAllGenre();
             break;
         case "search":
-            $controller->ShowSearchBook($_POST['search']);
+            $controller->ShowSearchBook("%".$_POST['search']."%");
             break;
         default:
             break;

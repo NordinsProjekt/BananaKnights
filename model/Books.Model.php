@@ -122,7 +122,7 @@ class BooksModel extends PDOHandler
             INNER JOIN genres AS g ON g.Id = gb.GenreId
             INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
             INNER JOIN authors AS a ON a.Id = ba.AuthorId 
-            WHERE (b.Title LIKE :title) AND (b.IsDeleted = 0)
+            WHERE (b.Title LIKE :title ) AND (b.IsDeleted = 0)
             ");
         $stmt->bindParam(":title", $searchinput, PDO::PARAM_STR);
         $stmt->execute();
