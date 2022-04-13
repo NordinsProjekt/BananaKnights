@@ -11,7 +11,7 @@ function ShowAllAuthors($arr,$role)
     }
     else
     {
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th></tr>";
+        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th></tr>";
     }
     
     foreach ($arr as $key => $row) {
@@ -28,6 +28,10 @@ function ShowAllAuthors($arr,$role)
             </form></td>";
         }
         $text.= "</tr>";
+    }
+    if ($role == "Admin")
+    {
+        $text.= "</table><form method='post' action='".prefix."author/newauthor'><button type='submit'>Skapa ny författare</button></form>";
     }
     return $text;
 }
