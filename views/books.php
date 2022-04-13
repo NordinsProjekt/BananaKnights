@@ -6,7 +6,7 @@ function CreateNewBook($arrGenre,$arrAuthor)
     $text = "<h1>Skapa ny bok</h1>";
     $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data'>";
     $text .= "<table><tr><th></th><th></th></tr>";
-    $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' /></td> </tr>";
+    $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' pattern='.{1}' placeholder='Bokens titel'/></td> </tr>";
     $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
     foreach ($arrAuthor as $key => $value) {
         $text.= "<option value='".$value['Id']."'>".$value['Firstname']." ".$value['Lastname']."</option>";
@@ -18,10 +18,12 @@ function CreateNewBook($arrGenre,$arrAuthor)
     }    
     $text .= "</select></td> </tr>";
     $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' 
-    id='pubYear' name='BookYear' pattern ='[0-9]'/></td>";
+    id='pubYear' name='BookYear' pattern ='[0-9]{0,4}' placeholder='ex 1986'/></td>";
     $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
-              <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30'></textarea></td> </tr>";
-    $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN' /></td> </tr>";
+              <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30' 
+              placeholder='Beskrivande text, minst 5 tecken' ></textarea></td> </tr>";
+    $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN'
+     placeholder='ISBN nummer' /></td> </tr>";
     $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' id='txtBookPicture' name='BookPicture' /></td> </tr>";
     $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveBook' value='Spara' /></td> </tr>";
     $text .= "</table></form>";
@@ -34,9 +36,11 @@ function CreateNewGenre()
         $text = "<h1>Skapa ny genre</h1>";
         $text .= "<form method='post' action='".prefix."books/savegenre'>";
         $text .= "<table><tr><th></th><th></th></tr>";
-        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' name='BookGenre' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' 
+        name='BookGenre' pattern='.{3}' placeholder='Genre namn'/></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
-                  <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30'></textarea></td> </tr>";
+                  <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30' 
+                  pattern='.{5}' placeholder='Minst 5 tecken'></textarea></td> </tr>";
         $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveGenre' value='Spara' /></td> </tr>";
         $text .= "</table></form>";
         return $text;

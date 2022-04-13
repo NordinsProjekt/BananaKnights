@@ -237,10 +237,10 @@ class BooksController
         }
         require_once "classes/Book.class.php";
         $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
-        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'],"0",date("Y-m-d H:i:s"));
+        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'].$_POST['BookTitle'],"0",date("Y-m-d H:i:s"));
             require_once "controller/Upload.Controller.php";
             $uploadController = new UploadController();
-            if ($uploadController->AddImage("img/books/".$book->getISBN(),$_FILES['BookPicture']))
+            if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
             {
                 echo "Allt gick bra";
             }

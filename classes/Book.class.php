@@ -71,7 +71,7 @@ class Book
 
     private function setImgPath($imgPath)
     {
-        $this->imgPath = $this->ScrubInputsISBN($imgPath);
+        $this->imgPath = $this->ScrubAll($imgPath);
         if (empty($this->imgPath) || $this->imgPath == "") 
         {
             $this->validated = false;
@@ -106,13 +106,20 @@ class Book
       return $safe;
     }
 
+    private function ScrubAll($notsafeText)
+    {
+        $banlist = array("\t","."," ","-",";","/","<",">",")","(","=","[","]","+","*","#",":");
+        $safe = trim(str_replace($banlist,"",$notsafeText));
+        return $safe;
+    }
+
     public function Validated()
     {
         return $this->validated;
     }
-    public function getISBN()
+    public function getImagePath()
     {
-        return $this->bookISBN;
+        return $this->imgPath;
     }
     public function ToArray()
     {
