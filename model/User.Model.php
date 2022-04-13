@@ -13,6 +13,13 @@ class UserModel extends PDOHandler
         return $stmt->fetchAll(); 
     }
 
+    public function GetUserFromId($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT UserName FROM users WHERE Id = :userId");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
     public function GetUserID($username,$passwordhash)
     {
         $stmt = $this->Connect()->prepare("SELECT Id FROM users 

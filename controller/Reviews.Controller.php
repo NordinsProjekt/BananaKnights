@@ -17,14 +17,17 @@ class ReviewsController
             require_once "views/reviews.php";
             require_once "views/default.php";
             require_once "model/Books.Model.php";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            $userName = $user['UserName'];
             $bookDB = new BooksModel();
             $book = $bookDB->GetBook($_POST['bookId']);
-            $page = "";
-            $page .= StartPage("Skapa ny Review");
-            $page .= AddNewReview($book);
-            $page .= EndPage();
-            echo $page;
-        }
+            echo StartPage("Skriv recension");
+            IndexNav("User",$userName);
+            echo AddNewReview($book);
+            echo EndPage();
+         }
         else
         {
             $this->ShowError("Du måste vara inloggad för att skriva reviews");
@@ -81,14 +84,31 @@ class ReviewsController
       return $safe;
     }
 
-    public function ShowError($errorText)
+    private function ShowError($errorText) //Sida som visar fel
     {
+        $role = "";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Fel vid inläsning");
-        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Fel vid inläsning");
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
+            IndexNav($role,$user['UserName']);
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
+        else
+        {
+            IndexNav("","");
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
     }
 
     private function VerifyUserRole($roleName)

@@ -19,12 +19,10 @@ class UserController
     {
         require_once "views/users.php";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Skapa ny användare");
-        $page .= NavigationPage();
-        $page .= SignUpForm("");
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Skapa ny användare");
+        IndexNav("","");
+        echo SignUpForm("");
+        echo EndPage();
     }
 
     public function SaveUser()
@@ -107,13 +105,29 @@ class UserController
 
     private function ShowError($errorText) //Sida som visar fel
     {
+        $role = "";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Fel vid inläsning");
-        $page .= NavigationPage();
-        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Fel vid inläsning");
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
+            IndexNav($role,$user['UserName']);
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
+        else
+        {
+            IndexNav("","");
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
     }
 
     private function ShowSuccess($message) //Sida som visas när något går bra.
@@ -131,12 +145,10 @@ class UserController
     {
         require_once "views/users.php";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Logga in");
-        $page .= NavigationPage();
-        $page .= LoginForm("");
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Logga in");
+        IndexNav("","");
+        echo LoginForm();
+        echo EndPage();
     }
 
     public function Login() //Logga in användaren
@@ -151,7 +163,7 @@ class UserController
                 $_SESSION['Username'] = $row['UserName'];
                 $_SESSION['UserId'] = $row['Id'];
                 //Ladda in homepage
-                $this->ShowSuccess("Du loggades in");
+                header("Location: ".prefix);
              }
              else
              {
@@ -180,6 +192,23 @@ class UserController
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
+    }
+
+    private function VerifyUserRole($roleName)
+    {
+        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
+        {
+            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
+            {
+                require_once "model/User.Model.php";
+                $userDB = new UserModel();
+                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 ?>

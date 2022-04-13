@@ -130,14 +130,31 @@ class AuthorsController
 
     }
 
-    public function ShowError($errorText)
+    private function ShowError($errorText) //Sida som visar fel
     {
+        $role = "";
         require_once "views/default.php";
-        $page = "";
-        $page .= StartPage("Fel vid inläsning");
-        $page .= "<h1>FEL</h1><p>" . $errorText . "</p>";
-        $page .= EndPage();
-        echo $page;
+        echo StartPage("Fel vid inläsning");
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $user = $userDB->GetUserFromId($_SESSION['UserId']);
+            if ($this->VerifyUserRole("Admin"))
+            {
+                $role = "Admin";
+            }
+            IndexNav($role,$user['UserName']);
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
+        else
+        {
+            IndexNav("","");
+            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+            echo EndPage();
+        }
     }
 
     private function ScrubSaveAuthorArr($arr)
