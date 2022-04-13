@@ -13,6 +13,17 @@ class UserModel extends PDOHandler
         return $stmt->fetchAll(); 
     }
 
+    public function GetUserRoles($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT u.Id,u.UserName,GROUP_CONCAT(r.Name) AS Roles FROM users AS u 
+        INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
+        INNER JOIN roles AS r ON ug.RolesID = r.Id
+        WHERE u.Id = :userId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function GetUserFromId($userId)
     {
         $stmt = $this->Connect()->prepare("SELECT UserName FROM users WHERE Id = :userId");

@@ -1,6 +1,7 @@
 <?php
 require_once "model/Reviews.Model.php";
-class ReviewsController
+require_once "classes/Base.Controller.class.php";
+class ReviewsController extends BaseController
 {
 
     private $db;
@@ -12,19 +13,16 @@ class ReviewsController
 
     function NewReview()
     {
-        if ($this->VerifyUserRole("User"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"User"))
         {
             require_once "views/reviews.php";
             require_once "views/default.php";
             require_once "model/Books.Model.php";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            $userName = $user['UserName'];
             $bookDB = new BooksModel();
             $book = $bookDB->GetBook($_POST['bookId']);
             echo StartPage("Skriv recension");
-            IndexNav("User",$userName);
+            IndexNav("User",$user['Username']);
             echo AddNewReview($book);
             echo EndPage();
          }
@@ -49,6 +47,7 @@ class ReviewsController
             if (!$result)
             {
                 echo "Review lades till på boken";
+                header("Location".prefix."/books/showall");
             }
             else
             {
@@ -84,32 +83,6 @@ class ReviewsController
       return $safe;
     }
 
-    private function ShowError($errorText) //Sida som visar fel
-    {
-        $role = "";
-        require_once "views/default.php";
-        echo StartPage("Fel vid inläsning");
-        if ($this->VerifyUserRole("User"))
-        {
-            $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            if ($this->VerifyUserRole("Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($role,$user['UserName']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-        else
-        {
-            IndexNav("","");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-    }
 
     private function VerifyUserRole($roleName)
     {

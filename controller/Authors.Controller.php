@@ -1,6 +1,7 @@
 <?php
 require_once "model/Authors.Model.php";
-class AuthorsController
+require_once "classes/Base.Controller.class.php";
+class AuthorsController extends BaseController
 {
 
     private $db;
@@ -17,17 +18,21 @@ class AuthorsController
         {
             require_once "views/authors.php";
             require_once "views/default.php";
-            $role = "User";
-            if ($this->VerifyUserRole("Admin"))
+            $user = $this->GetUserInformation();
+            if (str_contains($user['Roles'],"Admin"))
             {
-                $role = "Admin";
+                IndexNav("Admin",$user['Username']);
+                echo StartPage("Visa alla Författare");
+                echo ShowAllAuthors($arr,"Admin");
+                echo EndPage();
             }
-            $page = "";
-            $page .= NavigationPage();
-            $page .= StartPage("Visa alla Författare");
-            $page .= ShowAllAuthors($arr,$role);
-            $page .= EndPage();
-            echo $page;
+            else
+            {
+                IndexNav("",$user['Username']);
+                echo StartPage("Visa alla Författare");
+                echo ShowAllAuthors($arr,"");
+                echo EndPage();
+            }
         }
         else
         {
@@ -45,14 +50,23 @@ class AuthorsController
         $result = $this->db->GetAuthor($id);
         if ($result)
         {
+            $user = $this->GetUserInformation();
             require_once "views/authors.php";
             require_once "views/default.php";
-            $page = "";
-            $page .= NavigationPage();
-            $page .= StartPage("Visa Författare");
-            $page .= ShowAuthor($result);
-            $page .= EndPage();
-            echo $page;
+            if (str_contains($user['Roles'],"Admin"))
+            {
+                IndexNav("Admin",$user['Username']);
+                echo StartPage("Visa Författare");
+                echo ShowAuthor($result);
+                echo EndPage();
+            }
+            else
+            {
+                IndexNav("",$user['Username']);
+                echo StartPage("Visa Författare");
+                echo ShowAuthor($result);
+                echo EndPage();
+            }
         }
         else
         {
@@ -62,15 +76,17 @@ class AuthorsController
 
     function NewAuthor()
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             require_once "views/authors.php";
             require_once "views/default.php";
             $page = "";
-            $page .= StartPage("Skapa ny Författare");
-            $page .= AddNewAuthor();
-            $page .= EndPage();
-            echo $page;
+            echo StartPage("Skapa ny Författare");
+            IndexNav("Admin",$user['Username']);
+            echo AddNewAuthor();
+            echo EndPage();
+
         }
         else
         {
@@ -79,9 +95,10 @@ class AuthorsController
 
     }
 
-    function AddAuthor($session)
+    function AddAuthor()
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $inputArr = array (
                 $_POST['Fname'],$_POST['Lname'],$_POST['Country'], 
@@ -103,6 +120,7 @@ class AuthorsController
                     if (!$result)
                     {
                         echo "Författaren lades till";
+                        header("Location: ".prefix. "authors/showall");
                         break;
                     }
                     else
@@ -130,33 +148,6 @@ class AuthorsController
 
     }
 
-    private function ShowError($errorText) //Sida som visar fel
-    {
-        $role = "";
-        require_once "views/default.php";
-        echo StartPage("Fel vid inläsning");
-        if ($this->VerifyUserRole("User"))
-        {
-            $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
-            if ($this->VerifyUserRole("Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($role,$user['UserName']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-        else
-        {
-            IndexNav("","");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-    }
-
     private function ScrubSaveAuthorArr($arr)
     {
         $cleanArr = array();
@@ -172,24 +163,5 @@ class AuthorsController
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
-
-    private function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
-
 ?>

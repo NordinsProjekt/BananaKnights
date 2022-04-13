@@ -102,6 +102,10 @@ function ShowAllBooks($arr,$role)
         }
         $text.= "</tr>";
     }
+    if ($role == "Admin")
+    {
+        $text.= "<form method='post' action='".prefix."books/createbook'>";
+    }
     return $text;
 }
 
