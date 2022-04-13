@@ -90,9 +90,12 @@ if (key_exists('url',$_GET))
             break;
 
         case "review/newreview":
-            require_once "controller/Reviews.Controller.php";
-            $controller = new ReviewsController();
-            $controller->NewReview();
+            if (key_exists('bookId',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->NewReview();
+            }
             break;
         case "review/addreview":
             if (key_exists('id',$_POST))
@@ -100,7 +103,7 @@ if (key_exists('url',$_GET))
                 require_once "controller/Reviews.Controller.php";
                 require_once "controller/Books.Controller.php";
                 $controller = new ReviewsController();
-                $controller->AddReview(/*$_GET['id']*/1, $fakeSession);
+                $controller->AddReview();
             }
             break;
         default:

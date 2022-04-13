@@ -41,6 +41,11 @@ class BooksController
 
     function ShowBook()
     {
+        $role = "";
+        if ($this->VerifyUserRole("User"))
+        {
+            $role = "User";
+        }
         $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
         if ($result)
@@ -59,7 +64,7 @@ class BooksController
             $page = "";
             $page .= StartPage("Skapa ny Bok");
             $page .= NavigationPage();
-            $page .= ShowBook($result,$imageLink);
+            $page .= ShowBook($result,$imageLink,$role);
             $page .= EndPage();
             echo $page;
         }
@@ -236,19 +241,9 @@ class BooksController
             exit();
         }
         require_once "classes/Book.class.php";
-        $book = new Book($session['UserID'],$_POST['BookTitle'],$_POST['BookYear'],
+        $book = new Book($_SESSION['UserId'],$_POST['BookTitle'],$_POST['BookYear'],
         $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'].$_POST['BookTitle'],"0",date("Y-m-d H:i:s"));
-            require_once "controller/Upload.Controller.php";
-            $uploadController = new UploadController();
-            if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
-            {
-                echo "Allt gick bra";
-            }
-            else
-            {
-                echo "Något var fel med bilden";
-            }
-            var_dump($_SESSION['Message']);
+
         //TODO:
         //Om $_POST saknar info så visa felmeddelande direkt AJAX
         //Om arrayen inte innehåller något som är tomt eller felaktig data
@@ -260,7 +255,16 @@ class BooksController
             {
                 if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
                 {
-                    echo "Boken lades till";
+                    require_once "controller/Upload.Controller.php";
+                    $uploadController = new UploadController();
+                    if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
+                    {
+                        echo "Allt gick bra";
+                    }
+                    else
+                    {
+                        echo "Något var fel med bilden";
+                    }
                 }
                 else
                 {

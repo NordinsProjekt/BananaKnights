@@ -37,7 +37,6 @@ class AdminController
             $page .= "<div class='AdminBook'><div class='genre'>" . CreateNewGenre() . "</div>";
             $page .= "<div class='author'>". AddNewAuthor() . "</div>";
             $page .= "<div class='book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
-            $page .= "<div class='review'>" .AddNewReview() . "</div>";
             $page .= "</div>";
             $page.= EndPage();
             echo $page;
