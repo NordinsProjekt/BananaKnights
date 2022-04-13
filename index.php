@@ -85,7 +85,6 @@ if (key_exists('url',$_GET))
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
-            echo "inne i authors";
             $controller->AddAuthor($fakeSession);
             break;
 

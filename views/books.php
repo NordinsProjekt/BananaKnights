@@ -137,6 +137,10 @@ function ShowAllGenre($arr,$role)
         }
         $text.= "</tr>";
     }
+    if ($role == "Admin")
+    {
+        $text.= "</table><form method='post' action='".prefix."books/creategenre'><button type='submit'>Skapa ny genre</button></form>";
+    }
     return $text;
 }
 
