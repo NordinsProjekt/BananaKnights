@@ -76,7 +76,7 @@ function IndexNav($role,$username)
                 </li>
             </ul>
             <form class='d-flex me-auto' method='post' action='".prefix."books/search'>
-            <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search'>
+            <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search' />
             <button class='btn btn-outline-success mt-3' type='submit'>Search</button>
         </form>
             <ul class='navbar-nav mb-2 mb-lg-0'>
