@@ -63,7 +63,25 @@ class ReviewsController extends BaseController
 
     public function ShowAllReviews()
     {
-        
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $result = $this->db->GetAll();
+            if ($result)
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav("Admin",$user['Username']);
+                echo ShowAllReviews($result,"Admin");
+                echo EndPage();
+            }
+
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet att se detta");
+        }
     }
 
 
@@ -82,24 +100,5 @@ class ReviewsController extends BaseController
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
-
-
-    private function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
 }
 ?>

@@ -382,36 +382,11 @@ class BooksController extends BaseController
         return false;
     }
 
-    private function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     private function ScrubInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
-    }
-
-    //Mellanslag tillåtna
-    private function CheckUserName($notsafeText)
-    {
-        $banlist = array("\t",".",";","/",",","<",">",")","(","=","[","]","+","*");
-        $safe = str_replace($banlist,"",$notsafeText);
-        return $safe;
     }
 }
 ?>

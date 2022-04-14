@@ -104,7 +104,7 @@ function ShowAllBooks($arr,$role)
     }
     if ($role == "Admin")
     {
-        $text.= "<form method='post' action='".prefix."books/createbook'>";
+        $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
     }
     return $text;
 }
@@ -136,6 +136,10 @@ function ShowAllGenre($arr,$role)
             </form></td>";
         }
         $text.= "</tr>";
+    }
+    if ($role == "Admin")
+    {
+        $text.= "</table><form method='post' action='".prefix."books/creategenre'><button type='submit'>Skapa ny genre</button></form>";
     }
     return $text;
 }

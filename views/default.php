@@ -57,7 +57,7 @@ function IndexNav($role,$username)
 {
     $text = "
     <body>
-            <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+        <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
         <div class='container-fluid'>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
@@ -78,19 +78,22 @@ function IndexNav($role,$username)
             <form class='d-flex me-auto' method='post' action='".prefix."books/search'>
             <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search' />
             <button class='btn btn-outline-success mt-3' type='submit'>Search</button>
-        </form>
-            <ul class='navbar-nav mb-2 mb-lg-0'>
-                
-                ";
+            </form>";
+            if ($role == "Admin")
+            {
+                $text .= "<li><a class='nav-link' href='".prefix."books/showall'>Böcker</a></li>";
+                $text .= "<li><a class='nav-link' href='".prefix."review/showall'>Recensioner</a></li>";
+                $text .= "<li><a class='nav-link' href='".prefix."authors/showall'>Författare</a></li>";
+                $text .= "<li><a class='nav-link' href='".prefix."books/showallgenre'>Genre</a></li>";
+            }
                 if ($role != "")
                 {
                     $text .= "<li><a class='nav-link' href='".prefix."user/profile'>".$username."</a></li>";
-                    $text .= "<li><a class='nav-link' href='".prefix."user/logoutuser'>Logout</a>
-                    </li>";
+                    $text .= "<li><a class='nav-link' href='".prefix."user/logoutuser'>Logout</a></li>";
                 }
                 else
                 {
-                    $text .= "<a class='nav-link' href='".prefix."user/loginpage'>Login</a></li>";
+                    $text .= "<li><a class='nav-link' href='".prefix."user/loginpage'>Login</a></li>";
                     $text .= "<li><a class='nav-link' href='".prefix."user/create'>Register</a></li>";
                 }
 

@@ -21,15 +21,15 @@ class AuthorsController extends BaseController
             $user = $this->GetUserInformation();
             if (str_contains($user['Roles'],"Admin"))
             {
-                IndexNav("Admin",$user['Username']);
                 echo StartPage("Visa alla Författare");
+                IndexNav("Admin",$user['Username']);
                 echo ShowAllAuthors($arr,"Admin");
                 echo EndPage();
             }
             else
             {
-                IndexNav("",$user['Username']);
                 echo StartPage("Visa alla Författare");
+                IndexNav("",$user['Username']);
                 echo ShowAllAuthors($arr,"");
                 echo EndPage();
             }
@@ -55,15 +55,15 @@ class AuthorsController extends BaseController
             require_once "views/default.php";
             if (str_contains($user['Roles'],"Admin"))
             {
-                IndexNav("Admin",$user['Username']);
                 echo StartPage("Visa Författare");
+                IndexNav("Admin",$user['Username']);
                 echo ShowAuthor($result);
                 echo EndPage();
             }
             else
             {
-                IndexNav("",$user['Username']);
                 echo StartPage("Visa Författare");
+                IndexNav("",$user['Username']);
                 echo ShowAuthor($result);
                 echo EndPage();
             }
