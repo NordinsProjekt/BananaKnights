@@ -21,45 +21,59 @@
         $text .= "</table></form>";
         return $text;
     }
-
+    function ShowReview($review)
+    {
+        $text = "<h1>Visa enskild recension</h1>";
+        $text .= "<h2>".$review['ReviewTitle']."</h2>";
+        $text .= "<div width='300px'>".$review['ReviewText']."</div>";
+        $text .= "<p>Skriven av: ".$review['UserName']."</p>";
+        $text .= "<p>Skapad: ".$review['Created']."</p>";
+        return $text;
+    }
     function ShowAllReviews($result,$role)
     {
-        //TODO ShowAllReviews fixa!!
+        //TODO lägga in roller kontroll
         $text = "<h1>Visa alla reviews</h1>";
-        for ($i=0; $i < count($result); $i++) { 
-            var_dump($result[$i]);echo "<br /><br />";
+        if ($role != "Admin")
+        {
+            $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
+            <th>Visa</th></tr>";
         }
-                
+        else
+        {
+            $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
+            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
+        }
 
-        // if ($role == "Admin")
-        // {
-        //     $text .= "<table><tr> <th></th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
-        // }
-        // else
-        // {
-        //     $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Visa</th></tr>";
-        // }
-        
-        // foreach ($result as $key => $row) {
-        //     $text.= "<tr>";
-        //     $text.= "<td>".$row['Name']."</td>";
-        //     $text.= "<td>".$row['Description']."</td>";
-        //     $text.= "<td>".$row['Created']."</td>";
-        //     $text.= "<td><form method='post' action='".prefix."books/showgenre'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
-        //     </form></td>";
-        //     if ($role == "Admin")
-        //     {
-        //         $text.= "<td><form method='post' action='".prefix."books/editgenre'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
-        //         </form></td>";
-        //         $text.= "<td><form method='post' action='".prefix."books/deletegenre'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
-        //         </form></td>";
-        //     }
-        //     $text.= "</tr>";
-        // }
-        // if ($role == "Admin")
-        // {
-        //     $text.= "</table><form method='post' action='".prefix."books/creategenre'><button type='submit'>Skapa ny genre</button></form>";
-        // }
-        // return $text;
+        foreach ($result as $key => $row) {
+            if (file_exists("img/books/". $row['BookImagePath']))
+            {
+                $pictures = scandir("img/books/". $row['BookImagePath']);
+                $imageLink = prefix."img/books/". $row['BookImagePath'] ."/". $pictures[2];
+            }
+            else
+            {
+                $imageLink = prefix."img/books/noimage.jpg";
+            }
+            $text .= "<tr><td><img src='".$imageLink."' alt='book cover' height='100px' /></td>
+            <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
+            <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
+            <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+            if ($role == "Admin")
+            {
+                $text .= "
+                <td><form method='post' action='".prefix."review/edit'>
+                <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>
+                <td><form method='post' action='".prefix."review/delete'>
+                <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+                </tr>";
+            }
+            else
+            {
+                $text .= "<td></td><td></td>";
+            }
+        }
+        $text .= "</table>";
+        return $text;
     }
 ?>

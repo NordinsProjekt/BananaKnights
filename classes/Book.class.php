@@ -128,7 +128,6 @@ class Book
             $this->bookISBN,$this->imgPath,$this->isDeleted,$this->created
         );
         return $arr;
-
     }
 }
 ?>

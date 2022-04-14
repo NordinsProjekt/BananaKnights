@@ -65,7 +65,7 @@ function ShowBook($book,$imageLink,$role)
     if ($role == "User")
     {
         $text .= "<form method='post' action='".prefix."review/newreview' >
-        <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button>";
+        <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";
     }
 
     return $text;

@@ -64,9 +64,17 @@ class BooksController extends BaseController
             }
             require_once "views/books.php";
             require_once "views/default.php";
+            require_once "views/reviews.php";
             echo StartPage("Visa bok");
             IndexNav($role,$user['Username']);
             echo ShowBook($result,$imageLink,$role);
+            require_once "model/Reviews.Model.php";
+            $reviewDB = new ReviewsModel();
+            $reviews = $reviewDB->GetAllReviewsBook($result['Id']);
+            if ($reviews)
+            {
+                echo ShowAllReviews($reviews,$role);
+            }
             echo EndPage();
           }
         else
