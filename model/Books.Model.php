@@ -105,6 +105,7 @@ class BooksModel extends PDOHandler
             INNER JOIN genres AS g ON g.Id = gb.GenreId
             INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
             INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+            WHERE b.IsDeleted = 0 
             ORDER BY Created DESC
             LIMIT 8
             ");
