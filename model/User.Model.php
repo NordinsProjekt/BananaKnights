@@ -8,7 +8,9 @@ class UserModel extends PDOHandler
     }
     public function GetAll()
     {
-        $stmt = $this->Connect()->prepare("SELECT * FROM users");
+        $stmt = $this->Connect()->prepare("SELECT * ,GROUP_CONCAT(r.Name) AS Roles FROM users as u 
+        INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
+        INNER JOIN roles AS r ON ug.RolesID = r.Id");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }

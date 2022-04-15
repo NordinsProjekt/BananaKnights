@@ -103,6 +103,7 @@ class ReviewsController extends BaseController
 
     public function ShowAllReviews()
     {
+        //Endast admin ska få se denna viewn
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {

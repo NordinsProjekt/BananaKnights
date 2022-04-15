@@ -34,4 +34,9 @@ function LoginForm()
     return $text;
 }
 
+function ShowAllUsers($users,$role)
+{
+    
+}
+
 ?>
