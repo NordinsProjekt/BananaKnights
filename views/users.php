@@ -33,10 +33,4 @@ function LoginForm()
     $text .= "<tr> <td></td><td><input type='submit' id='btnLoginUser 'name='LoginUser' value='Logga in' /></td></tr>";
     return $text;
 }
-
-function ShowAllUsers($users,$role)
-{
-    
-}
-
 ?>

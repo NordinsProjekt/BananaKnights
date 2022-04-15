@@ -36,7 +36,14 @@ if (key_exists('url',$_GET))
             }
             break;
         case "admin":
-            AdminRoute("");
+            if (count($url) == 2)
+            {
+                AdminRoute($url[1]);
+            }
+            else
+            {
+                AdminRoute("");
+            }
             break;
     }
 
@@ -249,6 +256,11 @@ function AdminRoute($action)
     {
         case "":
             $controller->Show();
+            break;
+        case "showall":
+            $controller->ShowAllUsers();
+            break;
+        default:
             break;
     }
     exit();

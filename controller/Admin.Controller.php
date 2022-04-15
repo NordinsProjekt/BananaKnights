@@ -51,12 +51,18 @@ class AdminController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {
-            $result = $this->db->GetAll();
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+
+            $result = $userDB->GetAll();
             if ($result)
             {
+                require_once "views/admin.php";
+                require_once "views/default.php";
                 echo StartPage("Adminpanel");
                 IndexNav("Admin",$user['Username']);
-                ShowAllUsers($result,$user['Roles']);
+                echo ShowAllUsersAdmin($result,"Admin");
+                echo EndPage();
             }
         }
         else
