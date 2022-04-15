@@ -36,7 +36,14 @@ if (key_exists('url',$_GET))
             }
             break;
         case "admin":
-            AdminRoute("");
+            if (count($url) == 2)
+            {
+                AdminRoute($url[1]);
+            }
+            else
+            {
+                AdminRoute("");
+            }
             break;
     }
 
@@ -100,10 +107,25 @@ if (key_exists('url',$_GET))
             if (key_exists('id',$_POST))
             {
                 require_once "controller/Reviews.Controller.php";
-                require_once "controller/Books.Controller.php";
                 $controller = new ReviewsController();
                 $controller->AddReview();
             }
+            break;
+        case "review/show":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->ShowReview();
+            }
+            break;
+        case "review/edit":
+            if (key_exists('id',$_POST))
+            {}
+            break;
+        case "review/delete":
+            if (key_exists('id',$_POST))
+            {}
             break;
         case "review/showall":
             require_once "controller/Reviews.Controller.php";
@@ -234,6 +256,11 @@ function AdminRoute($action)
     {
         case "":
             $controller->Show();
+            break;
+        case "showall":
+            $controller->ShowAllUsers();
+            break;
+        default:
             break;
     }
     exit();

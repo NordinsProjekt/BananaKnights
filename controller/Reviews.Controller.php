@@ -20,11 +20,20 @@ class ReviewsController extends BaseController
             require_once "views/default.php";
             require_once "model/Books.Model.php";
             $bookDB = new BooksModel();
-            $book = $bookDB->GetBook($_POST['bookId']);
-            echo StartPage("Skriv recension");
-            IndexNav("User",$user['Username']);
-            echo AddNewReview($book);
-            echo EndPage();
+            $book = $bookDB->GetBook($this->CheckUserInputs($_POST['bookId']));
+            $review = $this->db->CheckIfUserAlreadyMadeOne($user['Id'],$book['Id']);
+            if ($book && $review['Antal']<1)
+            {
+                echo StartPage("Skriv recension");
+                IndexNav("User",$user['Username']);
+                echo AddNewReview($book);
+                echo EndPage();
+            }
+            else
+            {
+                $this->ShowError("Du har redan skrivit en recension för denna boken");
+            }
+
          }
         else
         {
@@ -44,10 +53,11 @@ class ReviewsController extends BaseController
             $cleanArr = $this->ScrubSaveAuthorArr($arr);
     
             $result = $this->db->InsertReview($cleanArr);
-            if (!$result)
+            if ($result)
             {
-                echo "Review lades till på boken";
-                header("Location".prefix."/books/showall");
+                require_once "controller/Home.Controller.php";
+                $home = new HomeController();
+                $home->ShowHomePage();
             }
             else
             {
@@ -61,8 +71,39 @@ class ReviewsController extends BaseController
         }
     }
 
+    public function ShowReview()
+    {
+        $role = "";
+        $safe = $this->CheckUserInputs($_POST['id']);
+        $result = $this->db->GetReview($safe);
+        $user = $this->GetUserInformation();
+        if ($result)
+        {
+
+            if (str_contains($user['Roles'],"User"))
+            {
+                $role = "User";
+                if (str_contains($user['Roles'],"Admin"))
+                {$role = "Admin"; }
+            }
+            require_once "views/reviews.php";
+            require_once "views/default.php";
+            echo StartPage("Review");
+            IndexNav($role,$user['Username']);
+            echo ShowReview($result);
+            echo EndPage();
+        }
+        else
+        {
+            $this->ShowError("Recensionen kunde inte hittas");
+        }
+
+        
+    }
+
     public function ShowAllReviews()
     {
+        //Endast admin ska få se denna viewn
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {

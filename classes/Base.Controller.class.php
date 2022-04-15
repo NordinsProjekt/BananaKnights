@@ -20,7 +20,8 @@ abstract class BaseController
             {
                 $userArr = array (
                     "Username"=>$user['UserName'],
-                    "Roles"=>$user['Roles']
+                    "Roles"=>$user['Roles'],
+                    "Id"=>$user['Id']
                 );
                 return $userArr;
             }
@@ -43,9 +44,6 @@ abstract class BaseController
         if (str_contains($user['Roles'],"User"))
         {
             $role = "User";
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            $user = $userDB->GetUserFromId($_SESSION['UserId']);
             if (str_contains($user['Roles'],"Admin"))
             {
                 $role = "Admin";
