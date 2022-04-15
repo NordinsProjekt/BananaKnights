@@ -48,6 +48,8 @@ class BooksController extends BaseController
         if (str_contains($user['Roles'],"User"))
         {
             $role = "User";
+            if (str_contains($user['Roles'],"Admin"))
+            {   $role = "Admin";    }
         }
         $safetext = $this->ScrubInputs($_POST['id']);
         $result = $this->db->GetBook($safetext);
