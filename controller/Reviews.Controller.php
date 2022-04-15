@@ -84,13 +84,13 @@ class ReviewsController extends BaseController
             {
                 $role = "User";
                 if (str_contains($user['Roles'],"Admin"))
-                {$role = "Admin"; }
+                {$role = "Admin";}
             }
             require_once "views/reviews.php";
             require_once "views/default.php";
             echo StartPage("Review");
             IndexNav($role,$user['Username']);
-            echo ShowReview($result);
+            echo ShowReview($result,$role);
             echo EndPage();
         }
         else

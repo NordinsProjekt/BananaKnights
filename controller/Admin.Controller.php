@@ -46,6 +46,7 @@ class AdminController extends BaseController
             $this->ShowError("Inga rättigheter för detta");
         }
     }
+
     public function ShowAllUsers()
     {
         $user = $this->GetUserInformation();
@@ -68,6 +69,19 @@ class AdminController extends BaseController
         else
         {
             $this->ShowError("Du har inte rättigheter för detta");
+        }
+    }
+    public function CreateUserRole()
+    {
+
+    }
+
+    public function SaveUserRole()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+
         }
     }
 }

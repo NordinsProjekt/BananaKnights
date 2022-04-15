@@ -57,6 +57,15 @@ class ReviewsModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function WasReviewUsefull()
+    {
+
+    }
+
+    public function DeleteWasReviewUsefull()
+    {
+        
+    }
 }
 
 ?>

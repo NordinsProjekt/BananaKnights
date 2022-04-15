@@ -21,7 +21,7 @@
         $text .= "</table></form>";
         return $text;
     }
-    function ShowReview($review)
+    function ShowReview($review,$role)
     {
         $text = "<h1>Visa enskild recension</h1>";
         $text .= "<h2>".$review['ReviewTitle']."</h2>";
