@@ -20,7 +20,7 @@ function ShowAllComments($arr,$role)
     if ($role == "Admin")
     {
         $text .= "<table><tr> <th>Username</th> <th>Skapad</th> <th>Kommentar</th> 
-                <th>Flagga</th> <th>Edit</th> <th>Radera</th></tr>";
+                <th>Edit</th> <th>Radera</th></tr>";
     }
     elseif($role == "Moderator")
     {

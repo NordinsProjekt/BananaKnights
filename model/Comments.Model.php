@@ -9,7 +9,7 @@ class CommentsModel extends PDOHandler
 
     public function GetAllComments($reviewid)
     {
-        $stmt = $this->Connect()->prepare("SELECT ui.UserName, c.Comment, c.Created, c.Flagged
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment, c.Created, c.Flagged
         FROM comments AS c
         INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
         INNER JOIN reviews AS r ON cr.ReviewId = r.Id

@@ -21,6 +21,7 @@
         $text .= "</table></form>";
         return $text;
     }
+
     function ShowReview($review,$role)
     {
         $text = "<h1>Visa enskild recension</h1>";
@@ -39,11 +40,11 @@
             {
                 $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
-            
         }
         $_SESSION['ReviewId'] = $review['Id'];
         return $text;
     }
+
     function ShowAllReviews($result,$role)
     {
         //TODO lägga in roller kontroll
