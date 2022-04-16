@@ -85,14 +85,17 @@ class ReviewsController extends BaseController
                 if (str_contains($user['Roles'],"Admin"))
                 {$role = "Admin";}
             }
-            $usefull = $this->db->IsUsefullSet($safe,$user['Id']);
-            if ($usefull['Antal'] == 1)
+            if ($role != "")
             {
-                $result+= ["Usefull" => true];
-            }
-            else
-            {
-                $result+= ["Usefull" => false];
+                $usefull = $this->db->IsUsefullSet($safe,$user['Id']);
+                if ($usefull['Antal'] == 1)
+                {
+                    $result+= ["Usefull" => true];
+                }
+                else
+                {
+                    $result+= ["Usefull" => false];
+                }
             }
             require_once "views/reviews.php";
             require_once "views/default.php";
