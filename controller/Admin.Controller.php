@@ -46,7 +46,41 @@ class AdminController extends BaseController
             $this->ShowError("Inga rättigheter för detta");
         }
     }
+    public function ShowUser()
+    {
+        if (isset($_POST['id']))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            if (is_numeric($safe) && $safe>0)
+            {
 
+            }
+        }
+        else
+        {
+
+        }
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            //$result = $userDB->GetUserFromId();
+            if ($result)
+            {
+                require_once "views/admin.php";
+                require_once "views/default.php";
+                echo StartPage("Adminpanel");
+                IndexNav("Admin",$user['Username']);
+                //echo ShowUsersAdmin($result,"Admin");
+                echo EndPage();
+            }
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättigheter för detta");
+        }
+    }
     public function ShowAllUsers()
     {
         $user = $this->GetUserInformation();
@@ -83,6 +117,12 @@ class AdminController extends BaseController
         {
 
         }
+    }
+    private function ScrubIndexNumber($notsafeText)
+    {
+      $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $safe = trim(str_replace($banlist,"",$notsafeText));
+      return $safe;
     }
 }
 ?>
