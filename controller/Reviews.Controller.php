@@ -91,6 +91,14 @@ class ReviewsController extends BaseController
             echo StartPage("Review");
             IndexNav($role,$user['Username']);
             echo ShowReview($result);
+            require_once "model/Comments.Model.php";
+            require_once "views/comments.php";
+            $comments = new CommentsModel();
+            $comments = $comments->GetAllComments($result['Id']);
+            if ($comments)
+            {
+                echo ShowAllComments($comments,$role);
+            }
             echo EndPage();
         }
         else
