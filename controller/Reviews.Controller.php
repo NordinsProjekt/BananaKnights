@@ -79,12 +79,20 @@ class ReviewsController extends BaseController
         $user = $this->GetUserInformation();
         if ($result)
         {
-
             if (str_contains($user['Roles'],"User"))
             {
                 $role = "User";
                 if (str_contains($user['Roles'],"Admin"))
                 {$role = "Admin";}
+            }
+            $usefull = $this->db->IsUsefullSet($safe,$user['Id']);
+            if ($usefull['Antal'] == 1)
+            {
+                $result+= ["Usefull" => true];
+            }
+            else
+            {
+                $result+= ["Usefull" => false];
             }
             require_once "views/reviews.php";
             require_once "views/default.php";
@@ -124,7 +132,50 @@ class ReviewsController extends BaseController
             $this->ShowError("Du har inte rättighet att se detta");
         }
     }
-
+    public function WasUsefull()
+    {
+        if (isset($_SESSION['ReviewId']))
+        {
+            $user = $this->GetUserInformation();
+            $safe = $this->CheckUserInputs($_POST['id']);
+            if ($_SESSION['ReviewId'] == $safe)
+            {
+                unset($_SESSION['ReviewId']); //Raderar backupvärdet.
+                $user = $this->GetUserInformation();
+                $safe = $this->CheckUserInputs($_POST['id']);
+                if (str_contains($user['Roles'],"User") && $safe > 0)
+                {
+                    //Kollar om det användaren har tryckt på knappen eller inte
+                    $result = $this->db->IsUsefullSet($safe,$user['Id']);
+                    if ($result['Antal'] == 1)
+                    {
+                        //Radera i databasen
+                        $this->db->DeleteWasReviewUsefull($safe,$user['Id']);
+                        $this->ShowReview();
+                    }
+                    else
+                    {
+                        //Lägg till i databasen
+                        $this->db->SetWasReviewUsefull($safe,$user['Id']);
+                        $this->ShowReview();
+                    }
+                }
+                else
+                {
+                    $this->ShowError("Logga in om du vill använda denna funktionen");
+                }
+            }
+            else
+            {
+                echo "Manipulerat Id från form. Bannad!!";
+            }
+        }
+        else
+        {
+            $this->ShowError("Försök till forminjection");
+            exit();
+        }
+    }
 
     private function ScrubSaveAuthorArr($arr)
     {

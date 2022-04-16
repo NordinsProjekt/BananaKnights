@@ -57,14 +57,34 @@ class ReviewsModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll();
     }
-    public function WasReviewUsefull()
+    public function SetWasReviewUsefull($reviewId,$userId)
     {
-
+        $stmt = $this->Connect()->prepare("INSERT INTO reviewusefull 
+        (UserId,ReviewId) VALUES (:userId,:reviewId);");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 
-    public function DeleteWasReviewUsefull()
+    public function DeleteWasReviewUsefull($reviewId,$userId)
     {
-        
+        $stmt = $this->Connect()->prepare("DELETE FROM reviewusefull WHERE 
+        UserId = :userId AND ReviewId = :reviewId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+
+    }
+    public function IsUsefullSet($reviewId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT COUNT(*) AS Antal FROM reviewusefull 
+        WHERE UserId = :userId AND ReviewId = :reviewId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 }
 

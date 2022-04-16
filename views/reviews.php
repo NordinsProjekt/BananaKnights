@@ -28,6 +28,20 @@
         $text .= "<div width='300px'>".$review['ReviewText']."</div>";
         $text .= "<p>Skriven av: ".$review['UserName']."</p>";
         $text .= "<p>Skapad: ".$review['Created']."</p>";
+        if ($role != "")
+        {
+            $text .= "<form method='post' action='".prefix."review/usefull'>";
+            if ($review['Usefull'])
+            {
+                $text .= "<button type='submit' name='id' value='".$review['Id']."' style='background-color:green'>Hjälpsam</button></form>";
+            }
+            else
+            {
+                $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
+            }
+            
+        }
+        $_SESSION['ReviewId'] = $review['Id'];
         return $text;
     }
     function ShowAllReviews($result,$role)

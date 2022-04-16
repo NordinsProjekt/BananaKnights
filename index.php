@@ -132,6 +132,14 @@ if (key_exists('url',$_GET))
             $controller = new ReviewsController();
             $controller->ShowAllReviews();
             break;
+        case "review/usefull":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->WasUsefull();
+            }
+            break;
         default:
           break;
     }
