@@ -339,7 +339,7 @@ class BooksController extends BaseController
             $result = $this->db->DeleteGenre($cleanId);
             if ($result)
             {
-            
+                $this->ShowAllGenre();
             }
         }
         else
