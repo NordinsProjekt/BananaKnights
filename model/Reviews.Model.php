@@ -18,10 +18,11 @@ class ReviewsModel extends PDOHandler
     public function InsertReview($inputArr)
     {
         $stmt = $this->Connect()->prepare(
-            "INSERT INTO reviews (BookId, UserId, Title, Text, Rating, Created)
-            VALUES (?,?,?,?,?,?)
+            "INSERT INTO reviews (BookId, UserId, Title, Text, Rating, IsDeleted, Created)
+            VALUES (?,?,?,?,?,?,?);
             ");
-        $stmt->execute($inputArr);
+        return $stmt->execute($inputArr);
+        
     }
 
     public function GetReview($id)

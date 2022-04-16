@@ -62,7 +62,7 @@ function ShowBook($book,$imageLink,$role)
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br /></p>";
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
-    if ($role == "User")
+    if ($role == "User" || $role == "Admin")
     {
         $text .= "<form method='post' action='".prefix."review/newreview' >
         <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";

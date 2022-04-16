@@ -52,15 +52,15 @@ class BooksModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("INSERT INTO bookauthors (BookId,AuthorId) 
         VALUES (?,?);");
-        $stmt->execute($arr);
-        return true;
+        
+        return $stmt->execute($arr);
     }
     public function AddGenreToBook($arr)
     {
         $stmt = $this->Connect()->prepare("INSERT INTO genrebooks (GenreId,BookId) 
         VALUES (?,?);");
-        $stmt->execute($arr);
-        return true;
+        
+        return $stmt->execute($arr);
     }
     public function UpdateBook($arr)
     {
@@ -71,15 +71,15 @@ class BooksModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("UPDATE books SET IsDeleted = 1 WHERE Id = :id ");
         $stmt->bindParam(":id",$id);
-        $stmt->execute();
-        return true;
+        
+        return $stmt->execute();
     }
     public function SetGenre($arr)
     {
         $stmt = $this->Connect()->prepare("INSERT INTO genres (Name,Description,Created) 
         VALUES (?,?,?);");
-        $stmt->execute($arr);
-        return true;
+        
+        return $stmt->execute($arr);
     }
     public function DeleteGenre($genreId)
     {

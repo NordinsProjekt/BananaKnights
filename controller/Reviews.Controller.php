@@ -47,11 +47,10 @@ class ReviewsController extends BaseController
         {
             $arr = array (
                 $_POST['id'], $_SESSION['UserId'], $_POST['Title'],
-                $_POST['Text'], $_POST['Rating'], date("Y-m-d h:i:s")
+                $_POST['Text'], $_POST['Rating'], "0", date("Y-m-d H:i:s")
             );
     
             $cleanArr = $this->ScrubSaveAuthorArr($arr);
-    
             $result = $this->db->InsertReview($cleanArr);
             if ($result)
             {
