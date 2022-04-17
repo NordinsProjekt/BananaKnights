@@ -8,6 +8,7 @@ function ScrubUserInputs($notsafeText)
 {
   $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
   $safe = trim(str_replace($banlist,"",$notsafeText));
+  $safe = stripslashes(htmlspecialchars($safe));
   return $safe;
 }
 ?>
@@ -31,7 +32,21 @@ if (isset($_POST['formname']))
         }
         exit();
     }
+    else
+    {
+        exit();
+    }
 }
+else
+{
+    //Visa indexsidan
+    //Om det finns en session så dödar vi den
+    //Något stämmer inte om formname inte finns
+    //session_unset();
+    //session_destroy();
+}
+
+//Vanliga routern
 if (key_exists('url',$_GET))
 {
     $url = explode("/",$_GET['url']);

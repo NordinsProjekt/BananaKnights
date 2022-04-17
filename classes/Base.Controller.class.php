@@ -85,7 +85,7 @@ abstract class BaseController
     {
         $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
         $safe = trim(str_replace($banlist,"",$notsafeText));
-        $safe = htmlspecialchars($safe);
+        $safe = stripslashes(htmlspecialchars($safe));
         return $safe;
     }
 }
