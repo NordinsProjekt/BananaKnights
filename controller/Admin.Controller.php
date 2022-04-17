@@ -48,32 +48,35 @@ class AdminController extends BaseController
     }
     public function ShowUser()
     {
-        if (isset($_POST['id']))
+        $user = $this->GetUserInformation();
+        if (isset($_POST['id']) && str_contains($user['Roles'],"Admin"))
         {
             $safe = $this->ScrubIndexNumber($_POST['id']);
             if (is_numeric($safe) && $safe>0)
             {
-
-            }
-        }
-        else
-        {
-
-        }
-        $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
-        {
-            require_once "model/User.Model.php";
-            $userDB = new UserModel();
-            //$result = $userDB->GetUserFromId();
-            if ($result)
-            {
-                require_once "views/admin.php";
-                require_once "views/default.php";
-                echo StartPage("Adminpanel");
-                IndexNav("Admin",$user['Username']);
-                //echo ShowUsersAdmin($result,"Admin");
-                echo EndPage();
+                require_once "model/User.Model.php";
+                $userDB = new UserModel();
+                $rolesArr = $userDB->GetAllRoles();
+                $userRolesArr = $userDB->GetAllRolesFromUser($safe);
+                $userResult = $userDB->GetEntireUser($safe);
+                if ($rolesArr && $userRolesArr && $userResult)
+                {
+                    $arr  = array(
+                        "AllRoles"=>$rolesArr,
+                        "UserRoles"=>$userRolesArr,
+                        "User"=>$userResult
+                    );
+                    require_once "views/default.php";
+                    require_once "views/admin.php";
+                    echo StartPage("Visa användare");
+                    IndexNav("Admin",$user['Username']);
+                    echo ShowUserAdmin($arr);
+                    echo EndPage();
+                }
+                else
+                {
+                    $this->ShowError("Kan inte visa formuläret!!");
+                }
             }
         }
         else
@@ -118,11 +121,31 @@ class AdminController extends BaseController
 
         }
     }
+
+    public function AddUserRole()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+
+        }
+    }
+
+    public function RemoveUserRoleFromUser()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+
+        }
+    }
+
     private function ScrubIndexNumber($notsafeText)
     {
       $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
+
 }
 ?>

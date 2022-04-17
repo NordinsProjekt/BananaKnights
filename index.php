@@ -268,6 +268,24 @@ function AdminRoute($action)
         case "showall":
             $controller->ShowAllUsers();
             break;
+        case "showuserform":
+            if (key_exists('id',$_POST))
+            {
+                $controller->ShowUser();
+            }
+            break;
+        case "addrolestouser":
+            if (key_exists('roleid',$_POST))
+            {
+                $controller->AddUserRole();
+            }
+            break;
+        case "removerolefromuser":
+            if (key_exists('roleid',$_POST))
+            {
+                $controller->RemoveUserRoleFromUser();
+            }
+            break;
         default:
             break;
     }
