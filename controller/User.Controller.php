@@ -119,8 +119,13 @@ class UserController extends BaseController
         $row = $this->db->GetUserFromUsername($this->ScrubInputs($_POST['Username']));
         if (isset($row['Id']))
         {
-             if (password_verify($_POST['Password'], $row['PasswordHash']))
-             {
+            if ($row['LockoutEnabled'])
+            {
+                $this->ShowError("Ditt konto är avstängt, kontakta admin");
+                exit();
+            }
+            if (password_verify($_POST['Password'], $row['PasswordHash']))
+            {
                 //Användaren har loggat in.
                 //Sparar all information som är viktig
                 $_SESSION['is_logged_in'] = TRUE;
@@ -128,20 +133,32 @@ class UserController extends BaseController
                 $_SESSION['UserId'] = $row['Id'];
                 $_SESSION['UserIp'] = $_SERVER['REMOTE_ADDR'];
                 $_SESSION['UserBrowser'] = $_SERVER['HTTP_USER_AGENT'];
-
+                //Nollställer antal felinloggningar till 0
+                $this->db->UpdateFailedLogin(0,$row['Id']);
                 //Ladda in homepage
                 header("Location: ".prefix);
-             }
-             else
-             {
-                 //Användarnman stämmer men inte lösenord
-                 $this->ShowError("Lösenordet är fel");
-             }
+            }
+            else
+            {
+                //Användarnman stämmer men inte lösenord
+                if ($row['AccessFailedCount'] <3)
+                {
+                    //Räknar upp antal fel
+                    $this->db->UpdateFailedLogin($row['AccessFailedCount']+1,$row['Id']);
+                }
+                else
+                {
+                    $this->db->UpdateLockedAccount($row['Id']);
+                    $this->ShowError("Ditt konto är nu kontakta admin");
+                    exit();
+                }
+                $this->ShowError("Fel användarnamn/lösenord");
+            }
         }
         else
         {
             //Användarnamn stämmer inte.
-            $this->ShowError("Användarnman stämmer inte.");
+            $this->ShowError("Fel användarnamn/lösenord");
         }         
     }
 
