@@ -147,6 +147,7 @@ class UserController extends BaseController
 
     public function Logout()
     {
+        session_unset();
         session_destroy();
         header("Location:".prefix);
     }

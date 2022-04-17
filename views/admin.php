@@ -7,6 +7,7 @@ function AdminIndex()
     $text .= "<a href='".prefix."admin/showall'>Visa alla användare</a>";
     $text .= "<h2>Hantera Roller</h2>";
     $text .= "<h2>Hantera Kommentarer</h2>";
+    $text .= "<h2>Bannade konton</h2>";
     return $text;
 }
 

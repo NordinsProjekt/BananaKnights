@@ -15,6 +15,9 @@ abstract class BaseController
         $userDB = new UserModel();
         if (isset($_SESSION['is_logged_in']) && $_SESSION['UserId']>0)
         {
+            //Loggar ut användaren och skickar till loginskärmen om
+            //något inte stämmer med session
+            $this->CheckSession();
             $user = $userDB->GetUserRoles($_SESSION['UserId']);
             if (!empty($user))
             {
@@ -34,6 +37,25 @@ abstract class BaseController
                 "Id"=>""
             );
             return $userArr;
+        }
+    }
+
+    private function CheckSession()
+    {
+        //Detta är ett litet skydd mot session hijacking
+        if ($_SERVER['REMOTE_ADDR'] != $_SESSION['UserIp'])
+        {
+            session_unset();
+            session_destroy();
+            header("Location:".prefix."user/loginpage");
+            exit();
+        }
+        if ($_SERVER['HTTP_USER_AGENT'] != $_SESSION['UserBrowser'])
+        {
+            session_unset();
+            session_destroy();
+            header("Location:".prefix."user/loginpage");
+            exit();
         }
     }
 

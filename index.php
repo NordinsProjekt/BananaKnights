@@ -17,7 +17,7 @@ function ScrubUserInputs($notsafeText)
 //Delar upp url:en för funktioner inom api:et
 //Kontrollerar så token är giltig
 
-//Test säkerhet för att göra formdata mer skyddad mot attacker
+//Testar säkerhet för att göra formdata mer skyddad mot attacker
 if (isset($_POST['formname']))
 {
     $name = ScrubUserInputs($_POST['formname']);
