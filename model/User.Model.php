@@ -87,6 +87,21 @@ class UserModel extends PDOHandler
         return $stmt->fetch();
     }
 
+    public function UpdateFailedLogin($count, $userId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE users SET AccessFailedCount = :count WHERE Id = :userId;");
+        $stmt->bindParam(":count",$count,PDO::PARAM_INT);
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function UpdateLockedAccount($userId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE users SET LockoutEnabled = 1 WHERE Id = :userId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public function SetUser($arr)
     {
         $stmt = $this->Connect()->prepare("INSERT INTO users (Email,EmailConfirmed,PasswordHash,PhoneNumber,PhoneNumberConfirmed,

@@ -142,16 +142,19 @@ class AdminController extends BaseController
     public function AddUserRole()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin") && $_POST['roleId'] >0 && $_POST['userId']>0)
+        $name = $this->ScrubFormName($_POST['formname']);
+        if (str_contains($user['Roles'],"Admin"))
         {
+            $formArr = $_SESSION['form'][$name];
+            unset($_SESSION['form']);
             require_once "model/User.Model.php";
             $userDB = new UserModel();
-            $result = $userDB->SetUserGroup($this->ScrubIndexNumber($_POST['roleId']),
-            $this->ScrubIndexNumber($_POST['userId']));
+            $result = $userDB->SetUserGroup($this->ScrubIndexNumber($formArr['roleId']),
+            $this->ScrubIndexNumber($formArr['userId']));
             if ($result)
             {
                 //Sätter in ID:t till användaren som skall visas
-                $_POST['id'] = $this->ScrubIndexNumber($_POST['userId']);
+                $_POST['id'] = $this->ScrubIndexNumber($formArr['userId']);
                 //Läser in samma användare som vi har jobbat med
                 $this->ShowUser();
             }
@@ -165,16 +168,19 @@ class AdminController extends BaseController
     public function RemoveUserRoleFromUser()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin") && $_POST['roleId'] >0 && $_POST['userId']>0)
+        $name = $this->ScrubFormName($_POST['formname']);
+        if (str_contains($user['Roles'],"Admin"))
         {
+            $formArr = $_SESSION['form'][$name];
+            unset($_SESSION['form']);
             require_once "model/User.Model.php";
             $userDB = new UserModel();
-            $result = $userDB->RemoveRoleFromUser($this->ScrubIndexNumber($_POST['roleId']),
-            $this->ScrubIndexNumber($_POST['userId']));
+            $result = $userDB->RemoveRoleFromUser($this->ScrubIndexNumber($formArr['roleId']),
+            $this->ScrubIndexNumber($formArr['userId']));
             if ($result)
             {
                 //Sätter in ID:t till användaren som skall visas
-                $_POST['id'] = $this->ScrubIndexNumber($_POST['userId']);
+                $_POST['id'] = $this->ScrubIndexNumber($formArr['userId']);
                 //Läser in samma användare som vi har jobbat med
                 $this->ShowUser();
             }
