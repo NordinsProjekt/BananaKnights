@@ -85,10 +85,12 @@ function IndexNav($role,$username)
                 $text .= "<li><a class='nav-link' href='".prefix."review/showall'>Recensioner</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."authors/showall'>Författare</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."books/showallgenre'>Genre</a></li>";
+                $text .= "<li><a class='nav-link' href='".prefix."admin'>Adminpanel</a></li>";
+
             }
                 if ($role != "")
                 {
-                    $text .= "<li><a class='nav-link' href='".prefix."user/profile'>".$username."</a></li>";
+                    $text .= "<li><a class='nav-link' href='".prefix."user/profile'>".$username." profil</a></li>";
                     $text .= "<li><a class='nav-link' href='".prefix."user/logoutuser'>Logout</a></li>";
                 }
                 else

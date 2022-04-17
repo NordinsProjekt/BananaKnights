@@ -1,4 +1,15 @@
 <?php
+
+function AdminIndex()
+{
+    $text = "<h1>Adminpanel</h1>";
+    $text .= "<h2>Hantera Användare</h2>";
+    $text .= "<a href='".prefix."admin/showall'>Visa alla användare</a>";
+    $text .= "<h2>Hantera Roller</h2>";
+    $text .= "<h2>Hantera Kommentarer</h2>";
+    return $text;
+}
+
 function ShowUserAdmin($formData)
 {
     $text = "<h1>Enskild användare</h1>";
@@ -7,8 +18,9 @@ function ShowUserAdmin($formData)
     $text .= "<tr> <td>Email</td> <td>".$formData['User']['Email']."</td> </tr>";
     $text .= "<tr><td>Användarroller</td><td></td></tr>";
     foreach ($formData['UserRoles'] as $key => $row) {
-        $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='admin/removerolefromuser'>
-        <button type='submit' name='roleid' value='".$row['Id']."'>Radera</button></form></td></tr>";
+        $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='".prefix."admin/removerolefromuser'>
+        <input type='hidden' name='userId' value='".$formData['User']['Id']."' />
+        <button type='submit' name='roleId' value='".$row['Id']."'>Radera</button></form></td></tr>";
     }
     $text .= "<tr><td></td><td></td></tr>";
     foreach ($formData['AllRoles'] as $key => $row) {
@@ -18,8 +30,9 @@ function ShowUserAdmin($formData)
         { }
         else
         {
-            $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='admin/addrolestouser'>
-            <button type='submit' name='roleid' value='".$row['Id']."'>Lägg till</button></form></td></tr>";
+            $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='".prefix."admin/addrolestouser'>
+            <input type='hidden' name='userId' value='".$formData['User']['Id']."' />
+            <button type='submit' name='roleId' value='".$row['Id']."'>Lägg till</button></form></td></tr>";
         }
         
 

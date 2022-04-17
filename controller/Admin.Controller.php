@@ -17,8 +17,6 @@ class AdminController extends BaseController
 
     public function Show()
     {
-        //TODO VALIDERA
-        //Inloggad och vara admin
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {
@@ -46,6 +44,25 @@ class AdminController extends BaseController
             $this->ShowError("Inga rättigheter för detta");
         }
     }
+
+    public function AdminPanel()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            require_once "views/default.php";
+            require_once "views/admin.php";
+            echo StartPage("Adminpanel");
+            IndexNav("Admin",$user['Username']);
+            echo AdminIndex();
+            echo EndPage();
+        }
+        else
+        {
+            $this->ShowError("Saknas rättighet för att komma in här");
+        }
+    }
+
     public function ShowUser()
     {
         $user = $this->GetUserInformation();
@@ -59,7 +76,7 @@ class AdminController extends BaseController
                 $rolesArr = $userDB->GetAllRoles();
                 $userRolesArr = $userDB->GetAllRolesFromUser($safe);
                 $userResult = $userDB->GetEntireUser($safe);
-                if ($rolesArr && $userRolesArr && $userResult)
+                if ($userResult)
                 {
                     $arr  = array(
                         "AllRoles"=>$rolesArr,
@@ -125,18 +142,46 @@ class AdminController extends BaseController
     public function AddUserRole()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Admin") && $_POST['roleId'] >0 && $_POST['userId']>0)
         {
-
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $result = $userDB->SetUserGroup($this->ScrubIndexNumber($_POST['roleId']),
+            $this->ScrubIndexNumber($_POST['userId']));
+            if ($result)
+            {
+                //Sätter in ID:t till användaren som skall visas
+                $_POST['id'] = $this->ScrubIndexNumber($_POST['userId']);
+                //Läser in samma användare som vi har jobbat med
+                $this->ShowUser();
+            }
+            else
+            {
+                $this->ShowError("Kunde inte ta bort behörigheten");
+            }
         }
     }
 
     public function RemoveUserRoleFromUser()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Admin") && $_POST['roleId'] >0 && $_POST['userId']>0)
         {
-
+            require_once "model/User.Model.php";
+            $userDB = new UserModel();
+            $result = $userDB->RemoveRoleFromUser($this->ScrubIndexNumber($_POST['roleId']),
+            $this->ScrubIndexNumber($_POST['userId']));
+            if ($result)
+            {
+                //Sätter in ID:t till användaren som skall visas
+                $_POST['id'] = $this->ScrubIndexNumber($_POST['userId']);
+                //Läser in samma användare som vi har jobbat med
+                $this->ShowUser();
+            }
+            else
+            {
+                $this->ShowError("Kunde inte ta bort behörigheten");
+            }
         }
     }
 
