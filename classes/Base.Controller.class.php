@@ -30,7 +30,8 @@ abstract class BaseController
         {
             $userArr = array(
                 "Username"=>"",
-                "Roles"=>""
+                "Roles"=>"",
+                "Id"=>""
             );
             return $userArr;
         }

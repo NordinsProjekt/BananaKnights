@@ -3,9 +3,6 @@ require_once "model/Comments.Model.php";
 require_once "classes/Base.Controller.class.php";
 class CommentsController extends BaseController
 {
-
-
-
     function ShowComments()
     {
         $role = "";

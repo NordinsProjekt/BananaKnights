@@ -8,12 +8,30 @@ class UserModel extends PDOHandler
     }
     public function GetAll()
     {
-        $stmt = $this->Connect()->prepare("SELECT u.Id,UserName,Email,GROUP_CONCAT(r.Name) AS Roles FROM users AS u 
-            INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
-            INNER JOIN roles AS r ON ug.RolesID = r.Id
-            GROUP BY u.Id;");
+        $stmt = $this->Connect()->prepare("SELECT u.Id,UserName,Email,IFNULL(GROUP_CONCAT(r.Name),'') AS Roles FROM users AS u 
+        LEFT JOIN usergroups AS ug ON u.Id = ug.UserId 
+        LEFT JOIN roles AS r ON ug.RolesID = r.Id
+        GROUP BY u.Id");
         $stmt->execute();
         return $stmt->fetchAll(); 
+    }
+
+    public function GetAllRoles()
+    {
+        $stmt = $this->Connect()->prepare("SELECT * FROM roles ORDER BY Name ASC;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function GetAllRolesFromUser($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT r.Id,r.Name FROM roles AS r
+        INNER JOIN usergroups AS ug ON r.Id = ug.RolesId 
+        WHERE ug.UserId = :userId 
+        ORDER BY r.Name ASC;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function GetUserRoles($userId)
@@ -30,6 +48,14 @@ class UserModel extends PDOHandler
     public function GetUserFromId($userId)
     {
         $stmt = $this->Connect()->prepare("SELECT UserName FROM users WHERE Id = :userId");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function GetEntireUser($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT * FROM users WHERE Id = :userId");
         $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();
@@ -75,9 +101,18 @@ class UserModel extends PDOHandler
         VALUES (:groupId,:userId);");
         $stmt->bindParam(":groupId",$groupId,PDO::PARAM_STR);
         $stmt->bindParam(":userId",$userId,PDO::PARAM_STR);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
+
+    public function RemoveRoleFromUser($groupId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("DELETE FROM usergroups WHERE RolesId = :groupId 
+        AND UserId = :userId;");
+        $stmt->bindParam(":groupId",$groupId,PDO::PARAM_INT);
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public function DoesUserExist($username)
     {
         $stmt = $this->Connect()->prepare("SELECT COUNT(Id) AS NumberOfUsers FROM users 

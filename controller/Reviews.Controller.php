@@ -81,8 +81,11 @@ class ReviewsController extends BaseController
             if (str_contains($user['Roles'],"User"))
             {
                 $role = "User";
-                if (str_contains($user['Roles'],"Admin"))
-                {$role = "Admin";}
+
+            }
+            if (str_contains($user['Roles'],"Admin"))
+            {
+                $role = "Admin";
             }
             if ($role != "")
             {
