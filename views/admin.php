@@ -18,10 +18,16 @@ function ShowUserAdmin($formData)
     $text .= "<tr> <td>Email</td> <td>".$formData['User']['Email']."</td> </tr>";
     $text .= "<tr><td>Användarroller</td><td></td></tr>";
     foreach ($formData['UserRoles'] as $key => $row) {
-        $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='".prefix."admin/removerolefromuser'>
-        <input type='hidden' name='userId' value='".$formData['User']['Id']."' />
-        <button type='submit' name='roleId' value='".$row['Id']."'>Radera</button></form></td></tr>";
+        $formId = uniqid($row['Id'],true);
+        $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='lol'>
+        <input type='hidden' name='formname' value='".$formId."'>
+        <button type='submit'>Radera</button></form></td></tr>";
+        //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."admin/removerolefromuser",
+        "userId"=>$formData['User']['Id'], "roleId"=>$row['Id']);
     }
+
+
     $text .= "<tr><td></td><td></td></tr>";
     foreach ($formData['AllRoles'] as $key => $row) {
         //Listar bara de rollerna som användaren inte har
@@ -30,12 +36,14 @@ function ShowUserAdmin($formData)
         { }
         else
         {
-            $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='".prefix."admin/addrolestouser'>
-            <input type='hidden' name='userId' value='".$formData['User']['Id']."' />
-            <button type='submit' name='roleId' value='".$row['Id']."'>Lägg till</button></form></td></tr>";
+            $formId = uniqid($row['Id'],true);
+            $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='lol'>
+            <input type='hidden' name='formname' value='".$formId."'>
+            <button type='submit'>Lägg till</button></form></td></tr>";
+            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."admin/addrolestouser",
+            "userId"=>$formData['User']['Id'], "roleId"=>$row['Id']);
         }
-        
-
     }
     $text .= "</table>";
     

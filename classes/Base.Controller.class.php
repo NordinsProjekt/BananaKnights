@@ -77,5 +77,16 @@ abstract class BaseController
         }
         return false;
     }
+    public function ObfuscateFormData()
+    {
+
+    }
+    protected function ScrubFormName($notsafeText)
+    {
+        $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
+        $safe = trim(str_replace($banlist,"",$notsafeText));
+        $safe = htmlspecialchars($safe);
+        return $safe;
+    }
 }
 ?>

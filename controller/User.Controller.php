@@ -122,9 +122,13 @@ class UserController extends BaseController
              if (password_verify($_POST['Password'], $row['PasswordHash']))
              {
                 //Användaren har loggat in.
+                //Sparar all information som är viktig
                 $_SESSION['is_logged_in'] = TRUE;
                 $_SESSION['Username'] = $row['UserName'];
                 $_SESSION['UserId'] = $row['Id'];
+                $_SESSION['UserIp'] = $_SERVER['REMOTE_ADDR'];
+                $_SESSION['UserBrowser'] = $_SERVER['HTTP_USER_AGENT'];
+
                 //Ladda in homepage
                 header("Location: ".prefix);
              }

@@ -4,12 +4,34 @@ const prefix = "/BananaKnights/";
 $fakeSession = array (
     "is_logged_in" => true, "UserID" => 1, "Role" => "User"
 );
+function ScrubUserInputs($notsafeText)
+{
+  $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
+  $safe = trim(str_replace($banlist,"",$notsafeText));
+  return $safe;
+}
 ?>
 
 <?php
 //Delar upp url:en för funktioner inom api:et
 //Kontrollerar så token är giltig
-//var_dump($_GET);
+
+//Test säkerhet för att göra formdata mer skyddad mot attacker
+if (isset($_POST['formname']))
+{
+    $name = ScrubUserInputs($_POST['formname']);
+    if (isset($_SESSION['form'][$name]))
+    {
+        $arr = explode("/",$_SESSION['form'][$name]['FormAction']);
+        switch($arr[2])
+        {
+            case "admin":
+                AdminRoute($arr[3]);
+                break;
+        }
+        exit();
+    }
+}
 if (key_exists('url',$_GET))
 {
     $url = explode("/",$_GET['url']);
@@ -275,15 +297,22 @@ function AdminRoute($action)
             }
             break;
         case "addrolestouser":
-            if (key_exists('roleId',$_POST) && key_exists('userId',$_POST))
+            if (key_exists('formname',$_POST))
             {
-                $controller->AddUserRole();
+                if (isset($_SESSION['form'][$_POST['formname']]))
+                {
+                    $controller->AddUserRole();
+                }
             }
             break;
         case "removerolefromuser":
-            if (key_exists('roleId',$_POST) && key_exists('userId',$_POST))
+            
+            if (key_exists('formname',$_POST))
             {
-                $controller->RemoveUserRoleFromUser();
+                if (isset($_SESSION['form'][ScrubUserInputs($_POST['formname'])]))
+                {
+                    $controller->RemoveUserRoleFromUser();
+                }
             }
             break;
         default:
