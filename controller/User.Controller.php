@@ -162,6 +162,12 @@ class UserController extends BaseController
         }         
     }
 
+    public function UserProfile()
+    {
+        //Här kan man fylla i sina uppgifter
+        //kunna se alla sina reviews och sånt.
+    }
+
     public function Logout()
     {
         session_unset();
