@@ -96,7 +96,7 @@ abstract class BaseController
         return $safe;
     }
     
-    protected function ScrubIndexNumber($notsafeText)
+    public function ScrubIndexNumber($notsafeText)
     {
       $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));

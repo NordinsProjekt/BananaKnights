@@ -50,6 +50,8 @@ else
     //Något stämmer inte om formname inte finns
     //session_unset();
     //session_destroy();
+    //Använd inte else om det finns kod nedanför.
+
 }
 
 //Vanliga routern
@@ -92,6 +94,22 @@ if (key_exists('url',$_GET))
 
     switch (strtolower($_GET['url']))
     {
+        //Vanliga get ID
+        case "showauthor":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowAuthor($safe);
+            }
+            break;
+        case "showbook":
+            if (key_exists('id',$_GET))
+            {
+                
+            }
+            break;
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 
             $controller = new AuthorsController();

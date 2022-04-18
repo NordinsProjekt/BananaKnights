@@ -51,7 +51,7 @@ class BooksController extends BaseController
             if (str_contains($user['Roles'],"Admin"))
             {   $role = "Admin";    }
         }
-        $safetext = $this->ScrubInputs($_POST['id']);
+        $safetext = $this->ScrubIndexNumber($_POST['id']);
         $result = $this->db->GetBook($safetext);
         if ($result)
         {
