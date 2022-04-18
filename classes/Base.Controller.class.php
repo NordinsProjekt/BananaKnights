@@ -112,5 +112,12 @@ abstract class BaseController
         $safe = stripslashes(htmlspecialchars($safe));
         return $safe;
     }
+    
+    protected function ScrubIndexNumber($notsafeText)
+    {
+      $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $safe = trim(str_replace($banlist,"",$notsafeText));
+      return $safe;
+    }
 }
 ?>

@@ -32,6 +32,9 @@ if (isset($_POST['formname']))
             case "author":
                 AuthorRoute($arr[3]);
                 break;
+            case "review":
+                ReviewRoute($arr[3]);
+                break;
         }
         exit();
     }
@@ -194,6 +197,21 @@ else
 }
 ?>
 <?php
+function ReviewRoute($action)
+{
+    require_once "controller/Reviews.Controller.php";
+    $controller = new ReviewsController();
+    switch(strtolower($action))
+    {
+        case "unflag":
+            $controller->UnFlagReview();
+            break;
+        case "flagged":
+            $controller->FlagReview();
+            break;
+    }
+}
+
 function AuthorRoute($action)
 {
     require_once "controller/Authors.Controller.php";

@@ -54,15 +54,19 @@ class AdminController extends BaseController
             require_once "views/admin.php";
             require_once "model/User.Model.php";
             require_once "model/Authors.Model.php";
+            require_once "model/Reviews.Model.php";
 
             $userDB = new UserModel();
             $authorDB = new AuthorsModel();
+            $reviewDB = new ReviewsModel();
+
             echo StartPage("Adminpanel");
             IndexNav($user['Roles'],$user['Username']);
             //Adminpanelen kommer behöva många listor av olika saker.
             //Bygg en formData array för allt.
             $formData['BannedUsers'] = $userDB->GetAllLockedAccounts();
             $formData['BannedAuthors'] = $authorDB->GetAllFlaggedAuthors();
+            $formData['BannadeReviews'] = $reviewDB->GetAllFlaggedReviews();
             echo AdminIndex($formData);
             echo EndPage();
         }
@@ -199,13 +203,5 @@ class AdminController extends BaseController
             }
         }
     }
-
-    private function ScrubIndexNumber($notsafeText)
-    {
-      $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
-      $safe = trim(str_replace($banlist,"",$notsafeText));
-      return $safe;
-    }
-
 }
 ?>

@@ -209,11 +209,5 @@ class AuthorsController extends BaseController
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }
-    private function ScrubIndexNumber($notsafeText)
-    {
-      $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
-      $safe = trim(str_replace($banlist,"",$notsafeText));
-      return $safe;
-    }
 }
 ?>

@@ -11,12 +11,54 @@ function AdminIndex($formData)
     $text .= GenerateTableWithUsers($formData['BannedUsers']);
     $text .= "<h2>Flaggade författare</h2>";
     $text .= GenerateTableWithAuthors($formData['BannedAuthors']);
+    $text .= "<h2>Flaggade recensioner</h2>";
+    $text .= GenerateTableWithReviews($formData['BannadeReviews']);
     
     return $text;
 }
+
+function GenerateTableWithReviews($reviews)
+{
+    $text = "";
+    if (empty($reviews))
+    {
+        return $text;
+    }
+    $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
+        <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
+
+    foreach ($reviews as $key => $row) {
+        if (file_exists("img/books/". $row['BookImagePath']))
+        {
+            $pictures = scandir("img/books/". $row['BookImagePath']);
+            $imageLink = prefix."img/books/". $row['BookImagePath'] ."/". $pictures[2];
+        }
+        else
+        {
+            $imageLink = prefix."img/books/noimage.jpg";
+        }
+        $text .= "<tr><td><img src='".$imageLink."' alt='book cover' height='100px' /></td>
+        <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
+        <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
+        <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+            $text .= "
+            <td><form method='post' action='".prefix."review/edit'>
+            <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>
+            <td><form method='post' action='".prefix."review/delete'>
+            <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+            </tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
 function GenerateTableWithAuthors($authors)
 {
     $text = "";
+    if (empty($authors))
+    {
+        return $text;
+    }
         $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     foreach ($authors as $key => $row) {
         $text.= "<tr>";
@@ -38,6 +80,10 @@ function GenerateTableWithAuthors($authors)
 function GenerateTableWithUsers($users)
 {
     $text = "";
+    if (empty($users))
+    {
+        return $text;
+    }
     $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th>
     <th>Edit</th><th>Radera</th> <th>Återställ lösenord</th></tr>";
     foreach ($users as $key => $row) {

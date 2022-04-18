@@ -1,6 +1,4 @@
 <?php
-
-
     function AddNewReview($book)
     {
         $text = "<h1>Skriv en Review</h1>";
@@ -40,6 +38,24 @@
             {
                 $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
+        }
+        if (str_contains($role,"Moderator") && $review['Flagged'] == 0)
+        {
+            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+            $formId = uniqid($review['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
+            "reviewId"=>$review['Id']);
+            $text .= "<form method='post' action='lol'>
+            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Anmäl</button></form>";
+        }
+        if (str_contains($role,"Admin") && $review['Flagged'] == 1)
+        {
+            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+            $formId = uniqid($review['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/unflag",
+            "reviewId"=>$review['Id']);
+            $text .= "<form method='post' action='lol'>
+            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
         }
         $_SESSION['ReviewId'] = $review['Id'];
         return $text;
