@@ -134,13 +134,40 @@ class AuthorsController extends BaseController
         }
    
     }
+    //Återställer från flaggat tillstånd
+    public function UnFlagAuthor()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $fornName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['authorId']);
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagAuthor(0,$safe);
+            if ($result)
+            {
+                $this->ShowAllAuthors();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att återställa författaren");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
 
+    //Flaggar för kontroll
     public function FlagAuthor()
     {
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Moderator"))
         {
-            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $fornName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['authorId']);
+            unset($_SESSION['form']);
             $result = $this->db->UpdateFlagAuthor(1,$safe);
             if ($result)
             {

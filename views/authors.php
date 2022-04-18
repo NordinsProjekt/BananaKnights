@@ -46,12 +46,28 @@ function ShowAuthor($author,$role)
 
     if ($author['Death'] != "0000-00-00")
     { $text .= "<b>Död:</b> ".$author['Death']."<br />"; }
-    $text .= "<h2>Böcker författaren har skrivit</h2>";
-    if ($role == "Moderator")
+
+    if ($role == "Moderator" && $author['Flagged'] == 0)
     {
-        $text .= "<form method='post' action='".prefix."author/flagged'>
-        <input type='hidden' name='id' value='".$author['Id']." /'><button type='submit'>Anmäl</button></form>";
+        //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+        $formId = uniqid($author['Id'],true);
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/flagged",
+        "authorId"=>$author['Id']);
+        $text .= "<form method='post' action='lol'>
+        <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Anmäl</button></form>";
     }
+    if ($role == "Admin" && $author['Flagged'] == 1)
+    {
+        //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+        $formId = uniqid($author['Id'],true);
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/unflag",
+        "authorId"=>$author['Id']);
+        $text .= "<form method='post' action='lol'>
+        <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
+    }
+
+    $text .= "<h2>Böcker författaren har skrivit</h2>";
+
     return $text;
 }
 
