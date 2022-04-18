@@ -9,7 +9,7 @@ abstract class BaseController
         
     }
     //Används för att kontrollera användaren och hämta rollerna som kontot har.
-    public function GetUserInformation()
+    protected function GetUserInformation()
     {
         require_once "model/User.Model.php";
         $userDB = new UserModel();
@@ -61,31 +61,17 @@ abstract class BaseController
         }
     }
 
-    public function ShowError($errorText) //Sida som visar fel
+    protected function ShowError($errorText) //Sida som visar fel
     {
         $user = $this->GetUserInformation();
         require_once "views/default.php";
         echo StartPage("Fel vid inläsning");
-        if (str_contains($user['Roles'],"User"))
-        {
-            $role = "User";
-            if (str_contains($user['Roles'],"Admin"))
-            {
-                $role = "Admin";
-            }
-            IndexNav($user['Roles'],$user['Username']);
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
-        else
-        {
-            IndexNav($user['Roles'],"");
-            echo "<h1>FEL</h1><p>" . $errorText . "</p>";
-            echo EndPage();
-        }
+        IndexNav($user['Roles'],$user['Username']);
+        echo "<h1>FEL</h1><p>" . $errorText . "</p>";
+        echo EndPage();
     }
 
-    public function VerifyUserRole($roleName)
+    protected function VerifyUserRole($roleName)
     {
         if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
         {
@@ -101,10 +87,7 @@ abstract class BaseController
         }
         return false;
     }
-    public function ObfuscateFormData()
-    {
 
-    }
     protected function ScrubFormName($notsafeText)
     {
         $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
@@ -117,7 +100,14 @@ abstract class BaseController
     {
       $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
-      return $safe;
+      if (is_numeric($safe) && $safe>0)
+      {
+          return (int)$safe;
+      }
+      else
+      {
+          return "";
+      }
     }
 }
 ?>

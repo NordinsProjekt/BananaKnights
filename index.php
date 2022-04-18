@@ -1,9 +1,7 @@
 <?php
 session_start();
 const prefix = "/BananaKnights/";
-$fakeSession = array (
-    "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-);
+
 function ScrubUserInputs($notsafeText)
 {
   $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
@@ -137,7 +135,7 @@ if (key_exists('url',$_GET))
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
-            $controller->AddAuthor($fakeSession);
+            $controller->AddAuthor();
             break;
         case "review/newreview":
             if (key_exists('bookId',$_POST))
@@ -303,9 +301,6 @@ function BooksRoute($action)
 
 function UserRoute($action)
 {
-    $fakeSession = array (
-        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-    );
     require_once "controller/User.Controller.php";
     $controller = new UserController();
     switch(strtolower($action))
@@ -329,9 +324,6 @@ function UserRoute($action)
 }
 function AdminRoute($action)
 {
-    $fakeSession = array (
-        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-    );
     require_once "controller/Admin.Controller.php";
     $controller = new AdminController();
     switch ($action)
