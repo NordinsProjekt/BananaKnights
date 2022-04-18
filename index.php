@@ -107,7 +107,10 @@ if (key_exists('url',$_GET))
         case "showbook":
             if (key_exists('id',$_GET))
             {
-                
+                require_once "controller/Books.Controller.php";
+                $controller = new BooksController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowBook($id);
             }
             break;
         case "authors/showall":
@@ -255,7 +258,8 @@ function BooksRoute($action)
         case "show":
             if (key_exists('id',$_POST))
             {
-                $controller->ShowBook();
+                $safe = $controller->ScrubIndexNumber($_POST['id']);
+                $controller->ShowBook($safe);
             }
             break;
         case "createbook":

@@ -65,15 +65,15 @@
     {
         //TODO lägga in roller kontroll
         $text = "<h1>Visa alla reviews</h1>";
-        if ($role != "Admin")
+        if (str_contains($role,"Admin"))
         {
             $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-            <th>Visa</th></tr>";
+            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
         }
         else
         {
             $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
+            <th>Visa</th></tr>";
         }
 
         foreach ($result as $key => $row) {
@@ -90,7 +90,7 @@
             <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
             <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
             <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
-            if ($role == "Admin")
+            if (str_contains($role,"Admin"))
             {
                 $text .= "
                 <td><form method='post' action='".prefix."review/edit'>

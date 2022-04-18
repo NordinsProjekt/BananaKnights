@@ -65,7 +65,6 @@ function ShowAuthor($author,$role)
         $text .= "<form method='post' action='lol'>
         <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
     }
-
     $text .= "<h2>Böcker författaren har skrivit</h2>";
 
     return $text;

@@ -41,18 +41,10 @@ class BooksController extends BaseController
 
     }
 
-    function ShowBook()
+    function ShowBook($id)
     {
-        $role = "";
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"User"))
-        {
-            $role = "User";
-            if (str_contains($user['Roles'],"Admin"))
-            {   $role = "Admin";    }
-        }
-        $safetext = $this->ScrubIndexNumber($_POST['id']);
-        $result = $this->db->GetBook($safetext);
+        $result = $this->db->GetBook($id);
         if ($result)
         {
             if (file_exists("img/books/". $result['ImagePath']))
@@ -69,13 +61,13 @@ class BooksController extends BaseController
             require_once "views/reviews.php";
             echo StartPage("Visa bok");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowBook($result,$imageLink,$role);
+            echo ShowBook($result,$imageLink,$user['Roles']);
             require_once "model/Reviews.Model.php";
             $reviewDB = new ReviewsModel();
             $reviews = $reviewDB->GetAllReviewsBook($result['Id']);
             if ($reviews)
             {
-                echo ShowAllReviews($reviews,$role);
+                echo ShowAllReviews($reviews,$user['Roles']);
             }
             echo EndPage();
           }
