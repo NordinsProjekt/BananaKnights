@@ -110,7 +110,7 @@ if (key_exists('url',$_GET))
                 require_once "controller/Books.Controller.php";
                 $controller = new BooksController();
                 $safe = $controller->ScrubIndexNumber($_GET['id']);
-                $controller->ShowBook($id);
+                $controller->ShowBook($safe);
             }
             break;
         case "authors/showall":

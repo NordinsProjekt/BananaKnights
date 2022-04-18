@@ -50,6 +50,8 @@ class AuthorsController extends BaseController
         $result = $this->db->GetAuthor($id);
         if ($result)
         {
+            $dataArr['Author'] = $result;
+            $dataArr['Books'] = $this->db->GetAllBooksSortedYear($id);
             $user = $this->GetUserInformation();
             $role = "";
             require_once "views/authors.php";
@@ -62,7 +64,7 @@ class AuthorsController extends BaseController
 
             echo StartPage("Visa Författare");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowAuthor($result,$role);
+            echo ShowAuthor($dataArr,$role);
             echo EndPage();
         }
         else

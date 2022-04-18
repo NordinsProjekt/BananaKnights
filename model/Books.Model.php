@@ -9,7 +9,7 @@ class BooksModel extends PDOHandler
     public function GetBook($id)
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
-        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName,a.Id as AuthorId, b.ISBN,b.ImagePath,b.Created FROM books AS b 
+        CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, a.Id as AuthorId, b.ISBN,b.ImagePath,b.Created FROM books AS b 
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
@@ -35,6 +35,7 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
     //Sparar en bok i databasen
     public function SetBook($arr)
     {

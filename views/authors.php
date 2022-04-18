@@ -37,36 +37,38 @@ function ShowAllAuthors($arr,$role)
 }
 
 
-function ShowAuthor($author,$role)
+function ShowAuthor($dataArr,$role)
 {
     $text = "<h1>Visa Författare</h1>";
-    $text .= "<h2>".$author['Firstname']." " . $author['Lastname'] ."</h2>";
-    $text .= "<p><b>Land:</b> ".$author['Country']."<br />";
-    $text .= "<b>Född:</b> " .$author['Born']."<br />";
+    $text .= "<h2>".$dataArr['Author']['Firstname']." " . $dataArr['Author']['Lastname'] ."</h2>";
+    $text .= "<p><b>Land:</b> ".$dataArr['Author']['Country']."<br />";
+    $text .= "<b>Född:</b> " .$dataArr['Author']['Born']."<br />";
 
-    if ($author['Death'] != "0000-00-00")
-    { $text .= "<b>Död:</b> ".$author['Death']."<br />"; }
+    if ($dataArr['Author']['Death'] != "0000-00-00")
+    { $text .= "<b>Död:</b> ".$dataArr['Author']['Death']."<br />"; }
 
-    if ($role == "Moderator" && $author['Flagged'] == 0)
+    if ($role == "Moderator" && $dataArr['Author']['Flagged'] == 0)
     {
         //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
-        $formId = uniqid($author['Id'],true);
+        $formId = uniqid($dataArr['Author']['Id'],true);
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/flagged",
-        "authorId"=>$author['Id']);
+        "authorId"=>$dataArr['Author']['Id']);
         $text .= "<form method='post' action='lol'>
         <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Anmäl</button></form>";
     }
-    if ($role == "Admin" && $author['Flagged'] == 1)
+    if ($role == "Admin" && $dataArr['Author']['Flagged'] == 1)
     {
         //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
-        $formId = uniqid($author['Id'],true);
+        $formId = uniqid($dataArr['Author']['Id'],true);
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/unflag",
-        "authorId"=>$author['Id']);
+        "authorId"=>$dataArr['Author']['Id']);
         $text .= "<form method='post' action='lol'>
         <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
     }
     $text .= "<h2>Böcker författaren har skrivit</h2>";
-
+    foreach ($dataArr['Books'] as $key => $row) {
+        $text .= "<a href='".prefix."showbook?id=".$row['Id']."'>".$row['Title']."(".$row['PublicationYear'].")</a><br />";
+    }
     return $text;
 }
 
