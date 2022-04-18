@@ -58,6 +58,7 @@ function IndexNav($role,$username)
             <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search' />
             <button class='btn btn-outline-success mt-3' type='submit'>Search</button>
             </form>";
+            $text .="<ul class='navbar-nav me-auto mb-2 mb-lg-0'>";
             if (str_contains($role,"Admin") || str_contains($role,"Moderator"))
             {
                 $text .= "<li><a class='nav-link' href='".prefix."books/showall'>Böcker</a></li>";
