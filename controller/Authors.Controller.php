@@ -22,14 +22,14 @@ class AuthorsController extends BaseController
             if (str_contains($user['Roles'],"Admin"))
             {
                 echo StartPage("Visa alla Författare");
-                IndexNav("Admin",$user['Username']);
+                IndexNav($user['Roles'],$user['Username']);
                 echo ShowAllAuthors($arr,"Admin");
                 echo EndPage();
             }
             else
             {
                 echo StartPage("Visa alla Författare");
-                IndexNav("",$user['Username']);
+                IndexNav($user['Roles'],$user['Username']);
                 echo ShowAllAuthors($arr,"");
                 echo EndPage();
             }
@@ -51,22 +51,19 @@ class AuthorsController extends BaseController
         if ($result)
         {
             $user = $this->GetUserInformation();
+            $role = "";
             require_once "views/authors.php";
             require_once "views/default.php";
+            if (str_contains($user['Roles'],"Moderator"))
+            { $role = "Moderator"; }
+
             if (str_contains($user['Roles'],"Admin"))
-            {
-                echo StartPage("Visa Författare");
-                IndexNav("Admin",$user['Username']);
-                echo ShowAuthor($result);
-                echo EndPage();
-            }
-            else
-            {
-                echo StartPage("Visa Författare");
-                IndexNav("",$user['Username']);
-                echo ShowAuthor($result);
-                echo EndPage();
-            }
+            { $role = "Admin"; }
+
+            echo StartPage("Visa Författare");
+            IndexNav($user['Roles'],$user['Username']);
+            echo ShowAuthor($result,$role);
+            echo EndPage();
         }
         else
         {
@@ -83,7 +80,7 @@ class AuthorsController extends BaseController
             require_once "views/default.php";
             $page = "";
             echo StartPage("Skapa ny Författare");
-            IndexNav("Admin",$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo AddNewAuthor();
             echo EndPage();
 
@@ -138,6 +135,28 @@ class AuthorsController extends BaseController
    
     }
 
+    public function FlagAuthor()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $result = $this->db->UpdateFlagAuthor(1,$safe);
+            if ($result)
+            {
+                $this->ShowAllAuthors();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
+
     public function EditAuthor($id)
     {
 
@@ -160,6 +179,12 @@ class AuthorsController extends BaseController
     private function CheckUserInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $safe = trim(str_replace($banlist,"",$notsafeText));
+      return $safe;
+    }
+    private function ScrubIndexNumber($notsafeText)
+    {
+      $banlist = array("\t"," ","%",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }

@@ -32,7 +32,7 @@ class AdminController extends BaseController
             $arrGenre = $booksTable->GetAllGenres();
             $arrAuthor =  $authorTable->GetAllAuthors();
             echo StartPage("Adminpanel");
-            IndexNav("Admin",$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo "<div class='AdminBook'><div class='genre'>" . CreateNewGenre() . "</div>";
             echo "<div class='author'>". AddNewAuthor() . "</div>";
             echo "<div class='book'>". CreateNewBook($arrGenre,$arrAuthor) . "</div>";
@@ -52,9 +52,18 @@ class AdminController extends BaseController
         {
             require_once "views/default.php";
             require_once "views/admin.php";
+            require_once "model/User.Model.php";
+            require_once "model/Authors.Model.php";
+
+            $userDB = new UserModel();
+            $authorDB = new AuthorsModel();
             echo StartPage("Adminpanel");
-            IndexNav("Admin",$user['Username']);
-            echo AdminIndex();
+            IndexNav($user['Roles'],$user['Username']);
+            //Adminpanelen kommer behöva många listor av olika saker.
+            //Bygg en formData array för allt.
+            $formData['BannedUsers'] = $userDB->GetAllLockedAccounts();
+            $formData['BannedAuthors'] = $authorDB->GetAllFlaggedAuthors();
+            echo AdminIndex($formData);
             echo EndPage();
         }
         else
@@ -86,7 +95,7 @@ class AdminController extends BaseController
                     require_once "views/default.php";
                     require_once "views/admin.php";
                     echo StartPage("Visa användare");
-                    IndexNav("Admin",$user['Username']);
+                    IndexNav($user['Roles'],$user['Username']);
                     echo ShowUserAdmin($arr);
                     echo EndPage();
                 }
@@ -115,7 +124,7 @@ class AdminController extends BaseController
                 require_once "views/admin.php";
                 require_once "views/default.php";
                 echo StartPage("Adminpanel");
-                IndexNav("Admin",$user['Username']);
+                IndexNav($user['Roles'],$user['Username']);
                 echo ShowAllUsersAdmin($result,"Admin");
                 echo EndPage();
             }

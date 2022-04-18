@@ -37,11 +37,20 @@ function ShowAllAuthors($arr,$role)
 }
 
 
-function ShowAuthor($author)
+function ShowAuthor($author,$role)
 {
     $text = "<h1>Visa Författare</h1>";
-    foreach ($author as $key => $value) {
-        $text .= "<p>".$key.": ".$value."</p>";
+    $text .= "<h2>".$author['Firstname']." " . $author['Lastname'] ."</h2>";
+    $text .= "<p><b>Land:</b> ".$author['Country']."<br />";
+    $text .= "<b>Född:</b> " .$author['Born']."<br />";
+
+    if ($author['Death'] != "0000-00-00")
+    { $text .= "<b>Död:</b> ".$author['Death']."<br />"; }
+    $text .= "<h2>Böcker författaren har skrivit</h2>";
+    if ($role == "Moderator")
+    {
+        $text .= "<form method='post' action='".prefix."author/flagged'>
+        <input type='hidden' name='id' value='".$author['Id']." /'><button type='submit'>Anmäl</button></form>";
     }
     return $text;
 }

@@ -30,7 +30,7 @@ class HomeController extends BaseController
             }
             include_once "views/default.php";
             echo StartPage("Cool Books");
-            IndexNav($role,$user['UserName']);
+            IndexNav($user['Roles'],$user['UserName']);
             IndexTop();
             IndexCards(); 
             echo EndPage();
@@ -40,7 +40,7 @@ class HomeController extends BaseController
         {
             include_once "views/default.php";
             echo StartPage("Cool Books");
-            IndexNav($role,"");
+            IndexNav($user['Roles'],"");
             IndexTop();
             IndexCards(); 
             echo EndPage();

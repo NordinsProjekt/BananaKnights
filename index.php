@@ -131,7 +131,11 @@ if (key_exists('url',$_GET))
             $controller = new AuthorsController();
             $controller->AddAuthor($fakeSession);
             break;
-
+        case "author/flagged":
+            require_once "controller/Authors.Controller.php";
+            $controller = new AuthorsController();
+            $controller->FlagAuthor();
+            break;
         case "review/newreview":
             if (key_exists('bookId',$_POST))
             {
@@ -321,7 +325,6 @@ function AdminRoute($action)
             }
             break;
         case "removerolefromuser":
-            
             if (key_exists('formname',$_POST))
             {
                 if (isset($_SESSION['form'][ScrubUserInputs($_POST['formname'])]))
