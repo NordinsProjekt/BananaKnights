@@ -10,10 +10,22 @@ class UserModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT u.Id,UserName,Email,IFNULL(GROUP_CONCAT(r.Name),'') AS Roles FROM users AS u 
         LEFT JOIN usergroups AS ug ON u.Id = ug.UserId 
-        LEFT JOIN roles AS r ON ug.RolesID = r.Id
+        LEFT JOIN roles AS r ON ug.RolesID = r.Id 
         GROUP BY u.Id");
         $stmt->execute();
         return $stmt->fetchAll(); 
+    }
+
+    public function GetAllLockedAccounts()
+    {
+        $stmt = $this->Connect()->prepare("SELECT u.Id,u.UserName,u.Email,IFNULL(GROUP_CONCAT(r.Name),'') AS Roles FROM users AS u 
+        LEFT JOIN usergroups AS ug ON u.Id = ug.UserId 
+        LEFT JOIN roles AS r ON ug.RolesID = r.Id 
+        WHERE LockoutEnabled = 1 
+        GROUP BY u.Id 
+        ORDER BY u.UserName ASC;");
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function GetAllRoles()
@@ -39,7 +51,7 @@ class UserModel extends PDOHandler
         $stmt = $this->Connect()->prepare("SELECT u.Id,u.UserName,GROUP_CONCAT(r.Name) AS Roles FROM users AS u 
         INNER JOIN usergroups AS ug ON u.Id = ug.UserId 
         INNER JOIN roles AS r ON ug.RolesID = r.Id
-        WHERE u.Id = :userId;");
+        WHERE u.Id = :userId AND LockoutEnabled = 0;");
         $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();

@@ -79,14 +79,16 @@ function IndexNav($role,$username)
             <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search' />
             <button class='btn btn-outline-success mt-3' type='submit'>Search</button>
             </form>";
-            if ($role == "Admin")
+            if (str_contains($role,"Admin") || str_contains($role,"Moderator"))
             {
                 $text .= "<li><a class='nav-link' href='".prefix."books/showall'>Böcker</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."review/showall'>Recensioner</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."authors/showall'>Författare</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."books/showallgenre'>Genre</a></li>";
+            }
+            if (str_contains($role,"Admin"))
+            {
                 $text .= "<li><a class='nav-link' href='".prefix."admin'>Adminpanel</a></li>";
-
             }
                 if ($role != "")
                 {

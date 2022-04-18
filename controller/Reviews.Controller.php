@@ -25,7 +25,7 @@ class ReviewsController extends BaseController
             if ($book && $review['Antal']<1)
             {
                 echo StartPage("Skriv recension");
-                IndexNav("User",$user['Username']);
+                IndexNav($user['Roles'],$user['Username']);
                 echo AddNewReview($book);
                 echo EndPage();
             }
@@ -102,7 +102,7 @@ class ReviewsController extends BaseController
             require_once "views/reviews.php";
             require_once "views/default.php";
             echo StartPage("Review");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
 
             echo ShowReview($result,$role);
             require_once "model/Comments.Model.php";
@@ -135,7 +135,7 @@ class ReviewsController extends BaseController
                 require_once "views/reviews.php";
                 require_once "views/default.php";
                 echo StartPage("Alla reviews");
-                IndexNav("Admin",$user['Username']);
+                IndexNav($user['Roles'],$user['Username']);
                 echo ShowAllReviews($result,"Admin");
                 echo EndPage();
             }

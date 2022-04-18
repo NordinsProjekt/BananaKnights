@@ -8,7 +8,7 @@ abstract class BaseController
     {
         
     }
-
+    //Används för att kontrollera användaren och hämta rollerna som kontot har.
     public function GetUserInformation()
     {
         require_once "model/User.Model.php";
@@ -18,6 +18,7 @@ abstract class BaseController
             //Loggar ut användaren och skickar till loginskärmen om
             //något inte stämmer med session
             $this->CheckSession();
+            //Om användaren är empty så har den blivit bannad medan session fortfarande är igång.
             $user = $userDB->GetUserRoles($_SESSION['UserId']);
             if (!empty($user))
             {
@@ -31,6 +32,7 @@ abstract class BaseController
         }
         else
         {
+            //Inte inloggad användare
             $userArr = array(
                 "Username"=>"",
                 "Roles"=>"",
@@ -71,13 +73,13 @@ abstract class BaseController
             {
                 $role = "Admin";
             }
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo "<h1>FEL</h1><p>" . $errorText . "</p>";
             echo EndPage();
         }
         else
         {
-            IndexNav("","");
+            IndexNav($user['Roles'],"");
             echo "<h1>FEL</h1><p>" . $errorText . "</p>";
             echo EndPage();
         }

@@ -30,7 +30,7 @@ class BooksController extends BaseController
             $authorTable = new AuthorsModel();
             $arrAuthor = $authorTable->GetAllAuthors();
             echo StartPage("Skapa ny Bok");
-            IndexNav($role,$user['Username']);            
+            IndexNav($user['Roles'],$user['Username']);            
             echo CreateNewBook($arrGenre,$arrAuthor);
             echo EndPage();
         }
@@ -68,7 +68,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             require_once "views/reviews.php";
             echo StartPage("Visa bok");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo ShowBook($result,$imageLink,$role);
             require_once "model/Reviews.Model.php";
             $reviewDB = new ReviewsModel();
@@ -123,7 +123,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
 
             echo StartPage("Sök Resultat");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo ShowAllBooks($result,$role);
             echo EndPage();
         }
@@ -131,7 +131,7 @@ class BooksController extends BaseController
         {
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo "<h1>Sök Resultat</h1><p>'".$_POST['search']."' gav inga resultat!</p>";
             echo EndPage();
         }
@@ -151,7 +151,7 @@ class BooksController extends BaseController
             require_once "views/books.php";
             require_once "views/default.php";
             echo StartPage("Skapa ny Bok");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo ShowAllBooks($result,$role);
             echo EndPage();
         }
@@ -159,7 +159,7 @@ class BooksController extends BaseController
         {
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
             echo EndPage();
         }
@@ -173,7 +173,7 @@ class BooksController extends BaseController
             require_once "views/books.php";
             require_once "views/default.php";
             echo StartPage("Skapa ny Genre");
-            IndexNav("Admin",$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo CreateNewGenre();
             echo EndPage();
         }
@@ -241,7 +241,7 @@ class BooksController extends BaseController
             require_once "views/books.php";
             require_once "views/default.php";
             echo StartPage("Skapa ny Bok");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo ShowAllGenre($result,$role);
             echo EndPage();
         }
@@ -249,7 +249,7 @@ class BooksController extends BaseController
         {
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
-            IndexNav($role,$user['Username']);
+            IndexNav($user['Roles'],$user['Username']);
             echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
             echo EndPage();
         }

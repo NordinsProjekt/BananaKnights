@@ -29,11 +29,16 @@ if (isset($_POST['formname']))
             case "admin":
                 AdminRoute($arr[3]);
                 break;
+            case "author":
+                AuthorRoute($arr[3]);
+                break;
         }
         exit();
     }
     else
     {
+        //Formuläret finns inte
+        //Banna användaren??
         exit();
     }
 }
@@ -131,7 +136,6 @@ if (key_exists('url',$_GET))
             $controller = new AuthorsController();
             $controller->AddAuthor($fakeSession);
             break;
-
         case "review/newreview":
             if (key_exists('bookId',$_POST))
             {
@@ -190,6 +194,21 @@ else
 }
 ?>
 <?php
+function AuthorRoute($action)
+{
+    require_once "controller/Authors.Controller.php";
+    $controller = new AuthorsController();
+    switch(strtolower($action))
+    {
+        case "unflag":
+            $controller->UnFlagAuthor();
+            break;
+        case "flagged":
+            $controller->FlagAuthor();
+            break;
+    }
+}
+
 function BooksRoute($action)
 {
     require_once "controller/Books.Controller.php";
@@ -321,7 +340,6 @@ function AdminRoute($action)
             }
             break;
         case "removerolefromuser":
-            
             if (key_exists('formname',$_POST))
             {
                 if (isset($_SESSION['form'][ScrubUserInputs($_POST['formname'])]))
