@@ -187,4 +187,18 @@ function IndexCards()
 
     echo $text;
 }
+
+
+function SearchReview()
+{
+    $text = "<br><br><form class='me-auto' method='post' action='".prefix."review/search'>";
+    $text .= "<input type='search' placeholder='Review title....' name='search'/>";
+    $text .= "<button type='submit'>Search Review</button>";
+    $text .= "</form><br>";
+    $text .= "<form class='me-auto' method='post' action='".prefix."review/showall'>";
+    $text .= "<button type='submit'>Visa alla</button>";
+    $text .= "</form>";
+
+    echo $text;
+}
 ?>
