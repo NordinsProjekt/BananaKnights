@@ -23,7 +23,9 @@ class BooksModel extends PDOHandler
 
     public function GetAllBooks()
     {
-        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+         b.Description, g.Name AS GenreName, 
         CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, b.Created, b.ImagePath FROM books AS b 
         
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
@@ -90,9 +92,19 @@ class BooksModel extends PDOHandler
         $result = $stmt->execute();
         return $result;
     }
+
+    public function HideGenre($genreId)
+    {
+        //Delete eller hide, det är frågan
+        $stmt = $this->Connect()->prepare("UPDATE genres SET IsDeleted = 1 WHERE Id = :id;");
+        $stmt->bindParam(":id",$genreId);
+        $result = $stmt->execute();
+        return $result;
+    }
     public function GetAllGenres()
     {
-        $stmt = $this->Connect()->prepare("SELECT Id, Name, Description, Created FROM genres");
+        $stmt = $this->Connect()->prepare("SELECT Id, Name, Description, Created FROM genres 
+        WHERE IsDeleted = 0;");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
@@ -100,7 +112,9 @@ class BooksModel extends PDOHandler
     public function GetAllBooksSorted()
     {
         $stmt = $this->Connect()->prepare(
-            "SELECT b.Id,b.Title,b.Description,b.PublicationYear,b.ISBN,b.Created,b.ImagePath,g.Name
+            "SELECT b.Id,b.Title,b.Description,
+            IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+            b.ISBN,b.Created,b.ImagePath,g.Name
             FROM books AS b
             INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
             INNER JOIN genres AS g ON g.Id = gb.GenreId
@@ -117,7 +131,9 @@ class BooksModel extends PDOHandler
     public function GetAllBooksSearch($searchinput)
     {
         $stmt = $this->Connect()->prepare(
-            "SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
+            "SELECT b.Id, b.Title,
+            IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+             b.Description, g.Name AS GenreName, 
             CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName
             FROM books AS b
             INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
