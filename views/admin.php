@@ -6,9 +6,11 @@ function AdminIndex($formData)
     $text .= "<h2>Hantera Användare</h2>";
     $text .= "<a href='".prefix."admin/showall'>Visa alla användare</a>";
     $text .= "<h2>Hantera Roller</h2>";
-    $text .= "<h2>Hantera Kommentarer</h2>";
+    $text .= "<h2>Statistik</h2>";
+    $text .= "<a href='".prefix."showstats'>Visa statistik</a>";
     $text .= "<h2>Avstängda konton</h2>";
     $text .= GenerateTableWithUsers($formData['BannedUsers']);
+    $text .= "<h2>Flaggade Kommentarer</h2>";
     $text .= "<h2>Flaggade författare</h2>";
     $text .= GenerateTableWithAuthors($formData['BannedAuthors']);
     $text .= "<h2>Flaggade recensioner</h2>";
@@ -16,7 +18,18 @@ function AdminIndex($formData)
     
     return $text;
 }
-
+function StatsPanel($statsData)
+{
+    $text = "";
+    $text .= "<h1>Stats för CoolBooks</h1>";
+    $text .= "<p><b>Antal böcker i databasen:</b> ".$statsData['Books']['NumberofBooks']."<br />";
+    $text .= "<b>Antal författare i databasen:</b> ".$statsData['Authors']['NumberofAuthors']."<br />";
+    $text .= "<b>Antal genre i databasen:</b> ".$statsData['Genre']['NumberofGenre']."<br />";
+    $text .= "<b>Antal användare i databasen:</b> ".$statsData['Users']['NumberofUsers']."<br />";
+    $text .= "<b>Antal recensioner i databasen:</b> ".$statsData['Reviews']['NumberofReviews']."<br />";
+    $text .= "<b>Antal kommentarer i databasen:</b> ".$statsData['Comments']['NumberofComments']."<br /></p>";
+    return $text;
+}
 function GenerateTableWithReviews($reviews)
 {
     $text = "";
