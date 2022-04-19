@@ -111,8 +111,14 @@ class ReviewsController extends BaseController
             $comments = $comments->GetAllComments($result['Id']);
             if ($comments)
             {
+                echo CreateNewComment($result);
                 echo ShowAllComments($comments,$role);
             }
+            else
+            {
+                echo CreateNewComment($result);
+            }
+            
             echo EndPage();
         }
         else

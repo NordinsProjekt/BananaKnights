@@ -26,15 +26,24 @@ class CommentsModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("INSERT INTO comments (UserId,Comment,Created,Flagged)
         VALUES (?,?,?,?);");
-        $stmt->execute($arr);
-        return $stmt->fetch();
+        return $stmt->execute($arr);
     }
 
-    public function InsertCommentReviews($commentId, $reviewId)
+    public function InsertCommentReviews($arr)
     {
-        $stmt = $this->Connect()->prepare("INSERT INTO commentsreviews (CommentId,ReviewId)
+        $stmt = $this->Connect()->prepare("INSERT INTO commentreviews (CommentId,ReviewId)
         VALUES (?,?);");
-        $stmt->execute($commentId, $reviewId);
+        return $stmt->execute($arr);
+    }
+
+    public function GetCommentId($arr)
+    {
+        $stmt = $this->Connect()->prepare(
+        "SELECT Id,UserId,Comment,Created,Flagged FROM comments 
+        WHERE Comment = :comment");
+
+        $stmt->bindParam(':comment', $arr[1], PDO::PARAM_STR);
+        $stmt->execute();
         return $stmt->fetch();
     }
 
