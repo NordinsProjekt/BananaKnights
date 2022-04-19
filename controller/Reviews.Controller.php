@@ -72,22 +72,12 @@ class ReviewsController extends BaseController
 
     public function ShowReview()
     {
-        $role = "";
         $safe = $this->CheckUserInputs($_POST['id']);
         $result = $this->db->GetReview($safe);
         $user = $this->GetUserInformation();
         if ($result)
         {
-            if (str_contains($user['Roles'],"User"))
-            {
-                $role = "User";
-
-            }
-            if (str_contains($user['Roles'],"Admin"))
-            {
-                $role = "Admin";
-            }
-            if ($role != "")
+            if ($user['Roles'] != "")
             {
                 $usefull = $this->db->IsUsefullSet($safe,$user['Id']);
                 if ($usefull['Antal'] == 1)
@@ -104,7 +94,7 @@ class ReviewsController extends BaseController
             echo StartPage("Review");
             IndexNav($user['Roles'],$user['Username']);
 
-            echo ShowReview($result,$role);
+            echo ShowReview($result,$user['Roles']);
             require_once "model/Comments.Model.php";
             require_once "views/comments.php";
             $comments = new CommentsModel();
@@ -112,7 +102,8 @@ class ReviewsController extends BaseController
             if ($comments)
             {
                 echo CreateNewComment($result);
-                echo ShowAllComments($comments,$role);
+                //echo ShowAllComments($comments,$role);
+              echo ShowAllComments($comments,$user['Roles']);
             }
             else
             {
@@ -133,7 +124,7 @@ class ReviewsController extends BaseController
     {
         //Endast admin ska få se denna viewn
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Admin") ||str_contains($user['Roles'],"Moderator") )
         {
             $result = $this->db->GetAll();
             if ($result)
@@ -194,6 +185,56 @@ class ReviewsController extends BaseController
         {
             $this->ShowError("Försök till forminjection");
             exit();
+        }
+    }
+
+    //Återställer från flaggat tillstånd
+    public function UnFlagReview()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $fornName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['reviewId']);
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagReview(0,$safe);
+            if ($result)
+            {
+                $this->ShowAllReviews();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att återställa författaren");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
+
+    //Flaggar för kontroll
+    public function FlagReview()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $fornName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['reviewId']);
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagReview(1,$safe);
+            if ($result)
+            {
+                $this->ShowAllReviews();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
         }
     }
 

@@ -1,9 +1,7 @@
 <?php
 session_start();
 const prefix = "/BananaKnights/";
-$fakeSession = array (
-    "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-);
+
 function ScrubUserInputs($notsafeText)
 {
   $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
@@ -32,6 +30,9 @@ if (isset($_POST['formname']))
             case "author":
                 AuthorRoute($arr[3]);
                 break;
+            case "review":
+                ReviewRoute($arr[3]);
+                break;
         }
         exit();
     }
@@ -49,6 +50,8 @@ else
     //Något stämmer inte om formname inte finns
     //session_unset();
     //session_destroy();
+    //Använd inte else om det finns kod nedanför.
+
 }
 
 //Vanliga routern
@@ -91,6 +94,25 @@ if (key_exists('url',$_GET))
 
     switch (strtolower($_GET['url']))
     {
+        //Vanliga get ID
+        case "showauthor":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowAuthor($safe);
+            }
+            break;
+        case "showbook":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Books.Controller.php";
+                $controller = new BooksController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowBook($safe);
+            }
+            break;
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 
             $controller = new AuthorsController();
@@ -134,7 +156,7 @@ if (key_exists('url',$_GET))
         case "author/addauthor":
             require_once "controller/Authors.Controller.php";
             $controller = new AuthorsController();
-            $controller->AddAuthor($fakeSession);
+            $controller->AddAuthor();
             break;
         case "review/newreview":
             if (key_exists('bookId',$_POST))
@@ -202,6 +224,21 @@ else
 }
 ?>
 <?php
+function ReviewRoute($action)
+{
+    require_once "controller/Reviews.Controller.php";
+    $controller = new ReviewsController();
+    switch(strtolower($action))
+    {
+        case "unflag":
+            $controller->UnFlagReview();
+            break;
+        case "flagged":
+            $controller->FlagReview();
+            break;
+    }
+}
+
 function AuthorRoute($action)
 {
     require_once "controller/Authors.Controller.php";
@@ -229,7 +266,8 @@ function BooksRoute($action)
         case "show":
             if (key_exists('id',$_POST))
             {
-                $controller->ShowBook();
+                $safe = $controller->ScrubIndexNumber($_POST['id']);
+                $controller->ShowBook($safe);
             }
             break;
         case "createbook":
@@ -293,9 +331,6 @@ function BooksRoute($action)
 
 function UserRoute($action)
 {
-    $fakeSession = array (
-        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-    );
     require_once "controller/User.Controller.php";
     $controller = new UserController();
     switch(strtolower($action))
@@ -319,9 +354,6 @@ function UserRoute($action)
 }
 function AdminRoute($action)
 {
-    $fakeSession = array (
-        "is_logged_in" => true, "UserID" => 1, "Role" => "User"
-    );
     require_once "controller/Admin.Controller.php";
     $controller = new AdminController();
     switch ($action)

@@ -56,13 +56,13 @@ function ShowBook($book,$imageLink,$role)
     $text = "<h1>Visa enskild bok</h1>";
     $text .= "<h2>".$book['Title']."</h2>";
     $text .= "<img src='".$imageLink."' />";
-    $text .= "<p><b>Författare:</b> ".$book['AuthorName']."<br />";
+    $text .= "<p><b>Författare:</b> <a href='".prefix."showauthor?id=".$book['AuthorId']."'>".$book['AuthorName']."</a><br />";
     $text .= "<b>Genre:</b> " .$book['GenreName']."<br />";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br /></p>";
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
-    if ($role == "User" || $role == "Admin")
+    if (str_contains($role,"User") || str_contains($role,"Admin"))
     {
         $text .= "<form method='post' action='".prefix."review/newreview' >
         <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";

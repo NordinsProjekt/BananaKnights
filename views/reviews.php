@@ -1,6 +1,4 @@
 <?php
-
-
     function AddNewReview($book)
     {
         $text = "<h1>Skriv en Review</h1>";
@@ -41,6 +39,24 @@
                 $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
         }
+        if (str_contains($role,"Moderator") && $review['Flagged'] == 0)
+        {
+            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+            $formId = uniqid($review['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
+            "reviewId"=>$review['Id']);
+            $text .= "<form method='post' action='lol'>
+            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Anmäl</button></form>";
+        }
+        if (str_contains($role,"Admin") && $review['Flagged'] == 1)
+        {
+            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+            $formId = uniqid($review['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/unflag",
+            "reviewId"=>$review['Id']);
+            $text .= "<form method='post' action='lol'>
+            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
+        }
         $_SESSION['ReviewId'] = $review['Id'];
         return $text;
     }
@@ -49,15 +65,15 @@
     {
         //TODO lägga in roller kontroll
         $text = "<h1>Visa alla reviews</h1>";
-        if ($role != "Admin")
+        if (str_contains($role,"Admin"))
         {
             $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-            <th>Visa</th></tr>";
+            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
         }
         else
         {
             $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
+            <th>Visa</th></tr>";
         }
 
         foreach ($result as $key => $row) {
@@ -74,7 +90,7 @@
             <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
             <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
             <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
-            if ($role == "Admin")
+            if (str_contains($role,"Admin"))
             {
                 $text .= "
                 <td><form method='post' action='".prefix."review/edit'>

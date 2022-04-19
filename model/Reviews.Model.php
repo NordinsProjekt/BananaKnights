@@ -22,13 +22,12 @@ class ReviewsModel extends PDOHandler
             VALUES (?,?,?,?,?,?,?);
             ");
         return $stmt->execute($inputArr);
-        
     }
 
     public function GetReview($id)
     {
         $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
-        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
+        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath, r.Flagged FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
         WHERE b.IsDeleted = 0 AND r.Id = :id;");
@@ -37,13 +36,24 @@ class ReviewsModel extends PDOHandler
         return $stmt->fetch();
     }
 
+    public function GetAllFlaggedReviews()
+    {
+        $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
+        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
+        INNER JOIN users AS u ON r.UserId = u.Id 
+        INNER JOIN books AS b ON r.BookId = b.Id 
+        WHERE b.IsDeleted = 0 AND r.Flagged = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
     public function GetAll()
     {
         $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
-        WHERE b.IsDeleted = 0;");
+        WHERE b.IsDeleted = 0 AND r.Flagged = 0;");
         $stmt->execute();
         return $stmt->fetchAll();
     }
@@ -78,6 +88,7 @@ class ReviewsModel extends PDOHandler
         return $stmt->fetch();
 
     }
+
     public function IsUsefullSet($reviewId,$userId)
     {
         $stmt = $this->Connect()->prepare("SELECT COUNT(*) AS Antal FROM reviewusefull 
@@ -86,6 +97,15 @@ class ReviewsModel extends PDOHandler
         $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();
+    }
+
+    public function UpdateFlagReview($flag,$reviewId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE reviews SET Flagged = :flag 
+        WHERE Id = :reviewId;");
+        $stmt->bindParam(":flag",$flag,PDO::PARAM_INT);
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        return $stmt->execute();
     }
 }
 

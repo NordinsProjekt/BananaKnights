@@ -7,6 +7,19 @@ class CommentsController extends BaseController
 
     function __construct()
     {
+        //$user = $this->GetUserInformation();
+        //$safetext = $this->ScrubInputs($_POST['id']);
+       // $result = $this->db->GetAllReviews($safetext);
+       // if ($result)
+       // {
+        //    require_once "views/comments.php";
+       //     echo ShowAllComments($result,$user['Roles']);
+      //  }
+      //  else
+      //  {
+     //       $this->ShowError("Boken finns inte");
+  //   //   }
+    //} 
         $this->db = new CommentsModel();
     }
 

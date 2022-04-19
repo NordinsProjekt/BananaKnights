@@ -50,7 +50,20 @@ class AuthorsModel extends PDOHandler
         return $stmt->execute();
     }
 
-
+    public function GetAllBooksSortedYear($authorId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, g.Name AS GenreName, 
+        b.Created, b.ImagePath FROM books AS b 
+        INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+        INNER JOIN genres AS g ON g.Id = gb.GenreId
+        INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        WHERE IsDeleted = 0 AND a.Id = :authorId 
+        ORDER BY b.PublicationYear DESC;");
+        $stmt->bindParam(":authorId",$authorId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
 
 }
 
