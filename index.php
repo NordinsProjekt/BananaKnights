@@ -203,6 +203,14 @@ if (key_exists('url',$_GET))
                 $controller->WasUsefull();
             }
             break;
+        case "review/addcomment":
+            require_once "controller/Comments.Controller.php";
+            if (key_exists('id',$_POST))
+            {
+                $controller = new CommentsController();
+                $controller->AddComment($_POST['id']);
+            }
+            break;
         default:
           break;
     }

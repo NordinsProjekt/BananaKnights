@@ -1,12 +1,12 @@
 <?php
 
-function CreateNewComment()
+function CreateNewComment($arr)
 {
-        $text = "<form method='post' action='".prefix."reviews/addcomment'>";
+        $text = "<form method='post' action='".prefix."review/addcomment'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtComment'>Kommentar</label></td> <td><input type='text' id='txtComment' 
                 name='Comment' placeholder='Kommentar'/></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='SaveComment' value='Submit' /></td> </tr>";
+        $text .= "<td><button type='submit' name='id' value='".$arr['Id']."'>Submit</input></td>";
         $text .= "</table></form>";
         return $text;
 }
