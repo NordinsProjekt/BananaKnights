@@ -50,7 +50,15 @@ class BooksController extends BaseController
             if (file_exists("img/books/". $result['ImagePath']))
             {
                 $pictures = scandir("img/books/". $result['ImagePath']);
-                $imageLink = prefix."img/books/". $result['ImagePath'] ."/". $pictures[2];
+                if (!empty($pictures[2]))
+                {
+                    $imageLink = prefix."img/books/". $result['ImagePath'] ."/". $pictures[2];
+                }
+                else
+                {
+                    $imageLink = prefix."img/books/noimage.jpg";
+                }
+                
             }
             else
             {
