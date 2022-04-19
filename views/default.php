@@ -110,7 +110,14 @@ function IndexTop()
     if (file_exists("img/books/". $bookinfo[$rnd]['ImagePath']))
     {
         $pictures = scandir("img/books/". $bookinfo[$rnd]['ImagePath']);
-        $imageLink = prefix."img/books/". $bookinfo[$rnd]['ImagePath'] ."/". $pictures[2];
+        if (empty($pictures[2]))
+        {
+            $imageLink = prefix."img/books/noimage.jpg";
+        }
+        else
+        {
+            $imageLink = prefix."img/books/". $result[$rnd]['ImagePath'] ."/". $pictures[2];
+        }
     }
     else
     {
@@ -155,7 +162,14 @@ function IndexCards()
         if (file_exists("img/books/". $sorted[$i]['ImagePath']))
         {
             $pictures = scandir("img/books/". $sorted[$i]['ImagePath']);
-            $imageLink = prefix."img/books/". $sorted[$i]['ImagePath'] ."/". $pictures[2];
+            if (empty($pictures[2]))
+            {
+                $imageLink = prefix."img/books/noimage.jpg";
+            }
+            else
+            {
+                $imageLink = prefix."img/books/". $sorted[$i]['ImagePath'] ."/". $pictures[2];
+            }
         }
         else
         {
