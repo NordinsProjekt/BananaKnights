@@ -113,6 +113,11 @@ if (key_exists('url',$_GET))
                 $controller->ShowBook($safe);
             }
             break;
+        case "showstats":
+                require_once "controller/Stats.Controller.php";
+                $controller = new StatsController();
+                $controller->GeneralStats();
+            break;
         case "authors/showall":
             require_once "controller/Authors.Controller.php"; 
             $controller = new AuthorsController();
