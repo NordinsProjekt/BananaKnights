@@ -52,6 +52,7 @@ abstract class BaseController
             header("Location:".prefix."user/loginpage");
             exit();
         }
+        
         if ($_SERVER['HTTP_USER_AGENT'] != $_SESSION['UserBrowser'])
         {
             session_unset();

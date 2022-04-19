@@ -14,12 +14,12 @@ function CreateNewComment($arr)
 function ShowAllComments($arr,$role)
 {
     $text = "";
-    if (str_contains($arr,"Admin"))
+    if (str_contains($role,"Admin"))
     {
         $text .= "<table><tr> <th>Username</th> <th>Skapad</th> <th>Kommentar</th> 
                 <th>Edit</th> <th>Radera</th></tr>";
     }
-    elseif(str_contains($arr,"Moderator"))
+    elseif(str_contains($role,"Moderator"))
     {
         $text .= "<table><tr> <th>Username</th> <th>Skapad</th> <th>Kommentar</th> 
                 <th>Flagga</th></tr>";
@@ -36,14 +36,14 @@ function ShowAllComments($arr,$role)
         $text.= "<td>".$row['Comment']."</td>";
         $text.= "</form></td>";
 
-        if (str_contains($arr,"Admin"))
+        if (str_contains($role,"Admin"))
         {
             $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
             $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
-        elseif(str_contains($arr,"Moderator"))
+        elseif(str_contains($role,"Moderator"))
         {
             $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$row['Id']."'>Flagga</input>
             </form></td>";
