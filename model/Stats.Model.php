@@ -55,9 +55,9 @@ class StatsModel extends PDOHandler
 
     public function UserWithMostComments()
     {
-        $stmt = $this->Connect()->prepare("SELECT COUNT(Id) AS NumberofComments FROM comments 
-        WHERE Flagged = 0 
-        GROUP BY UserId");
+        $stmt = $this->Connect()->prepare("SELECT COUNT(comments.Id) AS NumberofComments, users.UserName FROM comments 
+        INNER JOIN users ON comments.UserId = users.Id 
+        WHERE Flagged = 0 GROUP BY UserId LIMIT 1;");
         $stmt->execute();
         return $stmt->fetch(); 
     }
