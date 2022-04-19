@@ -211,6 +211,16 @@ if (key_exists('url',$_GET))
                 $controller->AddComment($_POST['id']);
             }
             break;
+        case "review/search":
+            require_once "controller/Reviews.Controller.php";
+            require_once "controller/Books.Controller.php";
+
+            if (key_exists('search',$_POST))
+            {
+                $controller = new ReviewsController();
+                $controller->ShowSearchReview("%".$_POST['search']."%");
+            }
+            break;
         default:
           break;
     }

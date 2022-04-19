@@ -26,12 +26,12 @@ class ReviewsModel extends PDOHandler
 
     public function GetReview($id)
     {
-        $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
+        $stmt = $this->Connect()->prepare("SELECT r.Id, b.Id AS BookId, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath, r.Flagged FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
         WHERE b.IsDeleted = 0 AND r.Id = :id;");
-        $stmt->bindParam(":id",$id,PDO::PARAM_INT);
+        $stmt->bindParam(":id",$id);
         $stmt->execute();
         return $stmt->fetch();
     }
@@ -65,6 +65,17 @@ class ReviewsModel extends PDOHandler
         INNER JOIN books AS b ON r.BookId = b.Id 
         WHERE b.IsDeleted = 0 AND b.Id = :bookId;");
         $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+    public function GetAllReviewsSearch($searchInput)
+    {
+        $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
+        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
+        INNER JOIN users AS u ON r.UserId = u.Id 
+        INNER JOIN books AS b ON r.BookId = b.Id 
+        WHERE (b.IsDeleted = 0) AND (r.Title LIKE :title)");
+        $stmt->bindParam(":title",$searchInput,PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll();
     }

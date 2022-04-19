@@ -133,6 +133,10 @@ class ReviewsController extends BaseController
                 require_once "views/default.php";
                 echo StartPage("Alla reviews");
                 IndexNav($user['Roles'],$user['Username']);
+                if(str_contains($user['Roles'],"Moderator"))
+                {
+                    echo SearchReview();
+                }
                 echo ShowAllReviews($result,"Admin");
                 echo EndPage();
             }
@@ -143,6 +147,31 @@ class ReviewsController extends BaseController
             $this->ShowError("Du har inte rättighet att se detta");
         }
     }
+
+    function ShowSearchReview($searchinput)
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin") ||str_contains($user['Roles'],"Moderator") )
+        {
+            $result = $this->db->GetAllReviewsSearch($searchinput);
+            if ($result)
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav($user['Roles'],$user['Username']);
+                echo SearchReview();
+                echo ShowAllReviews($result,"Admin");
+                echo EndPage();
+            }
+
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet att se detta");
+        }
+    }
+
     public function WasUsefull()
     {
         if (isset($_SESSION['ReviewId']))
