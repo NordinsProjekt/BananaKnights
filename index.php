@@ -4,7 +4,7 @@ const prefix = "/BananaKnights/";
 
 function ScrubUserInputs($notsafeText)
 {
-  $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
+  $banlist = array("\t","%",";","/","<",">",")","(","=","[","]","+","*","#");
   $safe = trim(str_replace($banlist,"",$notsafeText));
   $safe = stripslashes(htmlspecialchars($safe));
   return $safe;
@@ -32,6 +32,9 @@ if (isset($_POST['formname']))
                 break;
             case "review":
                 ReviewRoute($arr[3]);
+                break;
+            case "book":
+                BooksRoute($arr[3]);
                 break;
         }
         exit();
@@ -113,6 +116,15 @@ if (key_exists('url',$_GET))
                 $controller->ShowBook($safe);
             }
             break;
+        case "showgenre":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Books.Controller.php";
+                $controller = new BooksController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowGenre($safe);
+            }
+            break;
         case "showstats":
                 require_once "controller/Stats.Controller.php";
                 $controller = new StatsController();
@@ -148,10 +160,16 @@ if (key_exists('url',$_GET))
             {
                 require_once "controller/Authors.Controller.php";
                 $controller = new AuthorsController();
-                $controller->DeleteAuthor($_POST['id']);
+                $controller->DeleteAuthor();
             }
-            else
-            {}
+            break;
+            case "authors/undelete";
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $controller->UnDeleteAuthor();
+            }
             break;
         case "author/newauthor":
             require_once "controller/Authors.Controller.php";
@@ -303,6 +321,12 @@ function BooksRoute($action)
                 $controller->DeleteBook();
             }
             break;
+        case "undelete":
+            if (key_exists('id',$_POST))
+            {
+                $controller->UnDeleteBook();
+            }
+            break;
         case "edit":
             if (key_exists('id',$_POST))
             {
@@ -315,10 +339,10 @@ function BooksRoute($action)
         case "savegenre":
             $controller->SaveGenre();
             break;
-        case "showgenre":
+        case "revivegenre":
             if (key_exists('id',$_POST))
             {
-                $controller->ShowGenre();
+                $controller->ReviveGenre();
             }
             break;
         case "editgenre":
@@ -327,23 +351,18 @@ function BooksRoute($action)
                 $controller->EditGenre();
             }
             break;
-        case "updategenre":
-            if (key_exists('id',$_POST))
-            {
-                $controller->UpdateGenre();
-            }
-            break;
         case "deletegenre":
             if (key_exists('id',$_POST))
             {
-                $controller->DeleteGenre();
+                $controller->HideGenre();
             }
             break;
         case "showallgenre":
             $controller->ShowAllGenre();
             break;
         case "search":
-            $controller->ShowSearchBook("%".$_POST['search']."%");
+            $safe = ScrubUserInputs($_POST['search']);
+            $controller->ShowSearchBook("%".$safe."%");
             break;
         default:
             break;

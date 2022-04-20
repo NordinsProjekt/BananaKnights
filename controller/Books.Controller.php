@@ -45,6 +45,25 @@ class BooksController extends BaseController
     {
         $user = $this->GetUserInformation();
         $result = $this->db->GetBook($id);
+        require_once "model/Reviews.Model.php";
+        $reviewDB = new ReviewsModel();
+        $reviews = $reviewDB->GetAllReviewsBook($id);
+        $totalRating = 0;
+        if (!empty($reviews))
+        {
+            foreach ($reviews as $key => $row) {
+                $totalRating += $row['Rating'];
+            }
+            (int)$totalRating = $totalRating/count($reviews);
+        }
+        if ($totalRating == 0)
+        { 
+            $result['Rating'] = "n/a";
+        }
+        else 
+        {
+            $result['Rating'] = $totalRating;
+        }
         if ($result)
         {
             if (file_exists("img/books/". $result['ImagePath']))
@@ -85,15 +104,35 @@ class BooksController extends BaseController
         }
     }      
 
-    function DeleteBook()
+    public function UnDeleteBook()
     {
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {
-            $safetext = $this->ScrubInputs($_POST['id']);
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            if($this->db->ReviveBook($safe))
+            {
+                $this->ShowAllBooks();
+            }
+            else
+            {
+                $this->ShowError("Boken kunde inte tas bort");
+            }
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter för detta");
+        }
+    }
+    public function DeleteBook()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safetext = $this->ScrubIndexNumber($_POST['id']);
             if($this->db->HideBook($safetext))
             {
-                echo "Boken är nu borta";
+                $this->ShowAllBooks();
             }
             else
             {
@@ -212,17 +251,29 @@ class BooksController extends BaseController
 
     }
 
-    function ShowGenre()
+    function ShowGenre($id)
     {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($id);
+        $result = $this->db->GetGenre($safe);
+        if ($result)
+        {
+            $dataArr['Genre'] = $result;
+            $dataArr['Books'] = $this->db->GetAllBooksSortedByTitle($safe);
+            require_once "views/default.php";
+            require_once "views/books.php";
+    
+            echo StartPage("Visa Genre");
+            IndexNav($user['Roles'],$user['Username']);
+            echo ShowGenre($dataArr);
+            echo EndPage();
+        }
+
+        
 
     }
 
     function EditGenre()
-    {
-
-    }
-
-    function UpdateGenre()
     {
 
     }
@@ -351,8 +402,33 @@ class BooksController extends BaseController
     
     public function HideGenre()
     {
-        $user = $this->GetUserInformation();
         
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $this->db->HideGenre($safe);
+            $this->ShowAllGenre();
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet till detta");
+        }
+    }
+
+    public function ReviveGenre()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $this->db->ReviveGenre($safe);
+            $this->ShowAllGenre();
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
     }
 
     private function AddGenreToBook($bookId,$genreId)

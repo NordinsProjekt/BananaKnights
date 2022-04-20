@@ -167,8 +167,8 @@ class AuthorsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Moderator"))
         {
-            $fornName = $this->ScrubFormName($_POST['formname']);
-            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['authorId']);
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['authorId']);
             unset($_SESSION['form']);
             $result = $this->db->UpdateFlagAuthor(1,$safe);
             if ($result)
@@ -191,9 +191,48 @@ class AuthorsController extends BaseController
 
     }
 
-    public function DeleteAuthor($id)
+    public function DeleteAuthor()
     {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $result = $this->db->UpdateIsDeletedAuthor(1,$safe);
+            if ($result)
+            {
+                $this->ShowAllAuthors();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
 
+    public function UnDeleteAuthor()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $result = $this->db->UpdateIsDeletedAuthor(0,$safe);
+            if ($result)
+            {
+                $this->ShowAllAuthors();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
     }
 
     private function ScrubSaveAuthorArr($arr)

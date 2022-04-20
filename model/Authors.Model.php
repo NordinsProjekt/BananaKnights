@@ -7,7 +7,7 @@ class AuthorsModel extends PDOHandler
 {
     public function GetAllAuthors()
     {
-        $stmt = $this->Connect()->prepare("SELECT Id, Firstname, Lastname FROM authors WHERE Flagged = 0;");
+        $stmt = $this->Connect()->prepare("SELECT Id, Firstname, Lastname FROM authors WHERE Flagged = 0 AND IsDeleted = 0;");
         $stmt->execute();
 
         return $stmt->fetchAll(); 
@@ -20,13 +20,19 @@ class AuthorsModel extends PDOHandler
         return $stmt->fetchAll(); 
     }
 
+    public function GetAllDeletedAuthors()
+    {
+        $stmt = $this->Connect()->prepare("SELECT Id, Firstname, Lastname, Country, Created FROM authors WHERE IsDeleted = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
     public function GetAuthor($id)
     {
         $stmt = $this->Connect()->prepare(
         "SELECT Id, Firstname, Lastname, Country, Born, Death, Flagged 
         FROM authors
-        WHERE Id = :id
-        ");
+        WHERE Id = :id AND Flagged = 0 AND IsDeleted = 0;");
         $stmt->bindParam(":id",$id,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch();
@@ -50,6 +56,15 @@ class AuthorsModel extends PDOHandler
         return $stmt->execute();
     }
 
+    public function UpdateIsDeletedAuthor($delete,$authorId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE authors SET IsDeleted = :delete
+        WHERE Id = :authorId;");
+        $stmt->bindParam(":delete",$delete,PDO::PARAM_INT);
+        $stmt->bindParam(":authorId",$authorId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
     public function GetAllBooksSortedYear($authorId)
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
@@ -60,7 +75,7 @@ class AuthorsModel extends PDOHandler
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
-        WHERE IsDeleted = 0 AND a.Id = :authorId 
+        WHERE b.IsDeleted = 0 AND a.Id = :authorId 
         ORDER BY b.PublicationYear DESC;");
         $stmt->bindParam(":authorId",$authorId,PDO::PARAM_INT);
         $stmt->execute();

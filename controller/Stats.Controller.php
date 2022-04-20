@@ -1,6 +1,7 @@
 <?php
 require_once "model/Stats.Model.php";
 require_once "classes/Base.Controller.class.php";
+
 class StatsController extends BaseController
 {
     private $db;
@@ -34,6 +35,17 @@ class StatsController extends BaseController
             IndexNav($user['Roles'],$user['Username']);
             echo StatsPanel($statsArr);
             echo EndPage();
+            //Test för strukturen
+            // $chartArr = array("labels"=>"['Totalt','Senaste(7)']");
+            // $chartArr += array("label"=>"'Kommentarer'");
+            // $chartArr += array("data"=>"[7,3]");
+            // $this->APICharts($chartArr,"bar");
+            //Skriver ut den totala aktiviteten på sidan
+            $chartArr = array("labels"=>"['Books','Authors','Genre','Users','Reviews','Comments']");
+            $chartArr += array("label"=>"'Aktiviteter'");
+            $chartArr += array("data"=>"[".$statsArr['Books']['NumberofBooks'].",".$statsArr['Authors']['NumberofAuthors'].",".$statsArr['Genre']['NumberofGenre'].","
+            .$statsArr['Users']['NumberofUsers'].",".$statsArr['Reviews']['NumberofReviews'].",".$statsArr['Comments']['NumberofComments']."]");
+            $this->APICharts($chartArr,"bar");
         }
         else
         {
@@ -41,6 +53,16 @@ class StatsController extends BaseController
         }
     }
 
-    
+    public function APICharts($statsArr,$typ)
+    {
+        //Bygger charten
+        $text = "{type:'".$typ."',data:{labels:".$statsArr['labels'].",datasets:[{label:".$statsArr['label'].",data:".$statsArr['data']."}]}}";      
+        //API biblotek som QuickChart rekommenderade
+        require_once "classes/QuickChart.php";
+        $qc = new QuickChart();
+        $qc->setConfig($text);
+        // Visa bilden
+        echo '<img width="500" height="300" src="data:image/png;base64,' . base64_encode($qc->toBinary()) . '" />';
+    }
 }
 ?>

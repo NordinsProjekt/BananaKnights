@@ -55,10 +55,12 @@ class AdminController extends BaseController
             require_once "model/User.Model.php";
             require_once "model/Authors.Model.php";
             require_once "model/Reviews.Model.php";
+            require_once "model/Books.Model.php";
 
             $userDB = new UserModel();
             $authorDB = new AuthorsModel();
             $reviewDB = new ReviewsModel();
+            $bookDB = new BooksModel();
 
             echo StartPage("Adminpanel");
             IndexNav($user['Roles'],$user['Username']);
@@ -67,6 +69,9 @@ class AdminController extends BaseController
             $formData['BannedUsers'] = $userDB->GetAllLockedAccounts();
             $formData['BannedAuthors'] = $authorDB->GetAllFlaggedAuthors();
             $formData['BannadeReviews'] = $reviewDB->GetAllFlaggedReviews();
+            $formData['BannedGenre'] = $bookDB->GetAllDeletedGenre();
+            $formData['DeletedAuthors'] = $authorDB->GetAllDeletedAuthors();
+            $formData['DeletedBooks'] = $bookDB->GetAllDeletedBooks();
             echo AdminIndex($formData);
             echo EndPage();
         }

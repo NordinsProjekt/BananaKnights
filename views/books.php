@@ -57,9 +57,10 @@ function ShowBook($book,$imageLink,$role)
     $text .= "<h2>".$book['Title']."</h2>";
     $text .= "<img src='".$imageLink."' />";
     $text .= "<p><b>Författare:</b> <a href='".prefix."showauthor?id=".$book['AuthorId']."'>".$book['AuthorName']."</a><br />";
-    $text .= "<b>Genre:</b> " .$book['GenreName']."<br />";
+    $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br />";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
-    $text .= "<b>ISBN: </b>".$book['ISBN']."<br /></p>";
+    $text .= "<b>ISBN: </b>".$book['ISBN']."<br />";
+    $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
     if (str_contains($role,"User") || str_contains($role,"Admin"))
@@ -105,6 +106,20 @@ function ShowAllBooks($arr,$role)
     if ($role == "Admin")
     {
         $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
+    }
+    return $text;
+}
+
+function ShowGenre($dataArr)
+{
+    $text = "<h1>Visa Genre</h1>";
+    $text .= "<h2>".$dataArr['Genre']['Name']."</h2>";
+    $text .= "<p><b>Beskrivning</b> ".$dataArr['Genre']['Description']."<br />";
+    $text .= "<b>Skapad</b> " .$dataArr['Genre']['Created']."<br />";
+
+    $text .= "<h2>Böcker som finns i denna genre</h2>";
+    foreach ($dataArr['Books'] as $key => $row) {
+        $text .= "<a href='".prefix."showbook?id=".$row['Id']."'>".$row['Title']."(".$row['PublicationYear'].")</a><br />";
     }
     return $text;
 }

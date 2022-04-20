@@ -179,7 +179,7 @@ function IndexCards()
     "<div class='col text-white bg-secondary' style='border-radius: 8px'><br>
     <img src='" . $imageLink . "' alt='book bild' height='100px'><br>"
     . $sorted[$i]["Title"] . "<br>"
-    . $sorted[$i]["Name"] . "<br><br>
+    . $sorted[$i]["GenreName"] . "<br><br>
     <form method='post' action='".prefix."books/show'><button type='submit' class='btn btn-primary' name='id' value='".$sorted[$i]['Id']."'>Läs mer</button></form><br>
     </div><br>";
     }
