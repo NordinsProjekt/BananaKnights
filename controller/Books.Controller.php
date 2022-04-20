@@ -212,10 +212,10 @@ class BooksController extends BaseController
 
     }
 
-    function ShowGenre()
+    function ShowGenre($id)
     {
         $user = $this->GetUserInformation();
-        $safe = $this->ScrubIndexNumber($_POST['id']);
+        $safe = $this->ScrubIndexNumber($id);
         $result = $this->db->GetGenre($safe);
         if ($result)
         {

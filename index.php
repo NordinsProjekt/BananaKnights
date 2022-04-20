@@ -116,6 +116,15 @@ if (key_exists('url',$_GET))
                 $controller->ShowBook($safe);
             }
             break;
+        case "showgenre":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Books.Controller.php";
+                $controller = new BooksController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowGenre($safe);
+            }
+            break;
         case "showstats":
                 require_once "controller/Stats.Controller.php";
                 $controller = new StatsController();
@@ -321,12 +330,6 @@ function BooksRoute($action)
             if (key_exists('id',$_POST))
             {
                 $controller->ReviveGenre();
-            }
-            break;
-        case "showgenre":
-            if (key_exists('id',$_POST))
-            {
-                $controller->ShowGenre();
             }
             break;
         case "editgenre":

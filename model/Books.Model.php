@@ -9,7 +9,7 @@ class BooksModel extends PDOHandler
     public function GetBook($id)
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
-        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, a.Id as AuthorId, b.ISBN,b.ImagePath,b.Created FROM books AS b 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, a.Id as AuthorId,g.Id AS GenreId, b.ISBN,b.ImagePath,b.Created FROM books AS b 
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 

@@ -57,7 +57,7 @@ function ShowBook($book,$imageLink,$role)
     $text .= "<h2>".$book['Title']."</h2>";
     $text .= "<img src='".$imageLink."' />";
     $text .= "<p><b>Författare:</b> <a href='".prefix."showauthor?id=".$book['AuthorId']."'>".$book['AuthorName']."</a><br />";
-    $text .= "<b>Genre:</b> " .$book['GenreName']."<br />";
+    $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br />";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br /></p>";
     $text .= "<h3>Beskrivning</h3>";
