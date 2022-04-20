@@ -67,7 +67,7 @@ class BooksController extends BaseController
             {
                 $result['Rating'] = $totalRating;
             }
-            
+
             if (file_exists("img/books/". $result['ImagePath']))
             {
                 $pictures = scandir("img/books/". $result['ImagePath']);
@@ -90,7 +90,7 @@ class BooksController extends BaseController
             require_once "views/reviews.php";
             echo StartPage("Visa bok");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowBook($result,$imageLink,$user['Roles']);
+            echo nl2br(ShowBook($result,$imageLink,$user['Roles']));
             require_once "model/Reviews.Model.php";
             $reviewDB = new ReviewsModel();
             $reviews = $reviewDB->GetAllReviewsBook($result['Id']);

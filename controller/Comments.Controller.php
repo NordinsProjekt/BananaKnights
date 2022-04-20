@@ -12,6 +12,7 @@ class CommentsController extends BaseController
 
     function AddComment($reviewId)
     {
+            $safeReviewId = $this->ScrubIndexNumber($reviewId);
             $user = $this->GetUserInformation();
             $safetext = $this->ScrubInputs($_POST['Comment']);
             if (str_contains($user['Roles']," "))
@@ -34,7 +35,11 @@ class CommentsController extends BaseController
                     $result = $this->db->InsertCommentReviews($inputArr);
                     if($result)
                     {
-                        echo "Kommentar lades till";
+                        //Lite hackigt men det funkar
+                        require_once "controller/Reviews.Controller.php";
+                        $reviewDB = new ReviewsController();
+                        $_POST['id'] = $safeReviewId;
+                        $reviewDB->ShowReview();
                     }
                 }
                 else

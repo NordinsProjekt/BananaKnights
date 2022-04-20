@@ -1,7 +1,8 @@
-function sortTable(col) {
+function sortTable(col,direction) {
     var table, rows, switching, i, x, y, shouldSwitch;
     table = document.getElementById('myTable');
     switching = true;
+
     /* Make a loop that will continue until
     no switching has been done: */
     while (switching) {
