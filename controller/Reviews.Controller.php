@@ -109,7 +109,11 @@ class ReviewsController extends BaseController
             {
                 $commentidArr[$i] = $comments[$i]["Id"];
             }
-            $replies = $replies->GetAllReplies($commentidArr[0]); //tar alla commentid från showallcomments query
+            if (!empty($commentidArr[0]))
+            {
+                $replies = $replies->GetAllReplies($commentidArr[0]); //tar alla commentid från showallcomments query
+            }
+            
             if ($comments)
             {
                 echo CreateNewComment($result);
