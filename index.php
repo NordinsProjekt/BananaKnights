@@ -151,10 +151,16 @@ if (key_exists('url',$_GET))
             {
                 require_once "controller/Authors.Controller.php";
                 $controller = new AuthorsController();
-                $controller->DeleteAuthor($_POST['id']);
+                $controller->DeleteAuthor();
             }
-            else
-            {}
+            break;
+            case "authors/undelete";
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Authors.Controller.php";
+                $controller = new AuthorsController();
+                $controller->UnDeleteAuthor();
+            }
             break;
         case "author/newauthor":
             require_once "controller/Authors.Controller.php";
@@ -311,6 +317,12 @@ function BooksRoute($action)
         case "savegenre":
             $controller->SaveGenre();
             break;
+        case "revivegenre":
+            if (key_exists('id',$_POST))
+            {
+                $controller->ReviveGenre();
+            }
+            break;
         case "showgenre":
             if (key_exists('id',$_POST))
             {
@@ -323,16 +335,10 @@ function BooksRoute($action)
                 $controller->EditGenre();
             }
             break;
-        case "updategenre":
-            if (key_exists('id',$_POST))
-            {
-                $controller->UpdateGenre();
-            }
-            break;
         case "deletegenre":
             if (key_exists('id',$_POST))
             {
-                $controller->DeleteGenre();
+                $controller->HideGenre();
             }
             break;
         case "showallgenre":

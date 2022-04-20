@@ -1,6 +1,7 @@
 <?php
 require_once "model/Stats.Model.php";
 require_once "classes/Base.Controller.class.php";
+
 class StatsController extends BaseController
 {
     private $db;
@@ -54,22 +55,13 @@ class StatsController extends BaseController
 
     public function APICharts($statsArr,$typ)
     {
+        //Bygger charten
         $text = "{type:'".$typ."',data:{labels:".$statsArr['labels'].",datasets:[{label:".$statsArr['label'].",data:".$statsArr['data']."}]}}";      
-        //initialize CURL:
-         $ch = curl_init("https://quickchart.io/chart?c=".$text);
-         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-         $picture = curl_exec($ch);
-         curl_close($ch);
-        // //Kodar om svaret och visar det som bild.
-         echo '<img width="500" height="300" src="data:image/png;base64,' . base64_encode($picture) . '" />';
-   }
-
-   public function CommentsLast7Days($arr)
-   {
-    // {type:'bar',data:{labels:['Totalt','Aktiva'],datasets:[{ label:'Users',data:[7,3]}]}}
-    // {type:'bar',data:{labels:[2012,2013,2014,2015,2016],datasets:[{label:'Users',data:[120,60,50,180,120]}]}}
-
-   }
+        //API biblotek som QuickChart rekommenderade
+        require_once "classes/QuickChart.php";
+        $qc->setConfig($text);
+        // Visa bilden
+        echo '<img width="500" height="300" src="data:image/png;base64,' . base64_encode($qc->toBinary()) . '" />';
+    }
 }
 ?>

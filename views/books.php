@@ -109,6 +109,20 @@ function ShowAllBooks($arr,$role)
     return $text;
 }
 
+function ShowGenre($dataArr)
+{
+    $text = "<h1>Visa Genre</h1>";
+    $text .= "<h2>".$dataArr['Genre']['Name']."</h2>";
+    $text .= "<p><b>Beskrivning</b> ".$dataArr['Genre']['Description']."<br />";
+    $text .= "<b>Skapad</b> " .$dataArr['Genre']['Created']."<br />";
+
+    $text .= "<h2>Böcker som finns i denna genre</h2>";
+    foreach ($dataArr['Books'] as $key => $row) {
+        $text .= "<a href='".prefix."showbook?id=".$row['Id']."'>".$row['Title']."(".$row['PublicationYear'].")</a><br />";
+    }
+    return $text;
+}
+
 function ShowAllGenre($arr,$role)
 {
     $text = "<h1>Visa alla genre</h1>";

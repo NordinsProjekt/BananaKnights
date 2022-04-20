@@ -214,15 +214,27 @@ class BooksController extends BaseController
 
     function ShowGenre()
     {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($_POST['id']);
+        $result = $this->db->GetGenre($safe);
+        if ($result)
+        {
+            $dataArr['Genre'] = $result;
+            $dataArr['Books'] = $this->db->GetAllBooksSortedByTitle($safe);
+            require_once "views/default.php";
+            require_once "views/books.php";
+    
+            echo StartPage("Visa Genre");
+            IndexNav($user['Roles'],$user['Username']);
+            echo ShowGenre($dataArr);
+            echo EndPage();
+        }
+
+        
 
     }
 
     function EditGenre()
-    {
-
-    }
-
-    function UpdateGenre()
     {
 
     }
@@ -351,8 +363,33 @@ class BooksController extends BaseController
     
     public function HideGenre()
     {
-        $user = $this->GetUserInformation();
         
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $this->db->HideGenre($safe);
+            $this->ShowAllGenre();
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet till detta");
+        }
+    }
+
+    public function ReviveGenre()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            $this->db->ReviveGenre($safe);
+            $this->ShowAllGenre();
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
     }
 
     private function AddGenreToBook($bookId,$genreId)

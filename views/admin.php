@@ -10,14 +10,63 @@ function AdminIndex($formData)
     $text .= "<a href='".prefix."showstats'>Visa statistik</a>";
     $text .= "<h2>Avstängda konton</h2>";
     $text .= GenerateTableWithUsers($formData['BannedUsers']);
+    $text .= "<h2>Raderade Genre</h2>";
+    $text .= GenerateTableWithGenre($formData['BannedGenre']);
+    $text .= "<h2>Raderade Författare</h2>";
+    $text .= GenerateTableDeletedAuthors($formData['DeletedAuthors']);
     $text .= "<h2>Flaggade Kommentarer</h2>";
-    $text .= "<h2>Flaggade författare</h2>";
+    $text .= "<h2>Flaggade Författare</h2>";
     $text .= GenerateTableWithAuthors($formData['BannedAuthors']);
-    $text .= "<h2>Flaggade recensioner</h2>";
-    $text .= GenerateTableWithReviews($formData['BannadeReviews']);
-    
+    $text .= "<h2>Flaggade Recensioner</h2>";
+    $text .= GenerateTableWithGenre($formData['BannadeReviews']);
     return $text;
 }
+
+function GenerateTableDeletedAuthors($authors)
+{
+    $text = "";
+    $text = "";
+    if (empty($authors))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Country</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($authors as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['Firstname']."</td>";
+        $text.= "<td>".$row['Lastname']."</td>";
+        $text.= "<td>".$row['Country']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."authors/undelete'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
+function GenerateTableWithGenre($genre)
+{
+    $text = "";
+    $text = "";
+    if (empty($genre))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($genre as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['Name']."</td>";
+        $text.= "<td>".$row['Description']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
 function StatsPanel($statsData)
 {
     $text = "";
