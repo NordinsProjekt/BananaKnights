@@ -34,6 +34,17 @@ class StatsController extends BaseController
             IndexNav($user['Roles'],$user['Username']);
             echo StatsPanel($statsArr);
             echo EndPage();
+            //Test för strukturen
+            // $chartArr = array("labels"=>"['Totalt','Senaste(7)']");
+            // $chartArr += array("label"=>"'Kommentarer'");
+            // $chartArr += array("data"=>"[7,3]");
+            // $this->APICharts($chartArr,"bar");
+            //Skriver ut den totala aktiviteten på sidan
+            $chartArr = array("labels"=>"['Books','Authors','Genre','Users','Reviews','Comments']");
+            $chartArr += array("label"=>"'Aktiviteter'");
+            $chartArr += array("data"=>"[".$statsArr['Books']['NumberofBooks'].",".$statsArr['Authors']['NumberofAuthors'].",".$statsArr['Genre']['NumberofGenre'].","
+            .$statsArr['Users']['NumberofUsers'].",".$statsArr['Reviews']['NumberofReviews'].",".$statsArr['Comments']['NumberofComments']."]");
+            $this->APICharts($chartArr,"bar");
         }
         else
         {
@@ -41,6 +52,24 @@ class StatsController extends BaseController
         }
     }
 
-    
+    public function APICharts($statsArr,$typ)
+    {
+        $text = "{type:'".$typ."',data:{labels:".$statsArr['labels'].",datasets:[{label:".$statsArr['label'].",data:".$statsArr['data']."}]}}";      
+        //initialize CURL:
+         $ch = curl_init("https://quickchart.io/chart?c=".$text);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+         $picture = curl_exec($ch);
+         curl_close($ch);
+        // //Kodar om svaret och visar det som bild.
+         echo '<img width="500" height="300" src="data:image/png;base64,' . base64_encode($picture) . '" />';
+   }
+
+   public function CommentsLast7Days($arr)
+   {
+    // {type:'bar',data:{labels:['Totalt','Aktiva'],datasets:[{ label:'Users',data:[7,3]}]}}
+    // {type:'bar',data:{labels:[2012,2013,2014,2015,2016],datasets:[{label:'Users',data:[120,60,50,180,120]}]}}
+
+   }
 }
 ?>

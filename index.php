@@ -33,6 +33,9 @@ if (isset($_POST['formname']))
             case "review":
                 ReviewRoute($arr[3]);
                 break;
+            case "book":
+                BooksRoute($arr[3]);
+                break;
         }
         exit();
     }

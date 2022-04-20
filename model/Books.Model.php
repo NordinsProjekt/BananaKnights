@@ -8,13 +8,13 @@ class BooksModel extends PDOHandler
     }
     public function GetBook($id)
     {
-        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, g.Name AS GenreName, 
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, IFNULL(g.Name,'n/a') AS GenreName, 
         CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, a.Id as AuthorId, b.ISBN,b.ImagePath,b.Created FROM books AS b 
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
-        WHERE b.Id = :id AND b.IsDeleted = 0
+        WHERE b.Id = :id AND b.IsDeleted = 0 AND g.IsDeleted = 0 
         ORDER BY b.Title ASC;");
         $stmt->bindParam(":id",$id,PDO::PARAM_INT);
         $stmt->execute();
@@ -25,14 +25,14 @@ class BooksModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
         IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
-         b.Description, g.Name AS GenreName, 
+         b.Description, IFNULL(g.Name,'n/a') AS GenreName, 
         CONCAT(a.Firstname, ' ', a.Lastname) AS AuthorName, b.Created, b.ImagePath FROM books AS b 
         
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
-        WHERE IsDeleted = 0 
+        WHERE b.IsDeleted = 0 AND g.IsDeleted = 0
         ORDER BY b.Title ASC;");
         $stmt->execute();
         return $stmt->fetchAll(); 
