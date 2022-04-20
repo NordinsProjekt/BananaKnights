@@ -60,7 +60,14 @@ function ShowBook($book,$imageLink,$role)
     $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br />";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br />";
-    $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
+    if ($book['Rating'] != "n/a")
+    {
+        $text .= "<b>Betyg: </b>".$book['Rating']."/5<br /></p>";
+    }
+    else
+    {
+        $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
+    }
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
     if (str_contains($role,"User") || str_contains($role,"Admin"))
