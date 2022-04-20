@@ -180,7 +180,7 @@ function IndexCards()
     <img src='" . $imageLink . "' alt='book bild' height='100px'><br>"
     . $sorted[$i]["Title"] . "<br>"
     . $sorted[$i]["GenreName"] . "<br><br>
-    <form method='post' action='".prefix."books/show'><button type='submit' class='btn btn-primary' name='id' value='".$sorted[$i]['Id']."'>Läs mer</button></form><br>
+    <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."'><button type='submit' class='btn btn-primary'>Läs mer</button></form><br>
     </div><br>";
     }
     $text .= "</div></div><br>";

@@ -84,12 +84,13 @@ function ShowAllBooks($arr,$role)
     $text = "<h1>Visa alla böcker</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th>
-        <th>Edit</th><th>Radera</th></tr>";
+        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        <th>Edit</th><th>Radera</th></tr></thead>";
     }
     else
     {
-        $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th></tr>";
+        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        </tr></thead>";
     }
     
     foreach ($arr as $key => $row) {
@@ -108,12 +109,13 @@ function ShowAllBooks($arr,$role)
             $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
-        $text.= "</tr>";
+        $text.= "</tr></tbody>";
     }
     if ($role == "Admin")
     {
         $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
     }
+    $text.= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;
 }
 

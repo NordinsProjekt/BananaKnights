@@ -45,27 +45,29 @@ class BooksController extends BaseController
     {
         $user = $this->GetUserInformation();
         $result = $this->db->GetBook($id);
-        require_once "model/Reviews.Model.php";
-        $reviewDB = new ReviewsModel();
-        $reviews = $reviewDB->GetAllReviewsBook($id);
-        $totalRating = 0;
-        if (!empty($reviews))
-        {
-            foreach ($reviews as $key => $row) {
-                $totalRating += $row['Rating'];
-            }
-            (int)$totalRating = $totalRating/count($reviews);
-        }
-        if ($totalRating == 0)
-        { 
-            $result['Rating'] = "n/a";
-        }
-        else 
-        {
-            $result['Rating'] = $totalRating;
-        }
+
         if ($result)
         {
+            require_once "model/Reviews.Model.php";
+            $reviewDB = new ReviewsModel();
+            $reviews = $reviewDB->GetAllReviewsBook($id);
+            $totalRating = 0;
+            if (!empty($reviews))
+            {
+                foreach ($reviews as $key => $row) {
+                    $totalRating += $row['Rating'];
+                }
+                (int)$totalRating = $totalRating/count($reviews);
+            }
+            if ($totalRating == 0)
+            { 
+                $result['Rating'] = "n/a";
+            }
+            else 
+            {
+                $result['Rating'] = $totalRating;
+            }
+            
             if (file_exists("img/books/". $result['ImagePath']))
             {
                 $pictures = scandir("img/books/". $result['ImagePath']);
