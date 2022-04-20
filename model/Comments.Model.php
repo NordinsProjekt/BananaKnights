@@ -21,6 +21,19 @@ class CommentsModel extends PDOHandler
         return $stmt->fetchAll(); 
     }
 
+    public function GetAllReplies($commentid)
+    {
+        $stmt = $this->Connect()->prepare(
+        "SELECT r.Id, r.CommentId, r.Reply, r.Created, r.UserId, ui.UserName
+        FROM replies AS r
+        INNER JOIN comments AS c ON c.Id = r.CommentId
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE :commentid = 1;");
+        $stmt->bindParam(":commentid",$commentid);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
 
     public function InsertComment($arr)
     {

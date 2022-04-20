@@ -216,6 +216,13 @@ if (key_exists('url',$_GET))
                 $controller->AddComment($_POST['id']);
             }
             break;
+        case "review/replycomment":
+            require_once "controller/Comments.Controller.php";
+            if (key_exists('id',$_POST))
+            {
+                $controller = new CommentsController();
+            }
+            break;
         case "review/search":
             require_once "controller/Reviews.Controller.php";
             require_once "controller/Books.Controller.php";

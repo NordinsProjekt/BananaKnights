@@ -100,11 +100,21 @@ class ReviewsController extends BaseController
             require_once "views/comments.php";
             $comments = new CommentsModel();
             $comments = $comments->GetAllComments($result['Id']);
+
+            //hämtar alla replies på kommentarer
+            $replies = new CommentsModel();
+
+            $commentidArr = array();
+            for($i=0; $i<count($comments); $i++) //fyller array med commentid
+            {
+                $commentidArr[$i] = $comments[$i]["Id"];
+            }
+            $replies = $replies->GetAllReplies($commentidArr[0]); //tar alla commentid från showallcomments query
             if ($comments)
             {
                 echo CreateNewComment($result);
                 //echo ShowAllComments($comments,$role);
-              echo nl2br(ShowAllComments($comments,$user['Roles'])); //nl2br ersätter \n (newline) med br
+              echo ShowAllCommentsReplies($comments,$replies,$user['Roles']);
             }
             else
             {
