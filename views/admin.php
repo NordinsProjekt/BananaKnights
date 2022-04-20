@@ -10,6 +10,8 @@ function AdminIndex($formData)
     $text .= "<a href='".prefix."showstats'>Visa statistik</a>";
     $text .= "<h2>Avstängda konton</h2>";
     $text .= GenerateTableWithUsers($formData['BannedUsers']);
+    $text .= "<h2>Raderade Böcker</h2>";
+    $text .= GenerateTableDeletedBooks($formData['DeletedBooks']);
     $text .= "<h2>Raderade Genre</h2>";
     $text .= GenerateTableWithGenre($formData['BannedGenre']);
     $text .= "<h2>Raderade Författare</h2>";
@@ -22,6 +24,27 @@ function AdminIndex($formData)
     return $text;
 }
 
+function GenerateTableDeletedBooks($books)
+{
+    $text = "";
+    if (empty($books))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Titel</th> <th>Författare</th> <th>Genre</th> <th>Utgivningsår</th> <th>Återställ</th></tr>";
+    foreach ($books as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['Title']."</td>";
+        $text.= "<td>".$row['AuthorName']."</td>";
+        $text.= "<td>".$row['GenreName']."</td>";
+        $text.= "<td>".$row['PublicationYear']."</td>";
+        $text.= "<td><form method='post' action='".prefix."books/undelete'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
 function GenerateTableDeletedAuthors($authors)
 {
     $text = "";

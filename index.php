@@ -4,7 +4,7 @@ const prefix = "/BananaKnights/";
 
 function ScrubUserInputs($notsafeText)
 {
-  $banlist = array("\t"," ","%",";","/","<",">",")","(","=","[","]","+","*","#");
+  $banlist = array("\t","%",";","/","<",">",")","(","=","[","]","+","*","#");
   $safe = trim(str_replace($banlist,"",$notsafeText));
   $safe = stripslashes(htmlspecialchars($safe));
   return $safe;
@@ -314,6 +314,12 @@ function BooksRoute($action)
                 $controller->DeleteBook();
             }
             break;
+        case "undelete":
+            if (key_exists('id',$_POST))
+            {
+                $controller->UnDeleteBook();
+            }
+            break;
         case "edit":
             if (key_exists('id',$_POST))
             {
@@ -348,7 +354,8 @@ function BooksRoute($action)
             $controller->ShowAllGenre();
             break;
         case "search":
-            $controller->ShowSearchBook("%".$_POST['search']."%");
+            $safe = ScrubUserInputs($_POST['search']);
+            $controller->ShowSearchBook("%".$safe."%");
             break;
         default:
             break;

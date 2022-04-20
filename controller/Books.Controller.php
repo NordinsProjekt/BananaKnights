@@ -104,15 +104,35 @@ class BooksController extends BaseController
         }
     }      
 
-    function DeleteBook()
+    public function UnDeleteBook()
     {
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {
-            $safetext = $this->ScrubInputs($_POST['id']);
+            $safe = $this->ScrubIndexNumber($_POST['id']);
+            if($this->db->ReviveBook($safe))
+            {
+                $this->ShowAllBooks();
+            }
+            else
+            {
+                $this->ShowError("Boken kunde inte tas bort");
+            }
+        }
+        else
+        {
+            $this->ShowError("Inga rättigheter för detta");
+        }
+    }
+    public function DeleteBook()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safetext = $this->ScrubIndexNumber($_POST['id']);
             if($this->db->HideBook($safetext))
             {
-                echo "Boken är nu borta";
+                $this->ShowAllBooks();
             }
             else
             {

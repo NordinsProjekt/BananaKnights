@@ -71,6 +71,7 @@ class AdminController extends BaseController
             $formData['BannadeReviews'] = $reviewDB->GetAllFlaggedReviews();
             $formData['BannedGenre'] = $bookDB->GetAllDeletedGenre();
             $formData['DeletedAuthors'] = $authorDB->GetAllDeletedAuthors();
+            $formData['DeletedBooks'] = $bookDB->GetAllDeletedBooks();
             echo AdminIndex($formData);
             echo EndPage();
         }

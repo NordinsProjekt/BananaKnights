@@ -59,6 +59,7 @@ class StatsController extends BaseController
         $text = "{type:'".$typ."',data:{labels:".$statsArr['labels'].",datasets:[{label:".$statsArr['label'].",data:".$statsArr['data']."}]}}";      
         //API biblotek som QuickChart rekommenderade
         require_once "classes/QuickChart.php";
+        $qc = new QuickChart();
         $qc->setConfig($text);
         // Visa bilden
         echo '<img width="500" height="300" src="data:image/png;base64,' . base64_encode($qc->toBinary()) . '" />';

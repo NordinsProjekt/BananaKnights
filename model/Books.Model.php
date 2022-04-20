@@ -21,6 +21,23 @@ class BooksModel extends PDOHandler
         return $stmt->fetch();
     }
 
+    public function GetAllDeletedBooks()
+    {
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+         b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath FROM books AS b 
+        
+        INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+        INNER JOIN genres AS g ON g.Id = gb.GenreId
+        INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        WHERE b.IsDeleted = 1
+        ORDER BY b.Title ASC;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
     public function GetAllBooks()
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
@@ -74,7 +91,13 @@ class BooksModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("UPDATE books SET IsDeleted = 1 WHERE Id = :id ");
         $stmt->bindParam(":id",$id);
-        
+        return $stmt->execute();
+    }
+
+    public function ReviveBook($id)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE books SET IsDeleted = 0 WHERE Id = :id ");
+        $stmt->bindParam(":id",$id);
         return $stmt->execute();
     }
     public function SetGenre($arr)
