@@ -11,7 +11,7 @@ function CreateNewComment($arr)
         return $text;
 }
 
-function ShowAllComments($arr,$role)
+function ShowAllCommentsReplies($commentArr,$replyArr,$role)
 {
     $text = "";
     if (str_contains($role,"Admin"))
@@ -28,28 +28,59 @@ function ShowAllComments($arr,$role)
     {
         $text .= "<table><tr> <th>Username</th> <th>Skapad</th> <th>Kommentar</th></tr>";
     }
-    
-    foreach ($arr as $key => $row) {
+    foreach ($commentArr as $key => $commentrow) {
         $text.= "<tr>";
-        $text.= "<td>".$row['UserName']."</td>";
-        $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td>".$row['Comment']."</td>";
-        $text.= "</form></td>";
+        $text.= "<td>".$commentrow['UserName']."</td>";
+        $text.= "<td>".$commentrow['Created']."</td>";
+        $text.= "<td>".$commentrow['Comment']."</td>";
+        
 
         if (str_contains($role,"Admin"))
         {
-            $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$commentrow['Id']."'>Edit</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$commentrow['Id']."'>Radera</input>
             </form></td>";
         }
         elseif(str_contains($role,"Moderator"))
         {
-            $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$row['Id']."'>Flagga</input>
+            $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
             </form></td>";
         }
+        $text.= "<form method='post' action='".prefix."review/replycomment'><td><input type='text' name='reply' placeholder='reply...'></td></form>";
         $text.= "</tr>";
+
+
+
+
+        //REPLIES  
+        foreach ($replyArr as $key => $replyrow) 
+        {
+            if($replyrow['Id'] == $commentrow['Id'])
+            {
+                $text.= "";
+                $text.= "<td>".$replyrow['UserName']."</td>";
+                $text.= "<td>".$replyrow['Created']."</td>";
+                $text.= "<td>".$replyrow['Reply']."</td>";
+                $text.= "<td></td>";
+
+                if (str_contains($role,"Admin"))
+                {
+                $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$replyrow['Id']."'>Edit</input>
+                </form></td>";
+                $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$replyrow['Id']."'>Radera</input>
+                </form></td>";
+                }
+                elseif(str_contains($role,"Moderator"))
+                {
+                $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$replyrow['Id']."'>Flagga</input>
+                </form></td>";
+                }
+            }
+        }
     }
+    $text.= "</form></td>";
+    
     return $text;
 }
 
