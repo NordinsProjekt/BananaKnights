@@ -75,7 +75,7 @@ class AuthorsModel extends PDOHandler
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
-        WHERE IsDeleted = 0 AND a.Id = :authorId 
+        WHERE b.IsDeleted = 0 AND a.Id = :authorId 
         ORDER BY b.PublicationYear DESC;");
         $stmt->bindParam(":authorId",$authorId,PDO::PARAM_INT);
         $stmt->execute();

@@ -13,7 +13,7 @@ class BooksModel extends PDOHandler
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
-        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId
         WHERE b.Id = :id AND b.IsDeleted = 0
         ORDER BY b.Title ASC;");
         $stmt->bindParam(":id",$id,PDO::PARAM_INT);

@@ -63,7 +63,7 @@ class ReviewsModel extends PDOHandler
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
-        WHERE b.IsDeleted = 0 AND b.Id = :bookId;");
+        WHERE b.IsDeleted = 0 AND b.Flagged = 0 AND b.Id = :bookId AND r.IsDeleted = 0 AND r.Flagged = 0;");
         $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
