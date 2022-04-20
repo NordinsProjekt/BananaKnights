@@ -336,7 +336,8 @@ class BooksController extends BaseController
         if ($this->VerifyUserRole("Admin"))
         {
             $cleanId = $this->ScrubInputs($_POST['id']);
-            $result = $this->db->DeleteGenre($cleanId);
+            $result = $this->db->DeleteGenre
+            ($cleanId);
             if ($result)
             {
                 $this->ShowAllGenre();
@@ -346,6 +347,12 @@ class BooksController extends BaseController
         {
             $this->ShowError("Kräver högre rättighet för detta");
         }
+    }
+    
+    public function HideGenre()
+    {
+        $user = $this->GetUserInformation();
+        
     }
 
     private function AddGenreToBook($bookId,$genreId)

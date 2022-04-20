@@ -52,7 +52,9 @@ class AuthorsModel extends PDOHandler
 
     public function GetAllBooksSortedYear($authorId)
     {
-        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, g.Name AS GenreName, 
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear, 
+        g.Name AS GenreName, 
         b.Created, b.ImagePath FROM books AS b 
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
