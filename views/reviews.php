@@ -22,10 +22,11 @@
 
     function ShowReview($review,$role)
     {
+        //$review['ReviewText'] = str_replace('\n','<br />',$review['ReviewText']);
         $text = "<h1>Visa enskild recension</h1>";
         $text .= "<h2>".$review['ReviewTitle']."</h2>";
         $text .= "<div width='300px'>".$review['ReviewText']."</div>";
-        $text .= "<p>Skriven av: ".$review['UserName']."</p>";
+        $text .= "<br /><p><b>Skriven av: </b>".$review['UserName']."</p>";
         $text .= "<p>Skapad: ".$review['Created']."</p>";
         if ($role != "")
         {
@@ -80,7 +81,14 @@
             if (file_exists("img/books/". $row['BookImagePath']))
             {
                 $pictures = scandir("img/books/". $row['BookImagePath']);
-                $imageLink = prefix."img/books/". $row['BookImagePath'] ."/". $pictures[2];
+                if (empty($pictures[2]))
+                {
+                    $imageLink = prefix."img/books/noimage.jpg";
+                }
+                else
+                {
+                    $imageLink = prefix."img/books/". $row['BookImagePath'] ."/". $pictures[2];
+                }
             }
             else
             {

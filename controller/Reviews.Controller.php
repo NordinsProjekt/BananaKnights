@@ -51,6 +51,7 @@ class ReviewsController extends BaseController
             );
     
             $cleanArr = $this->ScrubSaveAuthorArr($arr);
+            //$cleanArr = $this->ConvertEnterKey($cleanArr[3]);
             $result = $this->db->InsertReview($cleanArr);
             if ($result)
             {
@@ -94,7 +95,7 @@ class ReviewsController extends BaseController
             echo StartPage("Review");
             IndexNav($user['Roles'],$user['Username']);
 
-            echo ShowReview($result,$user['Roles']);
+            echo nl2br(ShowReview($result,$user['Roles'])); //nl2br ersätter \n (newline) med br
             require_once "model/Comments.Model.php";
             require_once "views/comments.php";
             $comments = new CommentsModel();
@@ -289,8 +290,14 @@ class ReviewsController extends BaseController
     private function CheckUserInputs($notsafeText)
     {
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
-      $safe = trim(str_replace($banlist,"",$notsafeText));
+      $safe = htmlspecialchars(trim(str_replace($banlist,"",$notsafeText)));
       return $safe;
+    }
+
+    private function ConvertEnterKey($textString)
+    {
+        $newString = str_replace('\n','[br]',$textString);
+        return $newString;
     }
 }
 ?>

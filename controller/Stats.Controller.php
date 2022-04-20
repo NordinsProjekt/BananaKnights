@@ -22,12 +22,14 @@ class StatsController extends BaseController
         {
             require_once "views/default.php";
             require_once "views/admin.php";
+          
             $statsArr['Books'] = $this->db->GetNumberOfBooks();
             $statsArr['Authors'] = $this->db->GetNumberOfAuthors();
             $statsArr['Genre'] = $this->db->GetNumberOfGenre();
             $statsArr['Users'] = $this->db->GetNumberOfUsers();
             $statsArr['Reviews'] = $this->db->GetNumberOfReviews();
             $statsArr['Comments'] = $this->db->GetNumberOfComments();
+            $statsArr['Spammer'] = $this->db->UserWithMostComments();
             echo StartPage("Statistik för sidan");
             IndexNav($user['Roles'],$user['Username']);
             echo StatsPanel($statsArr);
