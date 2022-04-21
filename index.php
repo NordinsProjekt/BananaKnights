@@ -333,7 +333,8 @@ function BooksRoute($action)
         case "edit":
             if (key_exists('id',$_POST))
             {
-                $controller->EditBook();
+                $safe = $controller->ScrubIndexNumber($_POST['id']);
+                $controller->EditBook($safe);
             }
             break;
         case "creategenre":

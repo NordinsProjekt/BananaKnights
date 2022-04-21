@@ -399,11 +399,19 @@ class BooksController extends BaseController
 
     }
 
-    public function EditBook()
+    public function EditBook($id)
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'], "Admin"))
         {
-            echo "Visa Edit formulär";
+            $safe = $this->ScrubIndexNumber($id);
+            $book = $this->db->GetBook($safe);
+            require_once "views/default.php";
+            require_once "views/books.php";
+            echo StartPage("Editera bok");
+            IndexNav($user['Roles'],$user['Username']);
+            echo "";
+            echo EndPage();
         }
         else
         {

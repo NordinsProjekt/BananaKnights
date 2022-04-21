@@ -102,7 +102,15 @@ function ShowBook($book,$imageLink,$role)
 
     return $text;
 }
-
+function EditBook($book,$role)
+{
+    $text = "";
+    if (str_contains($role,"Admin"))
+    {
+        
+    }
+    return $text;
+}
 function ShowAllBooks($arr,$role)
 {
     $text = "<h1>Visa alla böcker</h1>";
