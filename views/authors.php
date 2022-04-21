@@ -75,22 +75,53 @@ function ShowAuthor($dataArr,$role)
 
 function AddNewAuthor()
 {
-        $text = "<h1>Skapa ny författare</h1>";
-        $text .= "<form method='post' action='".prefix."author/addauthor'>";
-        $text .= "<table>";
-        $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' id='firstname' name='Fname' /></td> </tr>";  
-        $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' id='lastname' name='Lname' /></td> </tr>"; 
-        $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' id='country' name='Country' /></td> </tr>"; 
-        $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' id='born' name='Born' /></td> </tr>"; 
-        $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' id='death' name='Death' /></td> </tr>"; 
+    $text = "<h1>Skapa ny författare</h1>";
+    $text .= "<form method='post' action='".prefix."author/addauthor'>";
+    $text .= "<table>";
+    $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' id='firstname' name='Fname' /></td> </tr>";  
+    $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' id='lastname' name='Lname' /></td> </tr>"; 
+    $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' id='country' name='Country' /></td> </tr>"; 
+    $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' id='born' name='Born' /></td> </tr>"; 
+    $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' id='death' name='Death' /></td> </tr>"; 
 
-        // behöver lägga till bild table i db
-        //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='addauthor' value='add' /></td> </tr>";
-        $text .= "</table></form>";
-        return $text;
+    // behöver lägga till bild table i db
+    //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";
+    $text .= "<tr> <td></td> <td><input type='submit' name='addauthor' value='add' /></td> </tr>";
+    $text .= "</table></form>";
+    return $text;
 }
 
+function EditAuthor($author,$role)
+{
+    $text = "";
+    if (str_contains($role,"Admin"))
+    {
+        $formId = uniqid($author['Id'],true);
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/saveeditauthor",
+        "authorId"=>$author['Id']);
+
+        $text = "<h1>Editera ".$author['Firstname']." " .$author['Lastname']."</h1>";
+        $text .= "<form method='post'>";
+        $text .= "<table>";
+        $text .= "<tr><td><label for='firstname'>Firstname</label></td> 
+        <td><input type='text' id='firstname' name='Fname' value='".$author['Firstname']."' /></td> </tr>";  
+        $text .= "<tr><td><label for='lastname'>Lastname</label></td> 
+        <td><input type='text' id='lastname' name='Lname' value='".$author['Lastname']."' /></td> </tr>"; 
+        $text .= "<tr><td><label for='country'>Country</label></td> 
+        <td><input type='text' id='country' name='Country' value='".$author['Country']."' /></td> </tr>"; 
+        $text .= "<tr><td><label for='born'>Born</label></td> 
+        <td><input type='date' id='born' name='Born' value='".$author['Born']."' /></td> </tr>"; 
+        $text .= "<tr><td><label for='death'>Death</label></td> 
+        <td><input type='date' id='death' name='Death' value='".$author['Death']."' /></td> </tr>";
+    
+        // behöver lägga till bild table i db
+        //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='hidden' name='formname' value='".$formId."' />
+            <input type='submit' name='saveauthor' value='Uppdatera' /></td> </tr>";
+        $text .= "</table></form>";
+    }
+    return $text;
+}
 
 
 

@@ -46,6 +46,30 @@ function CreateNewGenre()
         return $text;
 }
 
+function EditGenre($genre,$role)
+{
+    $text = "";
+    if (str_contains($role,"Admin"))
+    {
+        //Skapa Genre formulär
+        $formId = uniqid($genre['Id'],true);
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."book/saveeditgenre",
+        "genreId"=>$genre['Id']);
+
+        $text = "<h1>Editera ".$genre['Name']."</h1>";
+        $text .= "<form method='post'>";
+        $text .= "<table><tr><th></th><th></th></tr>";
+        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' 
+        name='BookGenre' pattern='.{3,}' placeholder='Genre namn' value='".$genre['Name']."' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
+                    <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30' 
+                    pattern='.{5,}' placeholder='Minst 5 tecken'>".$genre['Description']."</textarea></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnEditGenre' value='Edit' />
+        <input type='hidden' name='formname' value='".$formId."' /></td></tr>";
+        $text .= "</table></form>";
+    }
+    return $text;
+}
 function DeleteGenre()
 {
 
@@ -136,7 +160,7 @@ function ShowGenre($dataArr)
 function ShowAllGenre($arr,$role)
 {
     $text = "<h1>Visa alla genre</h1>";
-    if ($role == "Admin")
+    if (str_contains($role,"Admin"))
     {
         $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     }
@@ -152,7 +176,7 @@ function ShowAllGenre($arr,$role)
         $text.= "<td>".$row['Created']."</td>";
         $text.= "<td><form method='post' action='".prefix."showgenre?id=".$row['Id']."'><button type='submit'>Visa</input>
         </form></td>";
-        if ($role == "Admin")
+        if (str_contains($role,"Admin"))
         {
             $text.= "<td><form method='post' action='".prefix."books/editgenre'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
@@ -161,7 +185,7 @@ function ShowAllGenre($arr,$role)
         }
         $text.= "</tr>";
     }
-    if ($role == "Admin")
+    if (str_contains($role,"Admin"))
     {
         $text.= "</table><form method='post' action='".prefix."books/creategenre'><button type='submit'>Skapa ny genre</button></form>";
     }

@@ -1,4 +1,6 @@
 <?php
+
+//Modul från QuickChart GitHub
 class QuickChart {
   public $protocol;
   public $host;

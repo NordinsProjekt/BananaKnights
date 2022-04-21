@@ -47,6 +47,13 @@ class AuthorsModel extends PDOHandler
         $stmt->execute($inputArr);
     }
 
+    public function UpdateAuthor($authorObj)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE authors SET Firstname = ?, Lastname = ?, 
+        Country = ?, Born = ?, Death = ? WHERE Id = ?;");
+        return $stmt->execute($authorObj);
+    }
+
     public function UpdateFlagAuthor($flag,$authorId)
     {
         $stmt = $this->Connect()->prepare("UPDATE authors SET Flagged = :flag 

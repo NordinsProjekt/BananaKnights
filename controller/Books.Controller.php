@@ -272,27 +272,64 @@ class BooksController extends BaseController
 
     }
 
-    function EditGenre()
+    public function UpdateGenre($genreId)
     {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $genreId = $this->ScrubIndexNumber($genreId);
+            $genreArr = array (
+                $genreId, $_POST['BookGenre'],$_POST['GenreDescription']
+            );
+            unset ($_SESSION['form']);
+            if ($this->ValidateSaveGenre($genreArr))
+            {
+                $this->db->UpdateGenre($genreArr[0],$genreArr[1],$genreArr[2]);
+                $this->ShowAllGenre();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med valideringen av data");
+            }
 
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättigheter för detta");
+        }
+    }
+
+    public function EditGenre($genreId)
+    {
+        $safe = $this->ScrubIndexNumber($genreId);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $genre = $this->db->GetGenre($safe);
+            require_once "views/default.php";
+            require_once "views/books.php";
+            echo StartPage("Editera genre");
+            IndexNav($user['Roles'],$user['Username']);
+            echo EditGenre($genre,$user['Roles']);
+            echo EndPage();
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättigheter för detta");
+        }
     }
 
     function ShowAllGenre()
     {
-        $role = "User";
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
-        {
-            $role = "Admin";
-        }
         $result = $this->db->GetAllGenres();
         if ($result)
         {
             require_once "views/books.php";
             require_once "views/default.php";
-            echo StartPage("Skapa ny Bok");
+            echo StartPage("Visa alla genre");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowAllGenre($result,$role);
+            echo ShowAllGenre($result,$user['Roles']);
             echo EndPage();
         }
         else
@@ -300,7 +337,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
             IndexNav($user['Roles'],$user['Username']);
-            echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
+            echo "<h1>Visa alla genre</h1><p>Finns inga genre att visa</p>";
             echo EndPage();
         }
     }
@@ -377,8 +414,9 @@ class BooksController extends BaseController
     private function ValidateSaveGenre($arr)
     {
         //Kontrollerar Genre arrayen innan databasen
-        if (empty($arr[0]) || $arr[0] == "") {return false;}
-        if (empty($arr[0]) || $arr[0] == "") {return false;}
+        foreach ($arr as $key => $value) {
+            if (empty($value) || $value == "") {return false;}
+        }
         return true;
     }
 

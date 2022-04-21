@@ -127,7 +127,8 @@ function IndexTop()
         <div class='row'><br>
         <div class='col'><br>
 
-            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='100px'>
+            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='300px' />
+            <form method='post' action='".prefix."showbook?id=".$bookinfo[$rnd]['Id']."'><button type='submit' class='btn btn-primary'>Läs mer</button></form>
         </div>
         <div class='col-md-10'>
             <div class='card-body'><br><br>
@@ -140,7 +141,7 @@ function IndexTop()
         </div>
         </div>
         </div><br><br>";   
-    echo $text;
+    echo nl2br($text);
 }
 
 
