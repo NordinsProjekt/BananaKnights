@@ -60,7 +60,14 @@ function ShowBook($book,$imageLink,$role)
     $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br />";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br />";
-    $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
+    if ($book['Rating'] != "n/a")
+    {
+        $text .= "<b>Betyg: </b>".$book['Rating']."/5<br /></p>";
+    }
+    else
+    {
+        $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
+    }
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
     if (str_contains($role,"User") || str_contains($role,"Admin"))
@@ -77,12 +84,13 @@ function ShowAllBooks($arr,$role)
     $text = "<h1>Visa alla böcker</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th>
-        <th>Edit</th><th>Radera</th></tr>";
+        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        <th>Edit</th><th>Radera</th></tr></thead>";
     }
     else
     {
-        $text .= "<table><tr> <th>Titel</th> <th>År</th> <th>Beskrivning</th> <th>Genre</th> <th>Författare</th> <th>Visa</th></tr>";
+        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        </tr></thead>";
     }
     
     foreach ($arr as $key => $row) {
@@ -101,12 +109,13 @@ function ShowAllBooks($arr,$role)
             $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
-        $text.= "</tr>";
+        $text.= "</tr></tbody>";
     }
     if ($role == "Admin")
     {
         $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
     }
+    $text.= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;
 }
 
@@ -141,7 +150,7 @@ function ShowAllGenre($arr,$role)
         $text.= "<td>".$row['Name']."</td>";
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/showgenre'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."showgenre?id=".$row['Id']."'><button type='submit'>Visa</input>
         </form></td>";
         if ($role == "Admin")
         {

@@ -53,7 +53,7 @@ class Book
 
     private function setBookDescription($bookDescription)
     {
-        $this->bookDescription = $bookDescription;//$this->ScrubInputs($bookDescription);
+        $this->bookDescription = $this->ScrubInputs($bookDescription);
         if (empty($this->bookDescription) || $this->bookDescription == "") 
         {
             $this->validated = false;
