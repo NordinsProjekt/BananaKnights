@@ -27,6 +27,8 @@ abstract class BaseController
                     "Roles"=>$user['Roles'],
                     "Id"=>$user['Id']
                 );
+
+
                 return $userArr;
             }
         }
@@ -65,11 +67,22 @@ abstract class BaseController
     protected function ShowError($errorText) //Sida som visar fel
     {
         $user = $this->GetUserInformation();
+
+        //Loggar händelsen i databasen
+        require_once "model/Log.Model.php";
+        $logDB = new LogModel();
+        $trace = debug_backtrace();
+        $arr = array (
+            $user['Id'],$trace[1]['class'],$trace[1]['function'],$errorText,
+            $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],date("Y-m-d H:i:s")
+        );
+        $logDB->SetErrorMessage($arr);
         require_once "views/default.php";
         echo StartPage("Fel vid inläsning");
         IndexNav($user['Roles'],$user['Username']);
         echo "<h1>FEL</h1><p>" . $errorText . "</p>";
         echo EndPage();
+
     }
 
     protected function VerifyUserRole($roleName)

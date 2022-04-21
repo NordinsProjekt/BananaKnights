@@ -17,12 +17,9 @@ class BooksController extends BaseController
 
     function CreateBook()
     {
-        //TODO Kontrollera behörighet
-        $role = "";
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Admin") || str_contains($user['Roles'],"User"))
         {
-            $role = "Admin";
             require_once "views/books.php";
             require_once "views/default.php";
             require_once "model/Authors.Model.php";
@@ -310,58 +307,59 @@ class BooksController extends BaseController
 
     public function SaveBook()
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
         {
-
+            require_once "classes/Book.class.php";
+            $book = new Book($_SESSION['UserId'],$_POST['BookTitle'],$_POST['BookYear'],
+            $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'].$_POST['BookTitle'],"0",date("Y-m-d H:i:s"));
+            //TODO:
+            //Om $_POST saknar info så visa felmeddelande direkt AJAX
+            //Om arrayen inte innehåller något som är tomt eller felaktig data
+            if($book->Validated())
+            {
+                //result = lastID
+                $result = $this->db->SetBook($book->ToArray());
+                if ($this->AddAuthorToBook($result['Id'],$_POST['BookAuthor']))
+                {
+                    if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
+                    {
+                        require_once "controller/Upload.Controller.php";
+                        $uploadController = new UploadController();
+                        if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
+                        {
+                            echo "Allt gick bra";
+                        }
+                        else
+                        {
+                            echo "Något var fel med bilden";
+                        }
+                        header("Location: ".prefix."books/showall");
+                    }
+                    else
+                    {
+                        $this->ShowError("Fel i Skapa Bok formuläret Lägga till genre");
+                        //Annars radera boken
+                    }
+                }
+                else
+                {
+                    $this->ShowError("Fel i Skapa Bok formuläret lägga till author");
+                    //Annars radera boken
+                }
+            }
+            else
+            {
+                $this->ShowError("Fel i Skapa Bok formuläret validering av data");
+            }
         }
         else
         {
             $this->ShowError("Du har inga rättigheter för detta");
             exit();
         }
-        require_once "classes/Book.class.php";
-        $book = new Book($_SESSION['UserId'],$_POST['BookTitle'],$_POST['BookYear'],
-        $_POST['BookDescription'],$_POST['BookISBN'],$_POST['BookISBN'].$_POST['BookTitle'],"0",date("Y-m-d H:i:s"));
+        
 
-        //TODO:
-        //Om $_POST saknar info så visa felmeddelande direkt AJAX
-        //Om arrayen inte innehåller något som är tomt eller felaktig data
-        if($book->Validated())
-        {
-            //result = lastID
-            $result = $this->db->SetBook($book->ToArray());
-            if ($this->AddAuthorToBook($result['Id'],$_POST['BookAuthor']))
-            {
-                if ($this->AddGenreToBook($result['Id'],$_POST['BookGenre']))
-                {
-                    require_once "controller/Upload.Controller.php";
-                    $uploadController = new UploadController();
-                    if ($uploadController->AddImage("img/books/".$book->getImagePath(),$_FILES['BookPicture']))
-                    {
-                        echo "Allt gick bra";
-                    }
-                    else
-                    {
-                        echo "Något var fel med bilden";
-                    }
-                    header("Location: ".prefix."books/showall");
-                }
-                else
-                {
-                    $this->ShowError("Fel i Skapa Bok formuläret Lägga till genre");
-                    //Annars radera boken
-                }
-            }
-            else
-            {
-                $this->ShowError("Fel i Skapa Bok formuläret lägga till author");
-                //Annars radera boken
-            }
-        }
-        else
-        {
-            $this->ShowError("Fel i Skapa Bok formuläret validering av data");
-        }
     }
 
     public function EditBook()

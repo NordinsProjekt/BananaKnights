@@ -150,7 +150,7 @@ function ShowAllGenre($arr,$role)
         $text.= "<td>".$row['Name']."</td>";
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/showgenre'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."showgenre?id=".$row['Id']."'><button type='submit'>Visa</input>
         </form></td>";
         if ($role == "Admin")
         {
