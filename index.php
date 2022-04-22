@@ -292,6 +292,9 @@ function AuthorRoute($action)
         case "flagged":
             $controller->FlagAuthor();
             break;
+        case "saveeditauthor":
+            $controller->UpdateAuthor();
+            break;
     }
 }
 
@@ -331,7 +334,15 @@ function BooksRoute($action)
         case "edit":
             if (key_exists('id',$_POST))
             {
-                $controller->EditBook();
+                $safe = $controller->ScrubIndexNumber($_POST['id']);
+                $controller->EditBook($safe);
+            }
+            break;
+        case "saveeditbook":
+            $name = ScrubUserInputs($_POST['formname']);
+            if (key_exists('bookId',$_SESSION['form'][$name]))
+            {
+                $controller->UpdateBook($_SESSION['form'][$name]['bookId']);
             }
             break;
         case "creategenre":
@@ -340,16 +351,25 @@ function BooksRoute($action)
         case "savegenre":
             $controller->SaveGenre();
             break;
+        case "editgenre":
+            if (key_exists('id',$_POST))
+            {
+                $safe = $controller->ScrubIndexNumber($_POST['id']);
+                $controller->EditGenre($safe);
+            }
+            
+            break;
         case "revivegenre":
             if (key_exists('id',$_POST))
             {
                 $controller->ReviveGenre();
             }
             break;
-        case "editgenre":
-            if (key_exists('id',$_POST))
+        case "saveeditgenre":
+            $name = ScrubUserInputs($_POST['formname']);
+            if (key_exists('genreId',$_SESSION['form'][$name]))
             {
-                $controller->EditGenre();
+                $controller->UpdateGenre($_SESSION['form'][$name]['genreId']);
             }
             break;
         case "deletegenre":

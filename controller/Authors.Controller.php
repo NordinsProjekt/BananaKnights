@@ -1,6 +1,7 @@
 <?php
 require_once "model/Authors.Model.php";
 require_once "classes/Base.Controller.class.php";
+require_once "classes/Author.class.php";
 class AuthorsController extends BaseController
 {
 
@@ -188,7 +189,56 @@ class AuthorsController extends BaseController
 
     public function EditAuthor($id)
     {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safe = $this->ScrubIndexNumber($id);
+            $author = $this->db->GetAuthor($safe);
+            if (!empty($author))
+            {
+                require_once "views/default.php";
+                require_once "views/authors.php";
+                echo StartPage("Editera författare"),
+                IndexNav($user['Roles'],$user['Username']);
+                echo EditAuthor($author,$user['Roles']);
+                echo EndPage();
+            }
+            else
+            {
+                $this->ShowError("Författaren finns inte");
+            }
+        }
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
 
+    public function UpdateAuthor()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $formname = $this->ScrubFormName($_POST['formname']);
+            $authorId = $this->ScrubIndexNumber($_SESSION['form'][$formname]['authorId']);
+            $author = new Author($authorId,$_POST['Fname'],$_POST['Lname'],
+                    $_POST['Country'],$_POST['Born'],$_POST['Death']);
+            unset($_SESSION['form']);
+            if ($author->Validated())
+            {
+                $result = $this->db->UpdateAuthor($author->ToArrayUpdate());
+                $this->ShowAllAuthors();
+            }
+            else
+            {
+                $this->ShowError("Fel vid validering av data");
+            }
+
+        }
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
     }
 
     public function DeleteAuthor()
@@ -246,7 +296,7 @@ class AuthorsController extends BaseController
 
     private function CheckUserInputs($notsafeText)
     {
-      $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }

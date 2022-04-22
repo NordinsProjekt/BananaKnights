@@ -142,10 +142,18 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetch(); 
     }
+
+    public function UpdateGenre($id,$name,$description)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE genres SET Name = ?, Description = ?
+        WHERE Id = ?;");
+        return $stmt->execute(array($name,$description,$id));
+    }
+
     public function GetAllGenres()
     {
         $stmt = $this->Connect()->prepare("SELECT Id, Name, Description, Created FROM genres 
-        WHERE IsDeleted = 0;");
+        WHERE IsDeleted = 0 AND Flagged = 0;");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }

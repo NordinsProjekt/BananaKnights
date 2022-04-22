@@ -9,7 +9,6 @@ class AuthorsModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT Id, Firstname, Lastname FROM authors WHERE Flagged = 0 AND IsDeleted = 0;");
         $stmt->execute();
-
         return $stmt->fetchAll(); 
     }
 
@@ -45,6 +44,13 @@ class AuthorsModel extends PDOHandler
             VALUES (?,?,?,?,?,?)
             ");
         $stmt->execute($inputArr);
+    }
+
+    public function UpdateAuthor($authorObj)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE authors SET Firstname = ?, Lastname = ?, 
+        Country = ?, Born = ?, Death = ? WHERE Id = ?;");
+        return $stmt->execute($authorObj);
     }
 
     public function UpdateFlagAuthor($flag,$authorId)
