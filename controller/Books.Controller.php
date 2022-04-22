@@ -406,17 +406,36 @@ class BooksController extends BaseController
         {
             $safe = $this->ScrubIndexNumber($id);
             $book = $this->db->GetBook($safe);
+            require_once "model/Authors.Model.php";
+            $authorDB = new AuthorsModel();
+            $formData['Book'] = $book;
+            $formnData['Genres'] = $this->db->GetAllGenres();
+            $formData['Authors'] = $authorDB->GetAllAuthors();
             require_once "views/default.php";
             require_once "views/books.php";
             echo StartPage("Editera bok");
             IndexNav($user['Roles'],$user['Username']);
-            echo "";
+            echo EditBook($formData,$user['Roles']);
             echo EndPage();
         }
         else
         {
             $this->ShowError("Du har inga rättigheter för detta");
         }
+    }
+
+    public function UpdateBook($id)
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'], "Admin"))
+        {
+
+        }
+        else
+        {
+            $this->ShowError("Du har inga rättigheter för detta");
+        }
+           
     }
 
     private function ValidateSaveGenre($arr)

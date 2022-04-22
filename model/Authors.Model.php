@@ -9,7 +9,6 @@ class AuthorsModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT Id, Firstname, Lastname FROM authors WHERE Flagged = 0 AND IsDeleted = 0;");
         $stmt->execute();
-
         return $stmt->fetchAll(); 
     }
 

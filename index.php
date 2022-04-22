@@ -337,6 +337,13 @@ function BooksRoute($action)
                 $controller->EditBook($safe);
             }
             break;
+        case "saveeditbook":
+            $name = ScrubUserInputs($_POST['formname']);
+            if (key_exists('bookId',$_SESSION['form'][$name]))
+            {
+                $controller->UpdateBook($_SESSION['form'][$name]['bookId']);
+            }
+            break;
         case "creategenre":
             $controller->CreateGenre();
             break;

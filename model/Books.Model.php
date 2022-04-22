@@ -153,7 +153,7 @@ class BooksModel extends PDOHandler
     public function GetAllGenres()
     {
         $stmt = $this->Connect()->prepare("SELECT Id, Name, Description, Created FROM genres 
-        WHERE IsDeleted = 0;");
+        WHERE IsDeleted = 0 AND Flagged = 0;");
         $stmt->execute();
         return $stmt->fetchAll(); 
     }

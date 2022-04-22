@@ -223,7 +223,7 @@ class AuthorsController extends BaseController
             $authorId = $this->ScrubIndexNumber($_SESSION['form'][$formname]['authorId']);
             $author = new Author($authorId,$_POST['Fname'],$_POST['Lname'],
                     $_POST['Country'],$_POST['Born'],$_POST['Death']);
-
+            unset($_SESSION['form']);
             if ($author->Validated())
             {
                 $result = $this->db->UpdateAuthor($author->ToArrayUpdate());
