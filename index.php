@@ -239,6 +239,7 @@ if (key_exists('url',$_GET))
             if (key_exists('id',$_POST))
             {
                 $controller = new CommentsController();
+                $controller->AddReply($_POST['id'],$_SESSION['ReviewId']);
             }
             break;
         case "review/search":

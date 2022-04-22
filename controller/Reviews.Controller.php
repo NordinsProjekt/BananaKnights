@@ -101,24 +101,13 @@ class ReviewsController extends BaseController
             $comments = new CommentsModel();
             $comments = $comments->GetAllComments($result['Id']);
 
-            //hämtar alla replies på kommentarer
             $replies = new CommentsModel();
-
-            $commentidArr = array();
-            for($i=0; $i<count($comments); $i++) //fyller array med commentid
-            {
-                $commentidArr[$i] = $comments[$i]["Id"];
-            }
-            if (!empty($commentidArr[0]))
-            {
-                $replies = $replies->GetAllReplies($commentidArr[0]); //tar alla commentid från showallcomments query
-            }
+            $replies = $replies->GetAllReplies();
             
             if ($comments)
             {
                 echo CreateNewComment($result);
-                //echo ShowAllComments($comments,$role);
-              echo ShowAllCommentsReplies($comments,$replies,$user['Roles']);
+                echo ShowAllCommentsReplies($comments,$replies,$user['Roles']);
             }
             else
             {

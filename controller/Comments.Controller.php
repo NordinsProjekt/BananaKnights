@@ -49,6 +49,54 @@ class CommentsController extends BaseController
             }
     }
 
+    function AddReply($commentId, $reviewId)
+    {
+        $safeCommentId = $this->ScrubIndexNumber($commentId);
+        $user = $this->GetUserInformation();
+        $safereply = $this->ScrubInputs($_POST['reply']);
+        if (str_contains($user['Roles']," "))
+        {
+            $this->ShowError("Du måste vara inloggad för att svara på kommentarer");
+        }
+        else
+        {
+            $inputArr = array (
+                $safeCommentId, $safereply, 
+                date("Y-m-d h:i:s"), $user['Id']
+            );
+            $cleanArr = $this->ScrubSaveArr($inputArr);
+    
+            if($_SESSION['ReviewId'] == " ")
+            {
+                /* Skickar tillbaka användaren till homepage om hen försöker refresha sidan*/
+                /* Annars så läggs en likadan kommentar till i db */
+                require_once "controller/Home.Controller.php";
+                $controller = new HomeController();
+                $controller->ShowHomePage();
+                $message = "Nice try :)";
+                echo "<script type='text/javascript'>alert('$message');</script>";
+
+            }
+            else
+            {
+                $result = $this->db->InsertReply($cleanArr);
+                if ($result)
+                {
+                        require_once "controller/Reviews.Controller.php";
+                        $reviewDB = new ReviewsController();
+                        $_POST['id'] = $reviewId;
+                        $reviewDB->ShowReview();
+                        $_SESSION['ReviewId'] = " ";
+                }
+                else
+                {
+                    $this->ShowError("Något gick snett!");
+                }
+            }
+        }
+
+    }
+
 
     private function ScrubSaveArr($arr)
     {

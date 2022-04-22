@@ -28,6 +28,8 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
     {
         $text .= "<table><tr> <th>Username</th> <th>Skapad</th> <th>Kommentar</th></tr>";
     }
+
+    //KOMMENTARER
     foreach ($commentArr as $key => $commentrow) {
         $text.= "<tr>";
         $text.= "<td>".$commentrow['UserName']."</td>";
@@ -47,16 +49,15 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
             $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
             </form></td>";
         }
-        $text.= "<form method='post' action='".prefix."review/replycomment'><td><input type='text' name='reply' placeholder='reply...'></td></form>";
+        $text.= "<form method='post' action='".prefix."review/replycomment'><td><input type='text' name='reply' placeholder='reply...'>";
+        $text.= "<button type='submit' name='id' value='".$commentrow['Id']."'>svara</form></td>";
         $text.= "</tr>";
-
-
 
 
         //REPLIES  
         foreach ($replyArr as $key => $replyrow) 
         {
-            if($replyrow['Id'] == $commentrow['Id'])
+            if($replyrow['CommentId'] == $commentrow['Id'])
             {
                 $text.= "";
                 $text.= "<td>".$replyrow['UserName']."</td>";
@@ -66,14 +67,14 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
 
                 if (str_contains($role,"Admin"))
                 {
-                $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$replyrow['Id']."'>Edit</input>
+                $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</input>
                 </form></td>";
-                $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$replyrow['Id']."'>Radera</input>
+                $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</input>
                 </form></td>";
                 }
                 elseif(str_contains($role,"Moderator"))
                 {
-                $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$replyrow['Id']."'>Flagga</input>
+                $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Flagga</input>
                 </form></td>";
                 }
             }
