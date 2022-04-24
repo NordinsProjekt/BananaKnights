@@ -409,7 +409,7 @@ class BooksController extends BaseController
             require_once "model/Authors.Model.php";
             $authorDB = new AuthorsModel();
             $formData['Book'] = $book;
-            $formnData['Genres'] = $this->db->GetAllGenres();
+            $formData['Genres'] = $this->db->GetAllGenres();
             $formData['Authors'] = $authorDB->GetAllAuthors();
             require_once "views/default.php";
             require_once "views/books.php";
@@ -429,7 +429,17 @@ class BooksController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'], "Admin"))
         {
-
+            $safe = $this->ScrubIndexNumber($id);
+            //Saknar kontroll av datan
+            $arr = array (
+                $_POST['BookTitle'],$_POST['BookYear'],$_POST['BookDescription'],
+                $_POST['BookISBN'],$_POST['BookPicturePath'],$safe
+            );
+            $this->db->UpdateBook($arr);
+            //Uppdaterar författare och genre samtidigt.
+            $this->db->UpdateAuthorBook($_POST['BookAuthor'],$safe);
+            $this->db->UpdateGenreBooks($safe,$_POST['BookGenre']);
+            $this->ShowAllBooks();
         }
         else
         {

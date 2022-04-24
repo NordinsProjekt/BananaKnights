@@ -82,9 +82,23 @@ class BooksModel extends PDOHandler
         
         return $stmt->execute($arr);
     }
+    public function UpdateAuthorBook($authorId,$bookId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE bookauthors SET AuthorId = ? WHERE BookId = ?;");
+        return $stmt->execute(array($authorId,$bookId));
+    }
+
+    public function UpdateGenreBooks($bookId,$genreId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE genrebooks SET GenreId = ? WHERE BookId = ?;");
+        return $stmt->execute(array($genreId,$bookId));
+    }
+
     public function UpdateBook($arr)
     {
-
+        $stmt = $this->Connect()->prepare("UPDATE books SET Title = ?,
+        PublicationYear = ?, Description = ?, ISBN = ?, ImagePath = ? WHERE Id = ?;");
+        return $stmt->execute($arr);
     }
 
     public function HideBook($id)
