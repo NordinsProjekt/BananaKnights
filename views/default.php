@@ -45,18 +45,18 @@ function IndexNav($role,$username)
             <a class='navbar-brand' href='".prefix."'>Coolbooks</a>
             <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                 <li class='nav-item'>
-                <a class='nav-link active' aria-current='page' href='".prefix."'>Home</a>
+                <a class='nav-link' href='".prefix."'>Home</a>
                 </li>
                 <li class='nav-item'>
-                <a class='nav-link' href='#'>About</a>
+                <a class='nav-link' href='".prefix."about'>About</a>
                 </li>
                 <li class='nav-item'>
-                <a class='nav-link' href='#'>Contact</a>
+                <a class='nav-link' href='".prefix."contact'>Contact</a>
                 </li>
             </ul>
             <form class='d-flex me-auto' method='post' action='".prefix."books/search'>
-            <input class='form-control me-2 mt-3' type='search' placeholder='Search' aria-label='Search' name='search' />
-            <button class='btn btn-outline-success mt-3' type='submit'>Search</button>
+            <input class='form-control me-2 mt-2 mb-2' type='search' placeholder='Search' aria-label='Search' name='search' />
+            <button class='btn btn-outline-success mt-2 mb-2' type='submit'>Search</button>
             </form>";
             $text .="<ul class='navbar-nav me-auto mb-2 mb-lg-0'>";
             if (str_contains($role,"Admin") || str_contains($role,"Moderator"))

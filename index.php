@@ -252,8 +252,21 @@ if (key_exists('url',$_GET))
                 $controller->ShowSearchReview("%".$_POST['search']."%");
             }
             break;
+        /*ABOUT AND CONTACT PAGE */
+        case "about":
+            require_once "controller/About.Controller.php";
+
+            $controller = new AboutController();
+            $controller->ShowAboutPage();
+            break;
+        case "contact":
+            require_once "controller/Contact.Controller.php";
+
+            $controller = new ContactController();
+            $controller->ShowContactPage();
+            break;
         default:
-          break;
+            break;
     }
 }
 else
