@@ -7,38 +7,56 @@
         $text .= "<table>";
 
         $text .= "<tr><td><input type='hidden' id='bookid' name='id' value='".$book['Id']."' /></td></tr>";  
-        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' name='Title' /></td> </tr>"; 
-        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' name='Text' rows='10' cols='50'></textarea></td></tr>"; 
-        $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' name='Rating'>";
+        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' class='form-control' name='Title' /></td> </tr>"; 
+        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50'></textarea></td></tr>"; 
+        $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' class='form-select' name='Rating'>";
         $text .= "<option value=1>1</option>";
         $text .= "<option value=2>2</option>";
         $text .= "<option value=3>3</option>";
         $text .= "<option value=4>4</option>";
         $text .= "<option value=5>5</option></select>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' value='add'/></td></tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' class='btn btn-primary' value='Spara'/></td></tr>";
         $text .= "</table></form>";
         return $text;
     }
 
     function EditReview($formData,$user)
     {
-        //Behöver mer data för att få in book title och årtal också.
-        $text = "<h1>Editera ".$formData['Review']['Title']."</h1>";
-        $text .= "<h2>Recension för ".$formData['Book']['Title']." (".$formData['Book']['PublicationYear'].")</h2>";
-        $text .= "<form method='post'>";
-        $text .= "<table>";
+        $text = "";
+        //Säkerhetskontroll även i viewn
+        if (str_contains($user['Roles'],"Admin") || $user['Id'] == $formData['Review']['UserId'])
+        {
+            //Behöver mer data för att få in book title och årtal också.            
+            $formId = uniqid($formData['Review']['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/saveeditreview",
+                "reviewId"=>$formData['Review']['Id']);
 
-        $text .= "<tr><td><input type='hidden' id='bookid' name='id' value='".$formData['Book']['Id']."' /></td></tr>";  
-        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' name='Title' /></td> </tr>"; 
-        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' name='Text' rows='10' cols='50'></textarea></td></tr>"; 
-        $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' name='Rating'>";
-        $text .= "<option value=1>1</option>";
-        $text .= "<option value=2>2</option>";
-        $text .= "<option value=3>3</option>";
-        $text .= "<option value=4>4</option>";
-        $text .= "<option value=5>5</option></select>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' value='add'/></td></tr>";
-        $text .= "</table></form>";
+            $text = "<h1>Editera ".$formData['Review']['ReviewTitle']."</h1>";
+            $text .= "<h2>Recension för ".$formData['Book']['Title']." (".$formData['Book']['PublicationYear'].")</h2>";
+            $text .= "<form method='post'>";
+            $text .= "<table>";
+            $text .= "<tr><td><label for='title'>Title</label></td>
+            <td><input type='text' id='title' class='form-control' name='Title' value='".$formData['Review']['ReviewTitle']."' /></td> </tr>"; 
+            $text .= "<tr><td><label for='text'>Text</label></td>
+            <td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50'>".$formData['Review']['ReviewText']."</textarea></td></tr>"; 
+            $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' class='form-select' name='Rating'>";
+            for ($i=1; $i <6 ; $i++) { 
+                if ($formData['Review']['Rating'] == $i)
+                {
+                    $text .= "<option value='".$i."' selected>".$i."</option>";
+                }
+                else
+                {
+                    $text .= "<option value='".$i."'>".$i."</option>";
+                }
+            }
+            $text .= "</select>";
+            $text .= "<tr><td>Skapad av</td> <td>".$formData['Review']['UserName']."</td> </tr>";
+            $text .= "<tr><td>Skapad</td> <td>".$formData['Review']['Created']."</td> </tr>";
+            $text .= "<tr> <td></td> <td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' name='saveeditreview' value='Spara'/></td></tr>";
+            $text .= "</table></form>";
+        }
+
         return $text;
     }
     function ShowReview($review,$role)

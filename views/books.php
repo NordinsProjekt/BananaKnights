@@ -6,26 +6,26 @@ function CreateNewBook($arrGenre,$arrAuthor)
     $text = "<h1>Skapa ny bok</h1>";
     $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data'>";
     $text .= "<table><tr><th></th><th></th></tr>";
-    $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' pattern='.{1,}' placeholder='Bokens titel'/></td> </tr>";
-    $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
+    $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input class='form-control' type='text' id='txtBookTitle' name='BookTitle' pattern='.{1,}' placeholder='Bokens titel'/></td> </tr>";
+    $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor' class='form-select' >";
     foreach ($arrAuthor as $key => $value) {
         $text.= "<option value='".$value['Id']."'>".$value['Firstname']." ".$value['Lastname']."</option>";
     }    
     $text .= "</select></td> </tr>";
-    $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre'>";
+    $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre' class='form-select' >";
     foreach ($arrGenre as $key => $value) {
         $text.= "<option value='" . $value['Id'] . "'>".$value['Name']."</option>";
     }    
     $text .= "</select></td> </tr>";
-    $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' 
+    $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' class='form-control' size='4' 
     id='pubYear' name='BookYear' pattern ='[0-9]{0,4}' placeholder='ex 1986'/></td>";
     $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
-              <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30' 
+              <td><textarea id='txtBookDescription' name='BookDescription' class='form-control' rows='5' cols='30' 
               placeholder='Beskrivande text, minst 5 tecken' pattern='.{5,}'></textarea></td> </tr>";
     $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN'
-     placeholder='ISBN nummer' /></td> </tr>";
-    $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' id='txtBookPicture' name='BookPicture' /></td> </tr>";
-    $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveBook' value='Spara' /></td> </tr>";
+     placeholder='ISBN nummer' class='form-control' /></td> </tr>";
+    $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' class='form-control' id='txtBookPicture' name='BookPicture' /></td> </tr>";
+    $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-primary' name='btnSaveBook' value='Spara' /></td> </tr>";
     $text .= "</table></form>";
     return $text;
 }
@@ -36,12 +36,12 @@ function CreateNewGenre()
         $text = "<h1>Skapa ny genre</h1>";
         $text .= "<form method='post' action='".prefix."books/savegenre'>";
         $text .= "<table><tr><th></th><th></th></tr>";
-        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' 
+        $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' class='form-control' id='txtBookGenre' 
         name='BookGenre' pattern='.{3,}' placeholder='Genre namn'/></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
-                  <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30' 
+                  <td><textarea id='txtGenreDescription' class='form-control' name='GenreDescription' rows='5' cols='30' 
                   pattern='.{5,}' placeholder='Minst 5 tecken'></textarea></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveGenre' value='Spara' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-primary' name='btnSaveGenre' value='Spara' /></td> </tr>";
         $text .= "</table></form>";
         return $text;
 }
@@ -60,11 +60,11 @@ function EditGenre($genre,$role)
         $text .= "<form method='post'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' 
-        name='BookGenre' pattern='.{3,}' placeholder='Genre namn' value='".$genre['Name']."' /></td> </tr>";
+        name='BookGenre' pattern='.{3,}' placeholder='Genre namn' class='form-control' value='".$genre['Name']."' /></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
-                    <td><textarea id='txtGenreDescription' name='GenreDescription' rows='5' cols='30' 
+                    <td><textarea id='txtGenreDescription' class='form-control' name='GenreDescription' rows='5' cols='30' 
                     pattern='.{5,}' placeholder='Minst 5 tecken'>".$genre['Description']."</textarea></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnEditGenre' value='Edit' />
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnEditGenre' class='btn btn-primary' value='Edit' />
         <input type='hidden' name='formname' value='".$formId."' /></td></tr>";
         $text .= "</table></form>";
     }
@@ -111,8 +111,8 @@ function EditBook($formData,$role)
         $text .= "<form method='post'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> 
-        <td><input type='text' id='txtBookTitle' name='BookTitle' pattern='.{1,}' value='".$formData['Book']['Title']."' /></td> </tr>";
-        $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
+        <td><input type='text' id='txtBookTitle' name='BookTitle' class='form-control' pattern='.{1,}' value='".$formData['Book']['Title']."' /></td> </tr>";
+        $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' class='form-select' id='selAuthor'>";
         foreach ($formData['Authors'] as $key => $value) {
             if ($value['Id'] == $formData['Book']['AuthorId'])
             {
@@ -124,7 +124,7 @@ function EditBook($formData,$role)
             }
         }    
         $text .= "</select></td> </tr>";
-        $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre'>";
+        $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' class='form-select' id='selGenre'>";
         foreach ($formData['Genres'] as $key => $value) {
             if ($value['Id'] == $formData['Book']['AuthorId'])
             {
@@ -137,15 +137,15 @@ function EditBook($formData,$role)
         }    
         $text .= "</select></td> </tr>";
         $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' 
-        id='pubYear' name='BookYear' pattern ='[0-9]{0,4}' value='".$formData['Book']['PublicationYear']."' /></td>";
+        id='pubYear' name='BookYear' class='form-control' pattern ='[0-9]{0,4}' value='".$formData['Book']['PublicationYear']."' /></td>";
         $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
                 <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30' 
                 placeholder='Beskrivande text, minst 5 tecken' pattern='.{5,}'>".$formData['Book']['Description']."</textarea></td> </tr>";
-        $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN'
+        $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' class='form-control' name='BookISBN'
         placeholder='ISBN nummer' value='".$formData['Book']['ISBN']."' /></td> </tr>";
         $text .= "<tr> <td><label for='txtBookPicture'>Bildpath</label></td> 
-        <td><input type='text' id='txtBookPicture' name='BookPicturePath' value='".$formData['Book']['ImagePath']."' /></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveEditBook' value='Spara' />
+        <td><input type='text' id='txtBookPicture' class='form-control' name='BookPicturePath' value='".$formData['Book']['ImagePath']."' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveEditBook' class='btn btn-primary' value='Spara' />
             <input type='hidden' name='formname' value='".$formId."' /></td> </tr>";
         $text .= "</table></form>";
         //Skapa add picture/remove picture formulär

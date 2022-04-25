@@ -270,6 +270,75 @@ class ReviewsController extends BaseController
             $this->ShowError("Ingen rättighet för detta");
         }
     }
+    public function EditReview($id)
+    {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($id);
+
+        require_once "model/Books.Model.php";
+        $bookDB = new BooksModel();
+
+        $formData['Review'] = $this->db->GetReview($safe);
+        if ($formData['Review'])
+        {
+            $formData['Book'] = $bookDB->GetBook($formData['Review']['BookId']);
+            if ($formData['Book'])
+            {
+                if (str_contains($user['Roles'], "Admin") || $user['Id'] == $formData['Review']['UserId'])
+                {
+                    require_once "views/default.php";
+                    require_once "views/reviews.php";
+                    echo StartPage("Editera recension");
+                    IndexNav($user['Roles'],$user['Username']);
+                    echo EditReview($formData,$user);
+                    echo EndPage();
+                }
+                else
+                {
+                    $this->ShowError("Du har inte behörighet att göra detta");
+                }
+            }
+            else
+            {
+                $this->ShowError("Finns ingen bok kopplad till denna recensionen");
+            }
+        }
+        else
+        {
+            $this->ShowError("Recensionen finns inte");
+        }
+
+    }
+
+    public function UpdateReview($id)
+    {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($id);
+        //lägga till att den som skrev review ska kunna uppdatera den också
+        if (str_contains($user['Roles'], "Admin"))
+        {
+            //Förbereder arrayen som skall in i databasen
+            $arr = array (
+                $_POST['Title'],$_POST['Text'],$_POST['Rating'],$safe
+            );
+            $arr = $this->ScrubSaveAuthorArr($arr);
+            if (!$this->CheckIfNullOrEmptyArr($arr))
+            {
+                $this->db->UpdateReview($arr);
+                //ShowReview läser av $_POST['id'] för att veta vilken review som skall visas
+                $_POST['id'] = $safe;
+                $this->ShowReview();
+            }
+            else
+            {
+                $this->ShowError("Valideringen av datamisslyckades");
+            }
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta!!");
+        }
+    }
 
     private function ScrubSaveAuthorArr($arr)
     {
@@ -287,10 +356,15 @@ class ReviewsController extends BaseController
       return $safe;
     }
 
-    private function ConvertEnterKey($textString)
+    private function CheckIfNullOrEmptyArr($arr)
     {
-        $newString = str_replace('\n','[br]',$textString);
-        return $newString;
+        for ($i=0; $i < count($arr); $i++) { 
+            if (is_null($arr[$i]) || $arr[$i] == "" )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
 ?>
