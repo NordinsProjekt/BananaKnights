@@ -14,7 +14,7 @@ function SignUpForm($message)
     $text .= "<tr> <td><label for='txtPassword' />Lösenord </label></td>
     <td><input type='password' class='form-control' id='txtPassword'name='Password' pattern='.{8,}' placeholder='Minst 8 tecken' required /></td></tr>";
     $text .= "<tr> <td><label for='txtConfirmPassword' />Bekräfta lösenord: </label></td>
-    <td><input type='password' id='txtConfirmPassword'name='ConfirmPassword' pattern='.{8,}' placeholder='Minst 8 tecken' /></td></tr>";
+    <td><input type='password' class='form-control' id='txtConfirmPassword' name='ConfirmPassword' pattern='.{8,}' placeholder='Minst 8 tecken' required /></td></tr>";
     $text .= "<tr> <td><label for='txtEmail' />Email </label></td>
     <td><input type='email' class='form-control' id='txtEmail'name='Email' pattern='.{5,}' placeholder='ex user@gmail.com' required /></td></tr>";
     $text .= "<tr> <td></td><td><input type='submit' id='btnRegisterUser 'name='RegisterUser' class='btn btn-primary' value='Registrera konto' /></td></tr>";
