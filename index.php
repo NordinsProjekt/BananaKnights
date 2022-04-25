@@ -16,7 +16,7 @@ function ScrubUserInputs($notsafeText)
 //Kontrollerar så token är giltig
 
 //Testar säkerhet för att göra formdata mer skyddad mot attacker
-if (isset($_POST['formname']))
+if (isset($_POST['formname']) && key_exists('form',$_SESSION))
 {
     $name = ScrubUserInputs($_POST['formname']);
     if (isset($_SESSION['form'][$name]))
@@ -41,13 +41,22 @@ if (isset($_POST['formname']))
     }
     else
     {
-        //Formuläret finns inte
+        //variabeln $_POST['formname'] pekar inte på ett formulär i minnet
+        echo "<h1>Användaren har ändrat i formuläret</h1>";
+        echo "<h2>Händelsen är loggad</h2>";
+        echo $_SESSION['REMOTE_ADDR'];
         //Banna användaren??
         exit();
     }
 }
 else
 {
+    if (key_exists('form',$_SESSION))
+    {
+        unset($_SESSION['form']);
+        //Formuläret finns i session men inte post nyckeln
+        //Då ska formuläret rensas för att det inte används eller användare har påbörjar en editering och sedan ändrat sig.
+    }
     //Visa indexsidan
     //Om det finns en session så dödar vi den
     //Något stämmer inte om formname inte finns
@@ -352,6 +361,7 @@ function BooksRoute($action)
             }
             break;
         case "saveeditbook":
+            
             $name = ScrubUserInputs($_POST['formname']);
             if (key_exists('bookId',$_SESSION['form'][$name]))
             {

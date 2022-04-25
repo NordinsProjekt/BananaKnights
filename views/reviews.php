@@ -20,6 +20,27 @@
         return $text;
     }
 
+    function EditReview($formData,$user)
+    {
+        //Behöver mer data för att få in book title och årtal också.
+        $text = "<h1>Editera ".$formData['Review']['Title']."</h1>";
+        $text .= "<h2>Recension för ".$formData['Book']['Title']." (".$formData['Book']['PublicationYear'].")</h2>";
+        $text .= "<form method='post'>";
+        $text .= "<table>";
+
+        $text .= "<tr><td><input type='hidden' id='bookid' name='id' value='".$formData['Book']['Id']."' /></td></tr>";  
+        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' name='Title' /></td> </tr>"; 
+        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' name='Text' rows='10' cols='50'></textarea></td></tr>"; 
+        $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' name='Rating'>";
+        $text .= "<option value=1>1</option>";
+        $text .= "<option value=2>2</option>";
+        $text .= "<option value=3>3</option>";
+        $text .= "<option value=4>4</option>";
+        $text .= "<option value=5>5</option></select>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' value='add'/></td></tr>";
+        $text .= "</table></form>";
+        return $text;
+    }
     function ShowReview($review,$role)
     {
         //$review['ReviewText'] = str_replace('\n','<br />',$review['ReviewText']);

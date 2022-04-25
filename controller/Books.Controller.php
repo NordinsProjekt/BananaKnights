@@ -409,7 +409,7 @@ class BooksController extends BaseController
             require_once "model/Authors.Model.php";
             $authorDB = new AuthorsModel();
             $formData['Book'] = $book;
-            $formnData['Genres'] = $this->db->GetAllGenres();
+            $formData['Genres'] = $this->db->GetAllGenres();
             $formData['Authors'] = $authorDB->GetAllAuthors();
             require_once "views/default.php";
             require_once "views/books.php";
@@ -429,6 +429,24 @@ class BooksController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'], "Admin"))
         {
+            $safe = $this->ScrubIndexNumber($id);
+            //Saknar kontroll av datan
+            $arr = array (
+                $_POST['BookTitle'],$_POST['BookYear'],$_POST['BookDescription'],
+                $_POST['BookISBN'],$_POST['BookPicturePath'],$safe
+            );
+            if (!$this->CheckIfNullOrEmptyArr($this->ScrubSaveBookArr($arr)))
+            {
+                $this->db->UpdateBook($arr);
+                //Uppdaterar författare och genre samtidigt.
+                $this->db->UpdateAuthorBook($_POST['BookAuthor'],$safe);
+                $this->db->UpdateGenreBooks($safe,$_POST['BookGenre']);
+                $this->ShowAllBooks();
+            }
+            else
+            {
+                $this->ShowError("Valideringen misslyckades");
+            }
 
         }
         else
@@ -436,6 +454,14 @@ class BooksController extends BaseController
             $this->ShowError("Du har inga rättigheter för detta");
         }
            
+    }
+    private function ValidateUpdateBook($arr)
+    {
+        if ($arr[0] == NULL || $arr[0] = "")
+        {
+            return false;
+        }
+        return true;
     }
 
     private function ValidateSaveGenre($arr)
@@ -481,6 +507,7 @@ class BooksController extends BaseController
         }
     }
 
+    //Hämtar tillbaka en genre från Hide/Delete
     public function ReviveGenre()
     {
         $user = $this->GetUserInformation();
@@ -520,6 +547,7 @@ class BooksController extends BaseController
         return false;
     }
 
+    //Enkel scrubmetod som rensar bort dåliga tecken
     private function ScrubSaveBookArr($arr)
     {
         $cleanArr = array();
@@ -542,7 +570,7 @@ class BooksController extends BaseController
 
     private function ScrubInputs($notsafeText)
     {
-      $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
+      $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
     }

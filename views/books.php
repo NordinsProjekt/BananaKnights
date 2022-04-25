@@ -104,30 +104,51 @@ function EditBook($formData,$role)
     if (str_contains($role,"Admin"))
     {
         //Skapa Bok formuläret
-        $text = "<h1>Skapa ny bok</h1>";
-        $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data'>";
+        $formId = uniqid($formData['Book']['Id'],true);
+        $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."book/saveeditbook",
+        "bookId"=>$formData['Book']['Id']);
+        $text = "<h1>Editera ".$formData['Book']['Title']."</h1>";
+        $text .= "<form method='post'>";
         $text .= "<table><tr><th></th><th></th></tr>";
-        $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input type='text' id='txtBookTitle' name='BookTitle' pattern='.{1,}' placeholder='Bokens titel'/></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> 
+        <td><input type='text' id='txtBookTitle' name='BookTitle' pattern='.{1,}' value='".$formData['Book']['Title']."' /></td> </tr>";
         $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor'>";
         foreach ($formData['Authors'] as $key => $value) {
-            $text.= "<option value='".$value['Id']."'>".$value['Firstname']." ".$value['Lastname']."</option>";
+            if ($value['Id'] == $formData['Book']['AuthorId'])
+            {
+                $text.= "<option value='".$value['Id']."'selected>".$value['Firstname']." ".$value['Lastname']."</option>";
+            }
+            else
+            {
+                $text.= "<option value='".$value['Id']."'>".$value['Firstname']." ".$value['Lastname']."</option>";
+            }
         }    
         $text .= "</select></td> </tr>";
         $text .= "<tr> <td><label for='selGenre'>Genre</label></td> <td><select name='BookGenre' id='selGenre'>";
         foreach ($formData['Genres'] as $key => $value) {
-            $text.= "<option value='" . $value['Id'] . "'>".$value['Name']."</option>";
+            if ($value['Id'] == $formData['Book']['AuthorId'])
+            {
+                $text.= "<option value='" . $value['Id'] . "' selected>".$value['Name']."</option>";
+            }
+            else
+            {
+                $text.= "<option value='" . $value['Id'] . "'>".$value['Name']."</option>";
+            }
         }    
         $text .= "</select></td> </tr>";
         $text .= "<tr><td><label for='pubYear'>Utgivningsdatum</label></td> <td><input type='text' size='4' 
-        id='pubYear' name='BookYear' pattern ='[0-9]{0,4}' placeholder='ex 1986'/></td>";
+        id='pubYear' name='BookYear' pattern ='[0-9]{0,4}' value='".$formData['Book']['PublicationYear']."' /></td>";
         $text .= "<tr> <td><label for='txtBookDescription'>Beskrivning</label></td> 
                 <td><textarea id='txtBookDescription' name='BookDescription' rows='5' cols='30' 
-                placeholder='Beskrivande text, minst 5 tecken' pattern='.{5,}'></textarea></td> </tr>";
+                placeholder='Beskrivande text, minst 5 tecken' pattern='.{5,}'>".$formData['Book']['Description']."</textarea></td> </tr>";
         $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN'
-        placeholder='ISBN nummer' /></td> </tr>";
-        $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' id='txtBookPicture' name='BookPicture' /></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveBook' value='Spara' /></td> </tr>";
+        placeholder='ISBN nummer' value='".$formData['Book']['ISBN']."' /></td> </tr>";
+        $text .= "<tr> <td><label for='txtBookPicture'>Bildpath</label></td> 
+        <td><input type='text' id='txtBookPicture' name='BookPicturePath' value='".$formData['Book']['ImagePath']."' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveEditBook' value='Spara' />
+            <input type='hidden' name='formname' value='".$formId."' /></td> </tr>";
         $text .= "</table></form>";
+        //Skapa add picture/remove picture formulär
     }
     return $text;
 }
