@@ -153,8 +153,34 @@ function EditBook($formData,$role)
     return $text;
 }
 function ShowAllBooks($arr,$role)
-{
+{  
     $text = "<h1>Visa alla böcker</h1>";
+
+    $text .= "<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>";
+    $text .= "<script src='".prefix."js/OpenFilterList.js'></script>";
+    $text .= "<form method='post' action='".prefix."' >";
+    $text .= "<div class='links-unordered'>";
+    $text .= "<a class='toggle-button' href='#'>Advanced Search</a>";
+    $text .= "<ul style='display:none;'>";
+    $text .= "<h3>Datum</h3>";
+    $text .= "<li><label>Genre</label><br><input type'text' name='' placeholder='search..'><button type='submit'>Filter</button></li>";
+    $text .= "<li><label>Författare</label><br><input type'text' name='' placeholder='search..'><button type='submit'>Filter</button></li>";
+    $text .= "</ul>";
+    $text .= "</div>";
+    $text .= "</form>";
+
+/*
+    $text .= "<div class='input-group mb-3'>";
+    $text .= "<label class='input-group-text' for='inputGroupSelect01'>Options</label>";
+    $text .= "<select class='form-select' id='inputGroupSelect01'>";
+    $text .=   "<option selected>Choose...</option>";
+    $text .=   "<option value='1'>One</option>";
+    $text .=   "<option value='2'>Two</option>";
+    $text .=   "<option value='3'>Three</option>";
+    $text .=  "</select>";
+    $text .= "</div>";
+    */
+
     if ($role == "Admin")
     {
         $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>

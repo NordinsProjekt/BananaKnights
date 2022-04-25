@@ -10,7 +10,12 @@ class ContactController extends BaseController
         require_once "views/contact.php";
 
         echo StartPage("contact");
-        echo IndexNav($user['Roles'],$_SESSION['Username']);
+        if(empty($user["Roles"])){
+            echo IndexNav("","");
+        }
+        else{
+            echo IndexNav($user['Roles'],$_SESSION['Username']);
+        }
         echo contactForm();
         echo EndPage();
     }
