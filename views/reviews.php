@@ -7,8 +7,8 @@
         $text .= "<table>";
 
         $text .= "<tr><td><input type='hidden' id='bookid' name='id' value='".$book['Id']."' /></td></tr>";  
-        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' class='form-control' name='Title' /></td> </tr>"; 
-        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50'></textarea></td></tr>"; 
+        $text .= "<tr><td><label for='title'>Title</label></td><td><input type='text' id='title' class='form-control' name='Title'  required/></td> </tr>"; 
+        $text .= "<tr><td><label for='text'>Text</label></td><td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50' required></textarea></td></tr>"; 
         $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' class='form-select' name='Rating'>";
         $text .= "<option value=1>1</option>";
         $text .= "<option value=2>2</option>";
@@ -36,9 +36,9 @@
             $text .= "<form method='post'>";
             $text .= "<table>";
             $text .= "<tr><td><label for='title'>Title</label></td>
-            <td><input type='text' id='title' class='form-control' name='Title' value='".$formData['Review']['ReviewTitle']."' /></td> </tr>"; 
+            <td><input type='text' id='title' class='form-control' name='Title' value='".$formData['Review']['ReviewTitle']."' required /></td> </tr>"; 
             $text .= "<tr><td><label for='text'>Text</label></td>
-            <td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50'>".$formData['Review']['ReviewText']."</textarea></td></tr>"; 
+            <td><textarea id='ReviewText' class='form-control' name='Text' rows='10' cols='50' required >".$formData['Review']['ReviewText']."</textarea></td></tr>"; 
             $text .= "<tr><td><label for='rating'>Rating</label></td><td><select id='rating' class='form-select' name='Rating'>";
             for ($i=1; $i <6 ; $i++) { 
                 if ($formData['Review']['Rating'] == $i)
