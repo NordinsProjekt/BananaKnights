@@ -183,12 +183,12 @@ function ShowAllBooks($arr,$role)
 
     if ($role == "Admin")
     {
-        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        $text .= "<table id='myTable' class='table'><thead><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
         <th>Edit</th><th>Radera</th></tr></thead>";
     }
     else
     {
-        $text .= "<table id='myTable' class='table'><thead><tr> <th>Titel <button onclick='sortTable(0)'>sort</button></th> <th>År <button onclick='sortTable(1)'>sort</button></th> <th>Beskrivning</th> <th>Genre <button onclick='sortTable(3)'>sort</button></th> <th>Författare <button onclick='sortTable(4)'>sort</button></th> <th>Visa</th>
+        $text .= "<table id='myTable' class='table'><thead><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
         </tr></thead>";
     }
     
