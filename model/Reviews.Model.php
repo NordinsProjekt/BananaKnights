@@ -36,6 +36,13 @@ class ReviewsModel extends PDOHandler
         return $stmt->fetch();
     }
 
+    public function UpdateReview($arr)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE reviews SET Title = ?, Text = ?, Rating = ? 
+        WHERE Id = ?;");
+        return $stmt->execute($arr);
+    }
+
     public function GetAllFlaggedReviews()
     {
         $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,

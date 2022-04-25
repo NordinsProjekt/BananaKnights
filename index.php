@@ -216,7 +216,11 @@ if (key_exists('url',$_GET))
             break;
         case "review/edit":
             if (key_exists('id',$_POST))
-            {}
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->EditReview($_POST['id']);
+            }
             break;
         case "review/delete":
             if (key_exists('id',$_POST))
@@ -298,6 +302,13 @@ function ReviewRoute($action)
             break;
         case "flagged":
             $controller->FlagReview();
+            break;
+        case "saveeditreview":
+            $name = ScrubUserInputs($_POST['formname']);
+            if (key_exists('reviewId',$_SESSION['form'][$name]))
+            {
+                $controller->UpdateReview($_SESSION['form'][$name]['reviewId']);
+            }
             break;
     }
 }

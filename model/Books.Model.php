@@ -82,6 +82,7 @@ class BooksModel extends PDOHandler
         
         return $stmt->execute($arr);
     }
+    
     public function UpdateAuthorBook($authorId,$bookId)
     {
         $stmt = $this->Connect()->prepare("UPDATE bookauthors SET AuthorId = ? WHERE BookId = ?;");
