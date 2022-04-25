@@ -14,6 +14,7 @@ function sortTable(n) {
   dir = "asc";
   /*Make a loop that will continue until
   no switching has been done:*/
+
   while (switching) {
     //start by saying: no switching is done:
     switching = false;
