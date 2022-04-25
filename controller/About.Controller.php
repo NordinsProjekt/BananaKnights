@@ -10,7 +10,12 @@ class AboutController extends BaseController
         require_once "views/about.php";
 
         echo StartPage("about");
-        echo IndexNav($user['Roles'],$_SESSION['Username']);
+        if(empty($user["Roles"])){
+            echo IndexNav("","");
+        }
+        else{
+            echo IndexNav($user['Roles'],$_SESSION['Username']);
+        }
         echo AboutTop();
         echo EndPage();
     }
