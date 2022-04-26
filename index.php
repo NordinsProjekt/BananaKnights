@@ -102,6 +102,16 @@ if (key_exists('url',$_GET))
                 AdminRoute("");
             }
             break;
+        case "moderator":
+            if (count($url) == 2)
+            {
+                ModeratorRoute($url[1]);
+            }
+            else
+            {
+                ModeratorRoute("");
+            }
+            break;
     }
 
     switch (strtolower($_GET['url']))
@@ -230,6 +240,14 @@ if (key_exists('url',$_GET))
                 $controller->DeleteReview($_POST['id']);
             }
             break;
+        case "review/unflag":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->UnFlagReview($_POST['id']);
+            }
+            break;
         case "review/undelete":
             if (key_exists('id',$_POST))
             {
@@ -293,6 +311,22 @@ if (key_exists('url',$_GET))
                 $controller->UnFlagComment($_POST['id']);
             }
             break;
+            case "reply/flag":
+                if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+                {
+                    require_once "controller/Comments.Controller.php";
+                    $controller = new CommentsController();
+                    $controller->FlagReply($_POST['id']);
+                }
+                break;
+            case "reply/unflag":
+                if (key_exists('id',$_POST))
+                {
+                    require_once "controller/Comments.Controller.php";
+                    $controller = new CommentsController();
+                    $controller->UnFlagReply($_POST['id']);
+                }
+                break;
                 
 
         /*ABOUT AND CONTACT PAGE */
@@ -521,6 +555,21 @@ function AdminRoute($action)
                     $controller->RemoveUserRoleFromUser();
                 }
             }
+            break;
+        default:
+            break;
+    }
+    exit();
+}
+
+function ModeratorRoute($action)
+{
+    require_once "controller/Moderator.Controller.php";
+    $controller = new ModeratorController();
+    switch ($action)
+    {
+        case "":
+            $controller->ShowModeratorPage();
             break;
         default:
             break;

@@ -141,7 +141,7 @@ class AuthorsController extends BaseController
     public function UnFlagAuthor()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Moderator"))
         {
             $fornName = $this->ScrubFormName($_POST['formname']);
             $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['authorId']);

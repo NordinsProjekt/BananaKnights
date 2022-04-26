@@ -66,6 +66,10 @@ function IndexNav($role,$username)
                 $text .= "<li><a class='nav-link' href='".prefix."authors/showall'>Författare</a></li>";
                 $text .= "<li><a class='nav-link' href='".prefix."books/showallgenre'>Genre</a></li>";
             }
+            if (str_contains($role,"Moderator"))
+            {
+                $text .= "<li><a class='nav-link' href='".prefix."moderator'>Mod panel</a></li>";
+            }
             if (str_contains($role,"Admin"))
             {
                 $text .= "<li><a class='nav-link' href='".prefix."admin'>Adminpanel</a></li>";
@@ -199,7 +203,6 @@ function SearchReview()
     $text .= "<form class='me-auto' method='post' action='".prefix."review/showall'>";
     $text .= "<button type='submit'>Visa alla</button>";
     $text .= "</form>";
-
     echo $text;
 }
 ?>

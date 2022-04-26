@@ -225,7 +225,7 @@ class ReviewsController extends BaseController
     public function UnFlagReview()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
+        if (str_contains($user['Roles'],"Moderator"))
         {
             $fornName = $this->ScrubFormName($_POST['formname']);
             $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['reviewId']);
@@ -252,8 +252,8 @@ class ReviewsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Moderator"))
         {
-            $fornName = $this->ScrubFormName($_POST['formname']);
-            $safe = $this->ScrubIndexNumber($_SESSION['form'][$fornName]['reviewId']);
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['reviewId']);
             unset($_SESSION['form']);
             $result = $this->db->UpdateFlagReview(1,$safe);
             if ($result)

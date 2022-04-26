@@ -124,7 +124,7 @@ class CommentsController extends BaseController
         $safeReviewId = $_POST['ReviewId'];
         $safe = $this->ScrubIndexNumber($id);
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Moderator"))
+        if (str_contains($user['Roles'],"Moderator")) 
         {
             require_once "controller/Reviews.Controller.php";
             $controllerReview = new ReviewsController();
@@ -145,7 +145,55 @@ class CommentsController extends BaseController
             $this->ShowError("Du har inte rättighet för detta");
         }
     }
+    public function FlagReply($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->FlagReply($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
 
+    public function UnFlagReply($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator")) 
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->UnFlagReply($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            else
+            {
+                $this->ShowError("Kunde inte återställa kommentaren");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
     private function ScrubSaveArr($arr)
     {
         $cleanArr = array();
