@@ -71,9 +71,9 @@ class ReviewsController extends BaseController
         }
     }
 
-    public function ShowReview()
+    public function ShowReview($id)
     {
-        $safe = $this->CheckUserInputs($_POST['id']);
+        $safe = $this->CheckUserInputs($id);
         $result = $this->db->GetReview($safe);
         $user = $this->GetUserInformation();
         if ($result)
@@ -141,7 +141,7 @@ class ReviewsController extends BaseController
                 {
                     echo SearchReview();
                 }
-                echo ShowAllReviews($result,"Admin");
+                echo ShowAllReviews($result,$user['Roles']);
                 echo EndPage();
             }
 
@@ -165,7 +165,7 @@ class ReviewsController extends BaseController
                 echo StartPage("Alla reviews");
                 IndexNav($user['Roles'],$user['Username']);
                 echo SearchReview();
-                echo ShowAllReviews($result,"Admin");
+                echo ShowAllReviews($result,$user['Roles']);
                 echo EndPage();
             }
 
@@ -195,13 +195,13 @@ class ReviewsController extends BaseController
                     {
                         //Radera i databasen
                         $this->db->DeleteWasReviewUsefull($safe,$user['Id']);
-                        $this->ShowReview();
+                        $this->ShowReview($safe);
                     }
                     else
                     {
                         //Lägg till i databasen
                         $this->db->SetWasReviewUsefull($safe,$user['Id']);
-                        $this->ShowReview();
+                        $this->ShowReview($safe);
                     }
                 }
                 else
@@ -310,6 +310,52 @@ class ReviewsController extends BaseController
 
     }
 
+    public function DeleteReview($id)
+    {
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $result = $this->db->HideReview($safe);
+            if ($result)
+            {
+                $this->ShowAllReviews();
+            }
+            else
+            {
+                $this->ShowError("Recensionen finns inte");
+            }
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta!!");
+        }
+    }
+
+    public function UnDeleteReview($id)
+    {
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $result = $this->db->ReviveReview($safe);
+            if ($result)
+            {
+                require_once "controller/Admin.Controller.php";
+                $controllerAdmin = new AdminController();
+                $controllerAdmin->AdminPanel();
+            }
+            else
+            {
+                $this->ShowError("Recensionen finns inte");
+            }
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta!!");
+        }
+    }
+
     public function UpdateReview($id)
     {
         $user = $this->GetUserInformation();
@@ -327,7 +373,7 @@ class ReviewsController extends BaseController
                 $this->db->UpdateReview($arr);
                 //ShowReview läser av $_POST['id'] för att veta vilken review som skall visas
                 $_POST['id'] = $safe;
-                $this->ShowReview();
+                $this->ShowReview($safe);
             }
             else
             {

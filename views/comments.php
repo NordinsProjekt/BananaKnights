@@ -46,8 +46,8 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         }
         elseif(str_contains($role,"Moderator"))
         {
-            $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
-            </form></td>";
+            $text.= "<td><form method='post' action='".prefix."comment/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
+            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' /></form></td>";
         }
         $text.= "<form method='post' action='".prefix."review/replycomment'><td><input type='text' name='reply' placeholder='reply...'>";
         $text.= "<button type='submit' name='id' value='".$commentrow['Id']."'>svara</form></td>";

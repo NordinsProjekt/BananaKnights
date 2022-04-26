@@ -16,14 +16,60 @@ function AdminIndex($formData)
     $text .= GenerateTableWithGenre($formData['BannedGenre']);
     $text .= "<h2>Raderade Författare</h2>";
     $text .= GenerateTableDeletedAuthors($formData['DeletedAuthors']);
+    $text .= "<h2>Raderade Recensioner</h2>";
+    $text .= GenereateTableDeletedReviews($formData['DeletedReviews']);
     $text .= "<h2>Flaggade Kommentarer</h2>";
+    $text .= GenerateTableFlaggedComments($formData['BannedComments']);
     $text .= "<h2>Flaggade Författare</h2>";
     $text .= GenerateTableWithAuthors($formData['BannedAuthors']);
     $text .= "<h2>Flaggade Recensioner</h2>";
-    $text .= GenerateTableWithGenre($formData['BannadeReviews']);
+    $text .= GenereateTableDeletedReviews($formData['BannadeReviews']);
     return $text;
 }
 
+function GenerateTableFlaggedComments($comments)
+{
+    $text = "";
+    if (empty($comments))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Användare</th> <th>Text</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($comments as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td>".$row['Text']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."comment/unflag'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input><input type='hidden' name='ReviewId' value='".$row['ReviewId']." /></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
+function GenereateTableDeletedReviews($reviews)
+{
+    $text = "";
+    if (empty($reviews))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Titel</th> <th>Bok titel</th> <th>Betyg</th> <th>Skriven av</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($reviews as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['ReviewTitle']."</td>";
+        $text.= "<td>".$row['BookTitle']."</td>";
+        $text.= "<td>".$row['Rating']."</td>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."review/undelete'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
 function GenerateTableDeletedBooks($books)
 {
     $text = "";
@@ -70,7 +116,6 @@ function GenerateTableDeletedAuthors($authors)
 
 function GenerateTableWithGenre($genre)
 {
-    $text = "";
     $text = "";
     if (empty($genre))
     {
@@ -245,7 +290,7 @@ function ShowAllUsersAdmin($users,$role)
     $text = "<h1>Visa alla användare</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th></tr>
+        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th>
         <th>Edit</th><th>Radera</th></tr>";
     }
     else

@@ -9,7 +9,7 @@ class CommentsModel extends PDOHandler
 
     public function GetAllComments($reviewid)
     {
-        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment, c.Created, c.Flagged
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment, c.Created, c.Flagged, r.Id AS ReviewId
         FROM comments AS c
         INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
         INNER JOIN reviews AS r ON cr.ReviewId = r.Id
@@ -66,14 +66,32 @@ class CommentsModel extends PDOHandler
         return $stmt->fetch();
     }
 
-
-    public function HideReview($commentid)
+    public function FlagComment($commentid)
     {
         $stmt = $this->Connect()->prepare("UPDATE comments 
         SET Flagged = 1 WHERE Id = :id; ");
         $stmt->bindParam(":id",$commentid,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function UnFlagComment($commentid)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE comments 
+        SET Flagged = 0 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$commentid,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function GetAllFlaggedComments()
+    {
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment AS Text, c.Created, r.Id AS ReviewId 
+        FROM comments AS c
+        INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
+        INNER JOIN reviews AS r ON cr.ReviewId = r.Id
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE c.Flagged = 1;");
         $stmt->execute();
-        return true;
+        return $stmt->fetchAll(); 
     }
 
 

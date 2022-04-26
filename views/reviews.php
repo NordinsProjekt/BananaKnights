@@ -112,7 +112,7 @@
         }
         else
         {
-            $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
+            $text .= "<table id='myTable' class='Table'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>
             <th>Visa</th></tr>";
         }
 

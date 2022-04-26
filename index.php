@@ -211,7 +211,7 @@ if (key_exists('url',$_GET))
             {
                 require_once "controller/Reviews.Controller.php";
                 $controller = new ReviewsController();
-                $controller->ShowReview();
+                $controller->ShowReview($_POST['id']);
             }
             break;
         case "review/edit":
@@ -224,7 +224,19 @@ if (key_exists('url',$_GET))
             break;
         case "review/delete":
             if (key_exists('id',$_POST))
-            {}
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->DeleteReview($_POST['id']);
+            }
+            break;
+        case "review/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->UnDeleteReview($_POST['id']);
+            }
             break;
         case "review/showall":
             require_once "controller/Reviews.Controller.php";
@@ -265,6 +277,24 @@ if (key_exists('url',$_GET))
                 $controller->ShowSearchReview("%".$_POST['search']."%");
             }
             break;
+        case "comment/flag":
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->FlagComment($_POST['id']);
+            }
+            break;
+        case "comment/unflag":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnFlagComment($_POST['id']);
+            }
+            break;
+                
+
         /*ABOUT AND CONTACT PAGE */
         case "about":
             require_once "controller/About.Controller.php";
