@@ -78,10 +78,10 @@ function AddNewAuthor()
     $text = "<h1>Skapa ny författare</h1>";
     $text .= "<form method='post' action='".prefix."author/addauthor'>";
     $text .= "<table>";
-    $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' class='form-control' id='firstname' name='Fname' /></td> </tr>";  
-    $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' class='form-control' id='lastname' name='Lname' /></td> </tr>"; 
-    $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' class='form-control' id='country' name='Country' /></td> </tr>"; 
-    $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' class='form-control' id='born' name='Born' /></td> </tr>"; 
+    $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' class='form-control' id='firstname' name='Fname' required /></td> </tr>";  
+    $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' class='form-control' id='lastname' name='Lname' required /></td> </tr>"; 
+    $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' class='form-control' id='country' name='Country' required /></td> </tr>"; 
+    $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' class='form-control' id='born' name='Born' required/></td> </tr>"; 
     $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' class='form-control' id='death' name='Death' /></td> </tr>"; 
 
     // behöver lägga till bild table i db
@@ -104,13 +104,13 @@ function EditAuthor($author,$role)
         $text .= "<form method='post'>";
         $text .= "<table>";
         $text .= "<tr><td><label for='firstname'>Firstname</label></td> 
-        <td><input type='text' id='firstname' class='form-control' name='Fname' value='".$author['Firstname']."' /></td> </tr>";  
+        <td><input type='text' id='firstname' class='form-control' name='Fname' value='".$author['Firstname']."' required /></td> </tr>";  
         $text .= "<tr><td><label for='lastname'>Lastname</label></td> 
-        <td><input type='text' id='lastname' class='form-control' name='Lname' value='".$author['Lastname']."' /></td> </tr>"; 
+        <td><input type='text' id='lastname' class='form-control' name='Lname' value='".$author['Lastname']."'  required /></td> </tr>"; 
         $text .= "<tr><td><label for='country'>Country</label></td> 
-        <td><input type='text' id='country' class='form-control' name='Country' value='".$author['Country']."' /></td> </tr>"; 
+        <td><input type='text' id='country' class='form-control' name='Country' value='".$author['Country']."' required /></td> </tr>"; 
         $text .= "<tr><td><label for='born'>Born</label></td> 
-        <td><input type='date' id='born' class='form-control' name='Born' value='".$author['Born']."' /></td> </tr>"; 
+        <td><input type='date' id='born' class='form-control' name='Born' value='".$author['Born']."' required /></td> </tr>"; 
         $text .= "<tr><td><label for='death'>Death</label></td> 
         <td><input type='date' id='death' class='form-control' name='Death' value='".$author['Death']."' /></td> </tr>";
     

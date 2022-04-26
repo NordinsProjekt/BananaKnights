@@ -12,5 +12,11 @@ class HomeModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
+    public function AdminModeON()
+    {
+        $stmt = $this->Connect()->prepare("UPDATE sitesettings SET AdminMode = 1;");
+        return $stmt->execute();
+    }
 }
 ?>

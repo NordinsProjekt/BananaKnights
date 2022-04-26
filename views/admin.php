@@ -274,4 +274,9 @@ function ShowAllUsersAdmin($users,$role)
     }
     return $text;
 }
+
+function SiteSettings($role)
+{
+    
+}
 ?>
