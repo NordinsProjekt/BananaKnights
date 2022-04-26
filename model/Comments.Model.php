@@ -15,7 +15,8 @@ class CommentsModel extends PDOHandler
         INNER JOIN reviews AS r ON cr.ReviewId = r.Id
         INNER JOIN books AS b ON r.BookId = b.Id
         INNER JOIN users AS ui ON c.UserId = ui.Id
-        WHERE r.Id = :id AND c.Flagged = 0;");
+        WHERE r.Id = :id AND c.Flagged = 0
+        ORDER BY c.Created DESC");
         $stmt->bindParam(":id",$reviewid);
         $stmt->execute();
         return $stmt->fetchAll(); 
