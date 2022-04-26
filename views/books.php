@@ -166,18 +166,6 @@ function ShowAllBooks($arr,$role)
     $text .= "</ul>";
     $text .= "</div>";
 
-/*
-    $text .= "<div class='input-group mb-3'>";
-    $text .= "<label class='input-group-text' for='inputGroupSelect01'>Options</label>";
-    $text .= "<select class='form-select' id='inputGroupSelect01'>";
-    $text .=   "<option selected>Choose...</option>";
-    $text .=   "<option value='1'>One</option>";
-    $text .=   "<option value='2'>Two</option>";
-    $text .=   "<option value='3'>Three</option>";
-    $text .=  "</select>";
-    $text .= "</div>";
-    */
-
     if ($role == "Admin")
     {
         $text .= "<table id='myTable' class='table'><thead><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>

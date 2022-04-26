@@ -66,19 +66,6 @@ class CommentsController extends BaseController
             );
             $cleanArr = $this->ScrubSaveArr($inputArr);
     
-            if($_SESSION['ReviewId'] == " ")
-            {
-                /* Skickar tillbaka användaren till homepage om hen försöker refresha sidan*/
-                /* Annars så läggs en likadan kommentar till i db */
-                require_once "controller/Home.Controller.php";
-                $controller = new HomeController();
-                $controller->ShowHomePage();
-                $message = "Nice try :)";
-                echo "<script type='text/javascript'>alert('$message');</script>";
-
-            }
-            else
-            {
                 $result = $this->db->InsertReply($cleanArr);
                 if ($result)
                 {
@@ -92,7 +79,6 @@ class CommentsController extends BaseController
                 {
                     $this->ShowError("Något gick snett!");
                 }
-            }
         }
 
     }
