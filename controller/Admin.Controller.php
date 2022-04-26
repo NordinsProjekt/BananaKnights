@@ -56,22 +56,25 @@ class AdminController extends BaseController
             require_once "model/Authors.Model.php";
             require_once "model/Reviews.Model.php";
             require_once "model/Books.Model.php";
+            require_once "model/Comments.Model.php";
 
             $userDB = new UserModel();
             $authorDB = new AuthorsModel();
             $reviewDB = new ReviewsModel();
             $bookDB = new BooksModel();
+            $commentDB = new CommentsModel();
 
             echo StartPage("Adminpanel");
             IndexNav($user['Roles'],$user['Username']);
             //Adminpanelen kommer behöva många listor av olika saker.
             //Bygg en formData array för allt.
             $formData['BannedUsers'] = $userDB->GetAllLockedAccounts();
-            $formData['BannedAuthors'] = $authorDB->GetAllFlaggedAuthors();
-            $formData['BannadeReviews'] = $reviewDB->GetAllFlaggedReviews();
+
             $formData['BannedGenre'] = $bookDB->GetAllDeletedGenre();
+            
             $formData['DeletedAuthors'] = $authorDB->GetAllDeletedAuthors();
             $formData['DeletedBooks'] = $bookDB->GetAllDeletedBooks();
+            $formData['DeletedReviews'] = $reviewDB->GetAllDeletedReviews();
             echo AdminIndex($formData);
             echo EndPage();
         }

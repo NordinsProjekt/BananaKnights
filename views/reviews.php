@@ -86,7 +86,7 @@
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
             "reviewId"=>$review['Id']);
             $text .= "<form method='post' action='lol'>
-            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Anmäl</button></form>";
+            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Flagga</button></form>";
         }
         if (str_contains($role,"Admin") && $review['Flagged'] == 1)
         {
@@ -105,15 +105,15 @@
     {
         //TODO lägga in roller kontroll
         $text = "<h1>Visa alla reviews</h1>";
+        $text .= "<table id='myTable' class='Table'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>";
+        $text .= "<th>Visa</th>";
+        if (str_contains($role,"Moderator"))
+        {
+            $text .= "<th>Flagga</th></tr>";
+        }
         if (str_contains($role,"Admin"))
         {
-            $text .= "<table id='myTable' class='Table'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th> 
-            <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
-        }
-        else
-        {
-            $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-            <th>Visa</th></tr>";
+            $text .= "<th>Edit</th> <th>Radera</th> </tr>";
         }
 
         foreach ($result as $key => $row) {
@@ -137,6 +137,15 @@
             <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
             <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
             <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+            if (str_contains($role,"Moderator"))
+            {
+                $formId = uniqid($row['Id'],true);
+                $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
+                "reviewId"=>$row['Id']);
+                $text .= "<td><form method='post'>
+                <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
+                <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
+            }
             if (str_contains($role,"Admin"))
             {
                 $text .= "
@@ -145,10 +154,6 @@
                 <td><form method='post' action='".prefix."review/delete'>
                 <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
                 </tr>";
-            }
-            else
-            {
-                $text .= "<td></td><td></td>";
             }
         }
         $text .= "</table>";

@@ -16,14 +16,54 @@ function AdminIndex($formData)
     $text .= GenerateTableWithGenre($formData['BannedGenre']);
     $text .= "<h2>Raderade Författare</h2>";
     $text .= GenerateTableDeletedAuthors($formData['DeletedAuthors']);
-    $text .= "<h2>Flaggade Kommentarer</h2>";
-    $text .= "<h2>Flaggade Författare</h2>";
-    $text .= GenerateTableWithAuthors($formData['BannedAuthors']);
-    $text .= "<h2>Flaggade Recensioner</h2>";
-    $text .= GenerateTableWithGenre($formData['BannadeReviews']);
+    $text .= "<h2>Raderade Recensioner</h2>";
+    $text .= GenereateTableDeletedReviews($formData['DeletedReviews']);
     return $text;
 }
 
+function GenerateTableWithGenre($genre)
+{
+    $text = "";
+    if (empty($genre))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($genre as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['Name']."</td>";
+        $text.= "<td>".$row['Description']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
+function GenereateTableDeletedReviews($reviews)
+{
+    $text = "";
+    if (empty($reviews))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Titel</th> <th>Bok titel</th> <th>Betyg</th> <th>Skriven av</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($reviews as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['ReviewTitle']."</td>";
+        $text.= "<td>".$row['BookTitle']."</td>";
+        $text.= "<td>".$row['Rating']."</td>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."review/unflag'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
 function GenerateTableDeletedBooks($books)
 {
     $text = "";
@@ -68,27 +108,7 @@ function GenerateTableDeletedAuthors($authors)
     return $text;
 }
 
-function GenerateTableWithGenre($genre)
-{
-    $text = "";
-    $text = "";
-    if (empty($genre))
-    {
-        return $text;
-    }
-        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Återställ</th></tr>";
-    foreach ($genre as $key => $row) {
-        $text.= "<tr>";
-        $text.= "<td>".$row['Name']."</td>";
-        $text.= "<td>".$row['Description']."</td>";
-        $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button type='submit' name='id' 
-        value='".$row['Id']."'>Återställ</input></form></td>";
-        $text.= "</tr>";
-    }
-    $text .= "</table>";
-    return $text;
-}
+
 
 function StatsPanel($statsData)
 {
@@ -101,65 +121,6 @@ function StatsPanel($statsData)
     $text .= "<b>Antal recensioner i databasen:</b> ".$statsData['Reviews']['NumberofReviews']."<br />";
     $text .= "<b>Antal kommentarer i databasen:</b> ".$statsData['Comments']['NumberofComments']."<br />";
     $text .= "<b>Top spammer:</b> ".$statsData['Spammer']['UserName']." (".$statsData['Spammer']['NumberofComments'].")</p>";
-    return $text;
-}
-function GenerateTableWithReviews($reviews)
-{
-    $text = "";
-    if (empty($reviews))
-    {
-        return $text;
-    }
-    $text .= "<table><tr> <th></th> <th>Boktitel</th> <th>Titel</th> <th>Användare</th> <th>Betyg</th ><th>Skapad</th> 
-        <th>Visa</th> <th>Edit</th> <th>Radera</th> </tr>";
-
-    foreach ($reviews as $key => $row) {
-        if (file_exists("img/books/". $row['BookImagePath']))
-        {
-            $pictures = scandir("img/books/". $row['BookImagePath']);
-            $imageLink = prefix."img/books/". $row['BookImagePath'] ."/". $pictures[2];
-        }
-        else
-        {
-            $imageLink = prefix."img/books/noimage.jpg";
-        }
-        $text .= "<tr><td><img src='".$imageLink."' alt='book cover' height='100px' /></td>
-        <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
-        <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
-        <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
-            $text .= "
-            <td><form method='post' action='".prefix."review/edit'>
-            <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>
-            <td><form method='post' action='".prefix."review/delete'>
-            <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
-            </tr>";
-    }
-    $text .= "</table>";
-    return $text;
-}
-
-function GenerateTableWithAuthors($authors)
-{
-    $text = "";
-    if (empty($authors))
-    {
-        return $text;
-    }
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
-    foreach ($authors as $key => $row) {
-        $text.= "<tr>";
-        $text.= "<td>".$row['Firstname']."</td>";
-        $text.= "<td>".$row['Lastname']."</td>";
-        $text.= "<td><form method='post' action='".prefix."authors/show'><button type='submit' name='id' 
-        value='".$row['Id']."'>Visa</input></form></td>";
-            $text.= "<td><form method='post' action='".prefix."authors/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
-            </form></td>";
-            $text.= "<td><form method='post' action='".prefix."authors/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
-            </form></td>";
-
-        $text.= "</tr>";
-    }
-    $text .= "</table>";
     return $text;
 }
 
@@ -245,7 +206,7 @@ function ShowAllUsersAdmin($users,$role)
     $text = "<h1>Visa alla användare</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th></tr>
+        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th>
         <th>Edit</th><th>Radera</th></tr>";
     }
     else

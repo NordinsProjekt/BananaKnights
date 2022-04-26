@@ -102,6 +102,16 @@ if (key_exists('url',$_GET))
                 AdminRoute("");
             }
             break;
+        case "moderator":
+            if (count($url) == 2)
+            {
+                ModeratorRoute($url[1]);
+            }
+            else
+            {
+                ModeratorRoute("");
+            }
+            break;
     }
 
     switch (strtolower($_GET['url']))
@@ -211,7 +221,7 @@ if (key_exists('url',$_GET))
             {
                 require_once "controller/Reviews.Controller.php";
                 $controller = new ReviewsController();
-                $controller->ShowReview();
+                $controller->ShowReview($_POST['id']);
             }
             break;
         case "review/edit":
@@ -224,7 +234,27 @@ if (key_exists('url',$_GET))
             break;
         case "review/delete":
             if (key_exists('id',$_POST))
-            {}
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->DeleteReview($_POST['id']);
+            }
+            break;
+        case "review/unflag":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->UnFlagReview($_POST['id']);
+            }
+            break;
+        case "review/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $controller->UnDeleteReview($_POST['id']);
+            }
             break;
         case "review/showall":
             require_once "controller/Reviews.Controller.php";
@@ -265,6 +295,40 @@ if (key_exists('url',$_GET))
                 $controller->ShowSearchReview("%".$_POST['search']."%");
             }
             break;
+        case "comment/flag":
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->FlagComment($_POST['id']);
+            }
+            break;
+        case "comment/unflag":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnFlagComment($_POST['id']);
+            }
+            break;
+            case "reply/flag":
+                if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+                {
+                    require_once "controller/Comments.Controller.php";
+                    $controller = new CommentsController();
+                    $controller->FlagReply($_POST['id']);
+                }
+                break;
+            case "reply/unflag":
+                if (key_exists('id',$_POST))
+                {
+                    require_once "controller/Comments.Controller.php";
+                    $controller = new CommentsController();
+                    $controller->UnFlagReply($_POST['id']);
+                }
+                break;
+                
+
         /*ABOUT AND CONTACT PAGE */
         case "about":
             require_once "controller/About.Controller.php";
@@ -491,6 +555,21 @@ function AdminRoute($action)
                     $controller->RemoveUserRoleFromUser();
                 }
             }
+            break;
+        default:
+            break;
+    }
+    exit();
+}
+
+function ModeratorRoute($action)
+{
+    require_once "controller/Moderator.Controller.php";
+    $controller = new ModeratorController();
+    switch ($action)
+    {
+        case "":
+            $controller->ShowModeratorPage();
             break;
         default:
             break;

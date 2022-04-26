@@ -156,8 +156,8 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         }
         elseif(str_contains($role,"Moderator"))
         {
-            $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
-            </form></td>";
+            $text.= "<td><form method='post' action='".prefix."comment/flag'><button type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
+            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' /></form></td>";
         }
         $text.= "<form method='post' action='".prefix."review/replycomment'><td><input type='text' name='reply' placeholder='reply...'>";
         $text.= "<button type='submit' name='id' value='".$commentrow['Id']."'>svara</form></td>";
@@ -188,14 +188,15 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
 /*
                 if (str_contains($role,"Admin"))
                 {
-                $text.= "<td><form method='post' action='".prefix."comments/edit'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</input>
+                $text.= "<td><form method='post' action='".prefix."reply/edit'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</input>
                 </form></td>";
-                $text.= "<td><form method='post' action='".prefix."comments/delete'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</input>
+                $text.= "<td><form method='post' action='".prefix."reply/delete'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</input>
                 </form></td>";
                 }
                 elseif(str_contains($role,"Moderator"))
                 {
-                $text.= "<td><form method='post' action='".prefix."comments/flag'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Flagga</input>
+                $text.= "<td><form method='post' action='".prefix."reply/flag'><button type='submit' name='id' value='".$replyrow['ReplyId']."'>Flagga</input>
+                <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
                 </form></td>";
                 }
                 */

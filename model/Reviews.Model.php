@@ -30,7 +30,7 @@ class ReviewsModel extends PDOHandler
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath, r.Flagged FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
-        WHERE b.IsDeleted = 0 AND r.Id = :id;");
+        WHERE b.IsDeleted = 0 AND r.Id = :id; AND r.IsDeleted = 0 AND r.IsFlagged = 0;");
         $stmt->bindParam(":id",$id);
         $stmt->execute();
         return $stmt->fetch();
@@ -41,6 +41,17 @@ class ReviewsModel extends PDOHandler
         $stmt = $this->Connect()->prepare("UPDATE reviews SET Title = ?, Text = ?, Rating = ? 
         WHERE Id = ?;");
         return $stmt->execute($arr);
+    }
+
+    public function GetAllDeletedReviews()
+    {
+        $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
+        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
+        INNER JOIN users AS u ON r.UserId = u.Id 
+        INNER JOIN books AS b ON r.BookId = b.Id 
+        WHERE r.IsDeleted = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
     }
 
     public function GetAllFlaggedReviews()
@@ -60,7 +71,7 @@ class ReviewsModel extends PDOHandler
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
-        WHERE b.IsDeleted = 0 AND r.Flagged = 0;");
+        WHERE b.IsDeleted = 0 AND r.Flagged = 0 AND r.IsDeleted = 0;");
         $stmt->execute();
         return $stmt->fetchAll();
     }
@@ -81,7 +92,7 @@ class ReviewsModel extends PDOHandler
         b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
-        WHERE (b.IsDeleted = 0) AND (r.Title LIKE :title)");
+        WHERE (b.IsDeleted = 0) AND (r.Title LIKE :title) AND r.IsDeleted = 0;");
         $stmt->bindParam(":title",$searchInput,PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -122,6 +133,20 @@ class ReviewsModel extends PDOHandler
         $stmt = $this->Connect()->prepare("UPDATE reviews SET Flagged = :flag 
         WHERE Id = :reviewId;");
         $stmt->bindParam(":flag",$flag,PDO::PARAM_INT);
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function HideReview($reviewId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE reviews SET IsDeleted = 1 WHERE Id = :reviewId;");
+        $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function ReviveReview($reviewId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE reviews SET IsDeleted = 0 WHERE Id = :reviewId;");
         $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
         return $stmt->execute();
     }

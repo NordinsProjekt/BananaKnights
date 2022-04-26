@@ -9,7 +9,7 @@ class CommentsModel extends PDOHandler
 
     public function GetAllComments($reviewid)
     {
-        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment, c.Created, c.Flagged
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment, c.Created, c.Flagged, r.Id AS ReviewId
         FROM comments AS c
         INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
         INNER JOIN reviews AS r ON cr.ReviewId = r.Id
@@ -25,12 +25,13 @@ class CommentsModel extends PDOHandler
     public function GetAllReplies()
     {
         $stmt = $this->Connect()->prepare(
-        "SELECT r.Id AS ReplyId, c.Id AS CommentId, r.CommentId, r.Reply, r.Created, r.UserId, ui.UserName
-        FROM replies AS r
-        INNER JOIN comments AS c ON c.Id = r.CommentId
-        INNER JOIN users AS ui ON c.UserId = ui.Id");
-        $stmt->execute();
-        return $stmt->fetchAll(); 
+            "SELECT r.Id AS ReplyId, c.Id AS CommentId, r.CommentId, r.Reply, r.Created, r.UserId, ui.UserName
+            FROM replies AS r
+            INNER JOIN comments AS c ON c.Id = r.CommentId
+            INNER JOIN users AS ui ON c.UserId = ui.Id 
+            WHERE r.Flagged = 0;");
+            $stmt->execute();
+            return $stmt->fetchAll(); 
     }
 
     public function InsertReply($arr)
@@ -66,15 +67,61 @@ class CommentsModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetch();
     }
+    public function FlagReply($replyId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE replies 
+        SET Flagged = 1 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$replyId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 
+    public function UnFlagReply($replyId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE replies 
+        SET Flagged = 0 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$replyId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 
-    public function HideReview($commentid)
+    public function FlagComment($commentid)
     {
         $stmt = $this->Connect()->prepare("UPDATE comments 
         SET Flagged = 1 WHERE Id = :id; ");
         $stmt->bindParam(":id",$commentid,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function UnFlagComment($commentid)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE comments 
+        SET Flagged = 0 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$commentid,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function GetAllFlaggedComments()
+    {
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment AS Text, c.Created, r.Id AS ReviewId 
+        FROM comments AS c
+        INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
+        INNER JOIN reviews AS r ON cr.ReviewId = r.Id
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE c.Flagged = 1;");
         $stmt->execute();
-        return true;
+        return $stmt->fetchAll(); 
+    }
+
+    public function GetAllFlaggedReplies()
+    {
+        $stmt = $this->Connect()->prepare("SELECT rep.Id, ui.UserName, rep.Reply AS Text, rep.Created, r.Id AS ReviewId 
+        FROM replies AS rep
+        INNER JOIN comments AS c ON rep.CommentId = c.Id 
+        INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
+        INNER JOIN reviews AS r ON cr.ReviewId = r.Id
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE rep.Flagged = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
     }
 
 
