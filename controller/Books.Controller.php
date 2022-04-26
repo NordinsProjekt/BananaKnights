@@ -154,7 +154,21 @@ class BooksController extends BaseController
             $role = "Admin";
         }
         $safetext = $this->ScrubInputs($searchinput);
-        $result = $this->db->GetAllBooksSearch($safetext);
+
+
+        if(isset($_POST['search']))
+        {
+            $result = $this->db->GetAllBooksSearch($safetext);
+        }
+        if(isset($_POST['author']))
+        {
+            $result = $this->db->GetAllBooksAuthorSearch($safetext);
+        }
+        if(isset($_POST['genre']))
+        {
+            $result = $this->db->GetAllBooksGenreSearch($safetext);
+        }
+
         if ($result)
         {
             require_once "views/books.php";

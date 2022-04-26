@@ -158,16 +158,13 @@ function ShowAllBooks($arr,$role)
 
     $text .= "<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>";
     $text .= "<script src='".prefix."js/OpenFilterList.js'></script>";
-    $text .= "<form method='post' action='".prefix."' >";
     $text .= "<div class='links-unordered'>";
     $text .= "<a class='toggle-button' href='#'>Advanced Search</a>";
     $text .= "<ul style='display:none;'>";
-    $text .= "<h3>Datum</h3>";
-    $text .= "<li><label>Genre</label><br><input type'text' name='' placeholder='search..'><button type='submit'>Filter</button></li>";
-    $text .= "<li><label>Författare</label><br><input type'text' name='' placeholder='search..'><button type='submit'>Filter</button></li>";
+    $text .= "<form method='post' action='".prefix."books/searchgenre'><li><label>Genre</label><br><input type'text' name='genre' placeholder='...'><button type='submit'>Filter</button></li></form>";
+    $text .= "<form method='post' action='".prefix."books/searchauthor'><li><label>Författare</label><br><input type'text' name='author' placeholder='...'><button type='submit'>Filter</button></li></form>";
     $text .= "</ul>";
     $text .= "</div>";
-    $text .= "</form>";
 
 /*
     $text .= "<div class='input-group mb-3'>";

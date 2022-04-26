@@ -419,6 +419,14 @@ function BooksRoute($action)
             $safe = ScrubUserInputs($_POST['search']);
             $controller->ShowSearchBook("%".$safe."%");
             break;
+        case "searchgenre":
+            $safe = ScrubUserInputs($_POST['genre']);
+            $controller->ShowSearchBook("%".$safe."%");
+            break;
+        case "searchauthor":
+            $safe = ScrubUserInputs($_POST['author']);
+            $controller->ShowSearchBook("%".$safe."%");
+            break;
         default:
             break;
     }

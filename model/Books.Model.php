@@ -236,5 +236,43 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
+    public function GetAllBooksAuthorSearch($searchinput)
+    {
+        $stmt = $this->Connect()->prepare(
+            "SELECT b.Id, b.Title,
+            IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+             b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+             IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName
+            FROM books AS b
+            INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+            INNER JOIN genres AS g ON g.Id = gb.GenreId
+            INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+            INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+            WHERE (IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) LIKE :input) AND (b.IsDeleted = 0)
+            ");
+        $stmt->bindParam(":input", $searchinput, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
+    public function GetAllBooksGenreSearch($searchinput)
+    {
+        $stmt = $this->Connect()->prepare(
+            "SELECT b.Id, b.Title,
+            IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+             b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+             IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName
+            FROM books AS b
+            INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+            INNER JOIN genres AS g ON g.Id = gb.GenreId
+            INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+            INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+            WHERE (IF(g.IsDeleted=1,'n/a',g.Name) LIKE :input) AND (b.IsDeleted = 0)
+            ");
+        $stmt->bindParam(":input", $searchinput, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
 }
 ?>
