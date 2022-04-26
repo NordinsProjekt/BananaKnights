@@ -72,7 +72,7 @@ class CommentsController extends BaseController
                         require_once "controller/Reviews.Controller.php";
                         $reviewDB = new ReviewsController();
                         //$_POST['id'] = $reviewId;
-                        $reviewDB->ShowReview($revireId);
+                        $reviewDB->ShowReview($reviewId);
                         $_SESSION['ReviewId'] = " ";
                 }
                 else
