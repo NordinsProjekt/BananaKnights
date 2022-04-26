@@ -15,7 +15,7 @@ class CommentsController extends BaseController
             $safeReviewId = $this->ScrubIndexNumber($reviewId);
             $user = $this->GetUserInformation();
             $safetext = $this->ScrubInputs($_POST['Comment']);
-            if (str_contains($user['Roles']," "))
+            if (str_contains($user['Roles'],""))
             {
                 $this->ShowError("Du måste vara inloggad för att kommentera");
             }
