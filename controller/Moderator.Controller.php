@@ -45,19 +45,5 @@ class moderatorController extends BaseController
             $this->ShowError("Du har inte rättighet för detta");
         }
     }
-    private function CheckUserInputs($notsafeText)
-    {
-      $banlist = array("\t",".",";"," ","/",",","<",">",")","(","=","[","]","+","*");
-      $safe = str_replace($banlist,"",$notsafeText);
-      return $safe;
-    }
-
-    //Mellanslag tillåtna
-    private function CheckUserName($notsafeText)
-    {
-        $banlist = array("\t",".",";","/",",","<",">",")","(","=","[","]","+","*");
-        $safe = str_replace($banlist,"",$notsafeText);
-        return $safe;
-    }
 }
 ?>

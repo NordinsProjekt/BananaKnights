@@ -26,4 +26,13 @@ a {
     padding: 10px;
 }
 
+body {
+    background-color: #212529 !important; 
+    color: whitesmoke !important;
+}
+.card {
+    background-color: #212529 !important; 
+    color: whitesmoke !important;
+}
+
 

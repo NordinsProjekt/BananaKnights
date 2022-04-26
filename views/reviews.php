@@ -105,17 +105,17 @@
     {
         //TODO lägga in roller kontroll
         $text = "<h1>Visa alla reviews</h1>";
-        $text .= "<table id='myTable' class='Table'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>";
+        $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>";
         $text .= "<th>Visa</th>";
         if (str_contains($role,"Moderator"))
         {
-            $text .= "<th>Flagga</th></tr>";
+            $text .= "<th>Flagga</th>";
         }
         if (str_contains($role,"Admin"))
         {
-            $text .= "<th>Edit</th> <th>Radera</th> </tr>";
+            $text .= "<th>Edit</th> <th>Radera</th>";
         }
-
+        $text .= "</tr>";
         foreach ($result as $key => $row) {
             if (file_exists("img/books/". $row['BookImagePath']))
             {
@@ -154,6 +154,14 @@
                 <td><form method='post' action='".prefix."review/delete'>
                 <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
                 </tr>";
+            }
+            else
+            {
+                if ($row['UserName'] == $_SESSION['Username'])
+                {
+                    $text .= "<td><form method='post' action='".prefix."review/edit'>
+                    <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>";
+                }
             }
         }
         $text .= "</table>";

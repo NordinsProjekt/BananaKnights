@@ -360,8 +360,10 @@ class ReviewsController extends BaseController
     {
         $user = $this->GetUserInformation();
         $safe = $this->ScrubIndexNumber($id);
+        $review = $this->db->GetReview($safe);
         //lägga till att den som skrev review ska kunna uppdatera den också
-        if (str_contains($user['Roles'], "Admin"))
+
+        if (str_contains($user['Roles'], "Admin") || $user['Id'] == $review['UserId'])
         {
             //Förbereder arrayen som skall in i databasen
             $arr = array (

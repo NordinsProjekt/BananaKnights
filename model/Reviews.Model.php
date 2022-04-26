@@ -27,7 +27,7 @@ class ReviewsModel extends PDOHandler
     public function GetReview($id)
     {
         $stmt = $this->Connect()->prepare("SELECT r.Id, b.Id AS BookId, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,b.Title AS BookTitle,
-        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath, r.Flagged FROM reviews AS r 
+        b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath, r.Flagged,u.Id AS UserId FROM reviews AS r 
         INNER JOIN users AS u ON r.UserId = u.Id 
         INNER JOIN books AS b ON r.BookId = b.Id 
         WHERE b.IsDeleted = 0 AND r.Id = :id; AND r.IsDeleted = 0 AND r.IsFlagged = 0;");

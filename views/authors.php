@@ -4,14 +4,14 @@
 
 function ShowAllAuthors($arr,$role)
 {
-    $text = "<h1>Visa alla författare</h1>";
+    $text = "<h1 id='DarkModeH1'>Visa alla författare</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     }
     else
     {
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th></tr>";
     }
     
     foreach ($arr as $key => $row) {
