@@ -36,7 +36,7 @@ function IndexNav($role,$username)
 {
     $text = "
     <body>
-        <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+        <nav class='navbar navbar-expand-lg navbar-dark bg-dark' style='box-shadow: 0px 15px 10px -15px black;'>
         <div class='container-fluid'>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
