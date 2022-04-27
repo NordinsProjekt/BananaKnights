@@ -279,6 +279,15 @@ class CommentsController extends BaseController
         }
     }
 
+    public function UpdateComment($id)
+    {
+
+    }
+
+    public function UpdateReply($id)
+    {
+        
+    }
 
     private function ScrubSaveArr($arr)
     {
