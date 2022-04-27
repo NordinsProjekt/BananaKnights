@@ -320,6 +320,38 @@ if (key_exists('url',$_GET))
                 $controller->UnFlagComment($_POST['id']);
             }
             break;
+        case "comment/delete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->DeleteComment($_POST['id']);
+            }
+            break;
+        case "comment/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnDeleteComment($_POST['id']);
+            }
+            break;
+        case "reply/delete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->DeleteReply($_POST['id']);
+            }
+            break;
+        case "reply/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnDeleteReply($_POST['id']);
+            }
+            break;
         case "reply/flag":
             if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
             {
