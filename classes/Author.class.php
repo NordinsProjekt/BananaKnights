@@ -1,10 +1,10 @@
 <?php
 class Author
 {
-    private $authorId,$firstname,$lastname,$country,$born,$death;
+    private $authorId,$firstname,$lastname,$country,$born,$death,$imagePath;
     private $validated = true;
     //Input får inte vara null
-    public function __construct($authorId = 99999999,$firstname,$lastname,$country,$born,$death)
+    public function __construct($authorId = 99999999,$firstname,$lastname,$country,$born,$death,$imagePath)
     {
         $this->setAuthorId($authorId);
         $this->setFirstname($firstname);
@@ -13,6 +13,7 @@ class Author
         //Dessa får vara null är de "" blir de null
         $this->setBorn($born);
         $this->setDeath($death);
+        $this->setImagePath($imagePath);
     }
     
     public function __destruct()
@@ -82,10 +83,10 @@ class Author
         }
     }
 
-    private function setImgPath($imgPath)
+    private function setImagePath($imgPath)
     {
-        $this->imgPath = $this->ScrubAll($imgPath);
-        if (empty($this->imgPath) || $this->imgPath == "") 
+        $this->imagePath = $this->ScrubAll($imgPath);
+        if (empty($this->imagePath) || $this->imagePath == "") 
         {
             $this->validated = false;
         }
@@ -133,13 +134,13 @@ class Author
 
     public function getImagePath()
     {
-        return $this->imgPath;
+        return $this->imagePath;
     }
 
     public function ToArrayUpdate()
     {
         $arr = array (
-            $this->firstname,$this->lastname,$this->country,$this->born,$this->death,$this->authorId
+            $this->firstname,$this->lastname,$this->country,$this->born,$this->death,$this->imagePath,$this->authorId
         );
         return $arr;
     }

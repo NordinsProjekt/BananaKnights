@@ -152,7 +152,7 @@ function StatsPanel($statsData)
     $text .= "<b>Antal genre i databasen:</b> ".$statsData['Genre']['NumberofGenre']."<br />";
     $text .= "<b>Antal användare i databasen:</b> ".$statsData['Users']['NumberofUsers']."<br />";
     $text .= "<b>Antal recensioner i databasen:</b> ".$statsData['Reviews']['NumberofReviews']."<br />";
-    $text .= "<b>Antal kommentarer i databasen:</b> ".$statsData['Comments']['NumberofComments']."<br />";
+    $text .= "<b>Antal kommentarer i databasen:</b> ".(int)$statsData['Comments']['NumberofComments'] + (int)$statsData['Replies']['NumberofReplies']."<br />";
     $text .= "<b>Top spammer:</b> ".$statsData['Spammer']['UserName']." (".$statsData['Spammer']['NumberofComments'].")</p>";
     return $text;
 }

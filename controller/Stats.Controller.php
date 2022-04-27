@@ -30,6 +30,7 @@ class StatsController extends BaseController
             $statsArr['Users'] = $this->db->GetNumberOfUsers();
             $statsArr['Reviews'] = $this->db->GetNumberOfReviews();
             $statsArr['Comments'] = $this->db->GetNumberOfComments();
+            $statsArr['Replies'] = $this->db->GetNumberOfReplies();
             $statsArr['Spammer'] = $this->db->UserWithMostComments();
             echo StartPage("Statistik för sidan");
             IndexNav($user['Roles'],$user['Username']);
@@ -44,7 +45,7 @@ class StatsController extends BaseController
             $chartArr = array("labels"=>"['Books','Authors','Genre','Users','Reviews','Comments']");
             $chartArr += array("label"=>"'Aktiviteter'");
             $chartArr += array("data"=>"[".$statsArr['Books']['NumberofBooks'].",".$statsArr['Authors']['NumberofAuthors'].",".$statsArr['Genre']['NumberofGenre'].","
-            .$statsArr['Users']['NumberofUsers'].",".$statsArr['Reviews']['NumberofReviews'].",".$statsArr['Comments']['NumberofComments']."]");
+            .$statsArr['Users']['NumberofUsers'].",".$statsArr['Reviews']['NumberofReviews'].",".(int)$statsArr['Comments']['NumberofComments'] + (int)$statsArr['Replies']['NumberofReplies']."]");
             $this->APICharts($chartArr,"bar");
         }
         else

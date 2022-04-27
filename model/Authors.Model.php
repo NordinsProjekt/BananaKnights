@@ -49,7 +49,7 @@ class AuthorsModel extends PDOHandler
     public function UpdateAuthor($authorObj)
     {
         $stmt = $this->Connect()->prepare("UPDATE authors SET Firstname = ?, Lastname = ?, 
-        Country = ?, Born = ?, Death = ? WHERE Id = ?;");
+        Country = ?, Born = ?, Death = ?, ImagePath = ? WHERE Id = ?;");
         return $stmt->execute($authorObj);
     }
 
