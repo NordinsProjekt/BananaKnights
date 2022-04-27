@@ -57,7 +57,7 @@ function GenereateTableDeletedReviews($reviews)
         $text.= "<td>".$row['Rating']."</td>";
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."review/unflag'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."review/undelete'><button type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
         $text.= "</tr>";
     }
