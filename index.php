@@ -144,6 +144,15 @@ if (key_exists('url',$_GET))
                 $controller->ShowGenre($safe);
             }
             break;
+        case "showreview":
+            if (key_exists('id',$_GET))
+            {
+                require_once "controller/Reviews.Controller.php";
+                $controller = new ReviewsController();
+                $safe = $controller->ScrubIndexNumber($_GET['id']);
+                $controller->ShowReview($safe);
+            }
+            break;
         case "showstats":
                 require_once "controller/Stats.Controller.php";
                 $controller = new StatsController();

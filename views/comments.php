@@ -15,7 +15,11 @@ function CreateNewComment($arr)
         $text .= "</div>";
         $text .= "</div>";
         $text .= "</form><br><br>";
-        
+        $text .= "<script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>";
         return $text;
 }
 

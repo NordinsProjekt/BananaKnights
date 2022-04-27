@@ -15,18 +15,15 @@ class CommentsController extends BaseController
             $safeReviewId = $this->ScrubIndexNumber($reviewId);
             $user = $this->GetUserInformation();
             $safetext = $this->ScrubInputs($_POST['Comment']);
-            if (str_contains($user['Roles']," "))
-            {
-                $this->ShowError("Du måste vara inloggad för att kommentera");
-            }
-            else
+
+            if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin") || str_contains($user['Roles'],"Moderator") )
             {
                 $inputArr = array (
                     $user['Id'], $safetext,
                     date("Y-m-d h:i:s"), "0"
                 );
                 $cleanArr = $this->ScrubSaveArr($inputArr);
-        
+
                 $result = $this->db->InsertComment($cleanArr);
                 if ($result)
                 {
@@ -35,11 +32,7 @@ class CommentsController extends BaseController
                     $result = $this->db->InsertCommentReviews($inputArr);
                     if($result)
                     {
-                        //Lite hackigt men det funkar
-                        require_once "controller/Reviews.Controller.php";
-                        $reviewDB = new ReviewsController();
-                        $_POST['id'] = $safeReviewId;
-                        $reviewDB->ShowReview($safeReviewId);
+                        header("Location: ".prefix."showreview?id=".$safeReviewId);
                     }
                 }
                 else
@@ -47,6 +40,11 @@ class CommentsController extends BaseController
                     $this->ShowError("Något gick snett!");
                 }
             }
+            else
+            {
+                $this->ShowError("Du måste vara inloggad för att kommentera");
+            }
+
     }
 
     function AddReply($commentId, $reviewId)
@@ -54,6 +52,7 @@ class CommentsController extends BaseController
         $safeCommentId = $this->ScrubIndexNumber($commentId);
         $user = $this->GetUserInformation();
         $safereply = $this->ScrubInputs($_POST['reply']);
+        $safeReviewId = $this->ScrubIndexNumber($reviewId);
         if (str_contains($user['Roles']," "))
         {
             $this->ShowError("Du måste vara inloggad för att svara på kommentarer");
@@ -69,10 +68,7 @@ class CommentsController extends BaseController
                 $result = $this->db->InsertReply($cleanArr);
                 if ($result)
                 {
-                        require_once "controller/Reviews.Controller.php";
-                        $reviewDB = new ReviewsController();
-                        //$_POST['id'] = $reviewId;
-                        $reviewDB->ShowReview($reviewId);
+                    header("Location: ".prefix."showreview?id=".$safeReviewId);
                 }
                 else
                 {
