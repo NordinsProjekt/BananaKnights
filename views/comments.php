@@ -54,7 +54,7 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         $text .="</ul>";
         $text .="</form>";
 
-        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;' href='#'>Svara</a>";
+        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Svara</a>";
         if (str_contains($role,"Admin"))
         {
             $text.= "<form method='post' action='".prefix."comments/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</input>
