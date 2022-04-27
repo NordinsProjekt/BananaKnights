@@ -33,8 +33,6 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
 
 
         $text .="<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'>";
-        $text .= "<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>";
-        $text .= "<script src='".prefix."js/OpenFilterList.js'></script>";
         $text .="<div class='container bootdey' style='padding-left: 0'>";
         $text .="<div class='col-md-12 bootstrap snippets'>";
         $text .="<div class='panel'>";
@@ -49,13 +47,14 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         $text .="   <p>".$commentrow['Comment']."</p>";
         $text .="   <div class='pad-ver'>";
 
-        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;' href='#'>Svara</a>";
         $text .= "<form method='post' action='".prefix."review/replycomment'>";
         $text .= "<ul style='display:none;'>";
         $text .="<textarea class='form-control' type='text' name='reply' placeholder='reply...'></textarea>";
         $text .="<button class='btn btn-primary' type='submit' name='id' value='".$commentrow['Id']."'>svara</button>";
         $text .="</ul>";
         $text .="</form>";
+
+        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;' href='#'>Svara</a>";
         if (str_contains($role,"Admin"))
         {
             $text.= "<form method='post' action='".prefix."comments/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</input>
