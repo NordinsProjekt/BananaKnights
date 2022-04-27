@@ -47,8 +47,15 @@ class StatsModel extends PDOHandler
 
     public function GetNumberOfComments()
     {
-        $stmt = $this->Connect()->prepare("SELECT COUNT(Id) AS NumberofComments FROM comments 
-        WHERE Flagged = 0;");
+        $stmt = $this->Connect()->prepare("SELECT COUNT(Id) AS NumberofComments FROM comments
+        WHERE Flagged = 0 AND IsDeleted = 0;");
+        $stmt->execute();
+        return $stmt->fetch(); 
+    }
+    public function GetNumberOfReplies()
+    {
+        $stmt = $this->Connect()->prepare("SELECT COUNT(Id) AS NumberofReplies FROM replies 
+        WHERE Flagged = 0 AND IsDeleted = 0");
         $stmt->execute();
         return $stmt->fetch(); 
     }
@@ -57,7 +64,7 @@ class StatsModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT COUNT(comments.Id) AS NumberofComments, users.UserName FROM comments 
         INNER JOIN users ON comments.UserId = users.Id 
-        WHERE Flagged = 0 GROUP BY UserId LIMIT 1;");
+        WHERE Flagged = 0 AND IsDeleted = 0 GROUP BY UserId LIMIT 1;");
         $stmt->execute();
         return $stmt->fetch(); 
     }

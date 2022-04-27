@@ -18,6 +18,8 @@ function AdminIndex($formData)
     $text .= GenerateTableDeletedAuthors($formData['DeletedAuthors']);
     $text .= "<h2>Raderade Recensioner</h2>";
     $text .= GenereateTableDeletedReviews($formData['DeletedReviews']);
+    $text .= "<h2>Raderade Kommentarer</h2>";
+    $text .= GenerateDeletedComments($formData['DeletedComments'],$formData['DeletedReplies']);
     return $text;
 }
 
@@ -36,6 +38,37 @@ function GenerateTableWithGenre($genre)
         $text.= "<td>".$row['Created']."</td>";
         $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
+
+function GenerateDeletedComments($comments,$reply)
+{
+    $text = "";
+    if (empty($comments) && empty($reply))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Användare</th> <th>Text</th> <th>Skapad</th> <th>Återställ</th></tr>";
+    foreach ($comments as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td>".$row['Text']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."comment/undelete'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
+        $text.= "</tr>";
+    }
+    //Skriver ut alla svar för de är i en separat tabell
+    foreach ($reply as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td>".$row['Text']."</td>";
+        $text.= "<td>".$row['Created']."</td>";
+        $text.= "<td><form method='post' action='".prefix."reply/undelete'><button type='submit' name='id' 
+        value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
         $text.= "</tr>";
     }
     $text .= "</table>";
@@ -119,7 +152,7 @@ function StatsPanel($statsData)
     $text .= "<b>Antal genre i databasen:</b> ".$statsData['Genre']['NumberofGenre']."<br />";
     $text .= "<b>Antal användare i databasen:</b> ".$statsData['Users']['NumberofUsers']."<br />";
     $text .= "<b>Antal recensioner i databasen:</b> ".$statsData['Reviews']['NumberofReviews']."<br />";
-    $text .= "<b>Antal kommentarer i databasen:</b> ".$statsData['Comments']['NumberofComments']."<br />";
+    $text .= "<b>Antal kommentarer i databasen:</b> ".(int)$statsData['Comments']['NumberofComments'] + (int)$statsData['Replies']['NumberofReplies']."<br />";
     $text .= "<b>Top spammer:</b> ".$statsData['Spammer']['UserName']." (".$statsData['Spammer']['NumberofComments'].")</p>";
     return $text;
 }

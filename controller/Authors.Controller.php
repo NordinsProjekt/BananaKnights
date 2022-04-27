@@ -248,7 +248,7 @@ class AuthorsController extends BaseController
             $formname = $this->ScrubFormName($_POST['formname']);
             $authorId = $this->ScrubIndexNumber($_SESSION['form'][$formname]['authorId']);
             $author = new Author($authorId,$_POST['Fname'],$_POST['Lname'],
-                    $_POST['Country'],$_POST['Born'],$_POST['Death']);
+                    $_POST['Country'],$_POST['Born'],$_POST['Death'],$_POST['ImagePath']);
             unset($_SESSION['form']);
             if ($author->Validated())
             {

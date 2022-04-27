@@ -115,6 +115,8 @@ function EditAuthor($author,$role)
         <td><input type='date' id='born' class='form-control' name='Born' value='".$author['Born']."' required /></td> </tr>"; 
         $text .= "<tr><td><label for='death'>Death</label></td> 
         <td><input type='date' id='death' class='form-control' name='Death' value='".$author['Death']."' /></td> </tr>";
+        $text .= "<tr><td><label for='death'>Bildsökväg</label></td> 
+        <td><input type='text' id='imagepath' class='form-control' name='ImagePath' value='".$author['ImagePath']."' required /></td> </tr>";
     
         // behöver lägga till bild table i db
         //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";

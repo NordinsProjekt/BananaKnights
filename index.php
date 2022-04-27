@@ -320,6 +320,39 @@ if (key_exists('url',$_GET))
                 $controller->UnFlagComment($_POST['id']);
             }
             break;
+        case "comment/delete":
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+            {
+                echo "funkar?";
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->DeleteComment($_POST['id']);
+            }
+            break;
+        case "comment/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnDeleteComment($_POST['id']);
+            }
+            break;
+        case "reply/delete":
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->DeleteReply($_POST['id']);
+            }
+            break;
+        case "reply/undelete":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnDeleteReply($_POST['id']);
+            }
+            break;
         case "reply/flag":
             if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
             {
@@ -350,6 +383,9 @@ if (key_exists('url',$_GET))
             $controller->ShowContactPage();
             break;
         default:
+            require_once "controller/Home.Controller.php";
+            $controller = new HomeController();
+            $controller->ShowHomePage();
             break;
     }
     exit();
@@ -500,6 +536,7 @@ function BooksRoute($action)
         default:
             break;
     }
+    exit();
 }
 
 function UserRoute($action)
@@ -523,6 +560,7 @@ function UserRoute($action)
             $controller->Logout(); //Loggar ut och förstör session
             break;
     }
+    exit();
 }
 function AdminRoute($action)
 {
@@ -563,6 +601,7 @@ function AdminRoute($action)
         default:
             break;
     }
+    exit();
 }
 
 function ModeratorRoute($action)
@@ -577,5 +616,6 @@ function ModeratorRoute($action)
         default:
             break;
     }
+    exit();
 }
 ?>

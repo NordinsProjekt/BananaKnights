@@ -82,7 +82,7 @@ abstract class BaseController
         IndexNav($user['Roles'],$user['Username']);
         echo "<h1>FEL</h1><p>" . $errorText . "</p>";
         echo EndPage();
-
+        exit();
     }
 
     protected function VerifyUserRole($roleName)

@@ -69,12 +69,12 @@ class AdminController extends BaseController
             //Adminpanelen kommer behöva många listor av olika saker.
             //Bygg en formData array för allt.
             $formData['BannedUsers'] = $userDB->GetAllLockedAccounts();
-
             $formData['BannedGenre'] = $bookDB->GetAllDeletedGenre();
-            
             $formData['DeletedAuthors'] = $authorDB->GetAllDeletedAuthors();
             $formData['DeletedBooks'] = $bookDB->GetAllDeletedBooks();
             $formData['DeletedReviews'] = $reviewDB->GetAllDeletedReviews();
+            $formData['DeletedComments'] = $commentDB->GetAllDeletedComments();
+            $formData['DeletedReplies'] = $commentDB->GetAllDeletedReplies();
             echo AdminIndex($formData);
             echo EndPage();
         }
