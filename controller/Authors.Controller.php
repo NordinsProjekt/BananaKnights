@@ -80,7 +80,6 @@ class AuthorsController extends BaseController
             {
                 $imageLink = prefix."img/authors/noimage.jpg";
             }
-            var_dump($imageLink);
             $dataArr['Author']['ImageLink'] = $imageLink;
             echo StartPage("Visa Författare");
             IndexNav($user['Roles'],$user['Username']);
@@ -299,7 +298,9 @@ class AuthorsController extends BaseController
             $result = $this->db->UpdateIsDeletedAuthor(0,$safe);
             if ($result)
             {
-                $this->ShowAllAuthors();
+                require_once "controller/Admin.Controller.php";
+                $controllerAdmin = new AdminController();
+                $controllerAdmin->AdminPanel();
             }
             else
             {

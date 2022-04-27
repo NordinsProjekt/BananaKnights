@@ -39,10 +39,9 @@ function ShowAllAuthors($arr,$role)
 
 function ShowAuthor($dataArr,$role)
 {
-    var_dump($dataArr);
     $text = "<h1>Visa Författare</h1>";
     $text .= "<h2>".$dataArr['Author']['Firstname']." " . $dataArr['Author']['Lastname'] ."</h2>";
-    $text .= "<img src='".$dataArr['Author']['ImageLink']."' />";
+    $text .= "<img src='".$dataArr['Author']['ImageLink']."' height='600px' />";
     $text .= "<p><b>Land:</b> ".$dataArr['Author']['Country']."<br />";
     $text .= "<b>Född:</b> " .$dataArr['Author']['Born']."<br />";
 
