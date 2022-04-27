@@ -73,7 +73,6 @@ class CommentsController extends BaseController
                         $reviewDB = new ReviewsController();
                         //$_POST['id'] = $reviewId;
                         $reviewDB->ShowReview($reviewId);
-                        $_SESSION['ReviewId'] = " ";
                 }
                 else
                 {

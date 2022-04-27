@@ -9,6 +9,8 @@ function StartPage($titel)
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <link rel='stylesheet' type='text/css' href='".prefix."css/style.css' media='screen' />
     <link href='".prefix."css/bootstrap.min.css' rel='stylesheet'>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='".prefix."js/OpenFilterList.js'></script>
     <script src='".prefix."js/bootstrap.bundle.min.js'></script>
     <title>". $titel ."</title>
     </head>";
