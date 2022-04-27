@@ -471,14 +471,6 @@ class BooksController extends BaseController
         }
            
     }
-    private function ValidateUpdateBook($arr)
-    {
-        if ($arr[0] == NULL || $arr[0] = "")
-        {
-            return false;
-        }
-        return true;
-    }
 
     private function ValidateSaveGenre($arr)
     {

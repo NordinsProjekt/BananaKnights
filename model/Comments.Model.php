@@ -83,6 +83,52 @@ class CommentsModel extends PDOHandler
         return $stmt->execute();
     }
 
+    public function HideComment($commentId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE comments 
+        SET IsDeleted = 1 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$commentId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function ReviveComment($commentId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE comments 
+        SET IsDeleted = 0 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$commentId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function HideReplies($replyId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE replies 
+        SET IsDeleted = 1 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$replyId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function ReviveReplies($replyId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE replies 
+        SET IsDeleted = 0 WHERE Id = :id; ");
+        $stmt->bindParam(":id",$replyId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function UpdateComment($arr)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE comments SET Comment = ?
+        WHERE Id = ?;");
+        return $stmt->execute($arr);
+    }
+
+    public function UpdateReply($arr)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE replies SET Reply = ?
+        WHERE Id = ?;");
+        return $stmt->execute($arr);
+    }
+
     public function FlagComment($commentid)
     {
         $stmt = $this->Connect()->prepare("UPDATE comments 

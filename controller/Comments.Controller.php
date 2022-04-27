@@ -131,6 +131,7 @@ class CommentsController extends BaseController
             $this->ShowError("Du har inte rättighet för detta");
         }
     }
+
     public function FlagReply($id)
     {
         $safeReviewId = $_POST['ReviewId'];
@@ -180,6 +181,116 @@ class CommentsController extends BaseController
             $this->ShowError("Du har inte rättighet för detta");
         }
     }
+
+    public function UnDeleteComment($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin")) 
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->ReviveComment($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            else
+            {
+                $this->ShowError("Kunde inte återställa kommentaren");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
+
+    public function DeleteComment($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin")) 
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->HideComment($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            else
+            {
+                $this->ShowError("Kunde inte radera kommentaren");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
+
+    public function DeleteReply($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin")) 
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->HideReplies($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            else
+            {
+                $this->ShowError("Kunde inte radera svaret");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
+
+    public function UnDeleteReply($id)
+    {
+        $safeReviewId = $_POST['ReviewId'];
+        $safe = $this->ScrubIndexNumber($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin")) 
+        {
+            require_once "controller/Reviews.Controller.php";
+            $controllerReview = new ReviewsController();
+            $result = $this->db->ReviveReplies($safe);
+            if ($result)
+            {
+                //Behöver veta id för review
+                $controllerReview->ShowReview($safeReviewId);
+            }
+            else
+            {
+                $this->ShowError("Kunde inte återställa kommentaren");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
+    }
+
+
     private function ScrubSaveArr($arr)
     {
         $cleanArr = array();
