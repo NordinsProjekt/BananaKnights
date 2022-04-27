@@ -211,14 +211,14 @@ function ShowAllUsersAdmin($users,$role)
     }
     else
     {
-        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th></tr>";
+        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th>Ändra<th></th></tr>";
     }
     foreach ($users as $key => $row) {
         $text.= "<tr>";
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Email']."</td>";
         $text.= "<td>".$row['Roles']."</td>";
-        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button type='submit' name='id' value='".$row['Id']."'>Ändra roller</input>
         </form></td>";
         if ($role == "Admin")
         {
