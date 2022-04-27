@@ -57,14 +57,16 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Svara</a>";
         if (str_contains($role,"Admin"))
         {
-            $text.= "<form method='post' action='".prefix."comments/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</input>
+            $text.= "<form method='post' action='".prefix."comment/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</button>
+            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
             </form>";
-            $text.= "<form method='post' action='".prefix."comments/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Radera</input>
+            $text.= "<form method='post' action='".prefix."comment/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Radera</button>
+            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
             </form>";
         }
         if(str_contains($role,"Moderator"))
         {
-            $text.= "<form method='post' action='".prefix."comment/flag'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Flagga</input>
+            $text.= "<form method='post' action='".prefix."comment/flag'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Flagga</button>
             <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' /></form>";
         }
         $text .="</div>";
@@ -88,14 +90,16 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
                 $text .="<div class='btn-group'>";
                 if (str_contains($role,"Admin"))
                 {
-                $text.= "<form method='post' action='".prefix."reply/edit'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</input>
+                $text.= "<form method='post' action='".prefix."reply/edit'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</button>
+                <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
                 </form>";
-                $text.= "<form method='post' action='".prefix."reply/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</input>
+                $text.= "<form method='post' action='".prefix."reply/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</button>
+                <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
                 </form>";
                 }
                 if(str_contains($role,"Moderator"))
                 {
-                $text.= "<form method='post' action='".prefix."reply/flag'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Flagga</input>
+                $text.= "<form method='post' action='".prefix."reply/flag'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Flagga</button>
                 <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
                 </form>";
                 }

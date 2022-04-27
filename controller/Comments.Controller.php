@@ -157,13 +157,11 @@ class CommentsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Moderator")) 
         {
-            require_once "controller/Reviews.Controller.php";
-            $controllerReview = new ReviewsController();
             $result = $this->db->UnFlagReply($safe);
             if ($result)
             {
                 //Behöver veta id för review
-                $controllerReview->ShowReview($safeReviewId);
+                header("Location:".prefix."showreview?id=".$safeReviewId);
             }
             else
             {
@@ -211,13 +209,11 @@ class CommentsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin")) 
         {
-            require_once "controller/Reviews.Controller.php";
-            $controllerReview = new ReviewsController();
             $result = $this->db->HideComment($safe);
             if ($result)
             {
                 //Behöver veta id för review
-                $controllerReview->ShowReview($safeReviewId);
+                header("Location:".prefix."showreview?id=".$safeReviewId);
             }
             else
             {
@@ -238,13 +234,11 @@ class CommentsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin")) 
         {
-            require_once "controller/Reviews.Controller.php";
-            $controllerReview = new ReviewsController();
             $result = $this->db->HideReplies($safe);
             if ($result)
             {
                 //Behöver veta id för review
-                $controllerReview->ShowReview($safeReviewId);
+                header("Location:".prefix."showreview?id=".$safeReviewId);
             }
             else
             {

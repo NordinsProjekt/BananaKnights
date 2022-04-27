@@ -15,8 +15,8 @@ class CommentsModel extends PDOHandler
         INNER JOIN reviews AS r ON cr.ReviewId = r.Id
         INNER JOIN books AS b ON r.BookId = b.Id
         INNER JOIN users AS ui ON c.UserId = ui.Id
-        WHERE r.Id = :id AND c.Flagged = 0
-        ORDER BY c.Created DESC");
+        WHERE r.Id = :id AND c.Flagged = 0 AND c.IsDeleted = 0
+        ORDER BY c.Created DESC;");
         $stmt->bindParam(":id",$reviewid);
         $stmt->execute();
         return $stmt->fetchAll(); 
@@ -29,7 +29,7 @@ class CommentsModel extends PDOHandler
             FROM replies AS r
             INNER JOIN comments AS c ON c.Id = r.CommentId
             INNER JOIN users AS ui ON c.UserId = ui.Id 
-            WHERE r.Flagged = 0;");
+            WHERE r.Flagged = 0 AND r.IsDeleted = 0;");
             $stmt->execute();
             return $stmt->fetchAll(); 
     }
@@ -170,6 +170,30 @@ class CommentsModel extends PDOHandler
         return $stmt->fetchAll(); 
     }
 
+    public function GetAllDeletedComments()
+    {
+        $stmt = $this->Connect()->prepare("SELECT c.Id, ui.UserName, c.Comment AS Text, c.Created, r.Id AS ReviewId 
+        FROM comments AS c
+        INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
+        INNER JOIN reviews AS r ON cr.ReviewId = r.Id
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE c.IsDeleted = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
+    public function GetAllDeletedReplies()
+    {
+        $stmt = $this->Connect()->prepare("SELECT rep.Id, ui.UserName, rep.Reply AS Text, rep.Created, r.Id AS ReviewId 
+        FROM replies AS rep
+        INNER JOIN comments AS c ON rep.CommentId = c.Id 
+        INNER JOIN commentreviews AS cr ON c.Id  = cr.CommentId
+        INNER JOIN reviews AS r ON cr.ReviewId = r.Id
+        INNER JOIN users AS ui ON c.UserId = ui.Id
+        WHERE rep.IsDeleted = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
 
 
 
