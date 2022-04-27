@@ -60,7 +60,7 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
             $text.= "<form method='post' action='".prefix."comment/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</button>
             <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
             </form>";
-            $text.= "<form method='post' action='".prefix."comment/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Radera</button>
+            $text.= "<form method='post' action='".prefix."comment/delete'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Radera</button>
             <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
             </form>";
         }
