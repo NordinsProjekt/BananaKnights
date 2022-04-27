@@ -4,14 +4,14 @@
 
 function ShowAllAuthors($arr,$role)
 {
-    $text = "<h1>Visa alla författare</h1>";
+    $text = "<h1 id='DarkModeH1'>Visa alla författare</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     }
     else
     {
-        $text .= "<table><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Förnamn</th> <th>Efternamn</th> <th>Visa</th></tr>";
     }
     
     foreach ($arr as $key => $row) {
@@ -41,6 +41,7 @@ function ShowAuthor($dataArr,$role)
 {
     $text = "<h1>Visa Författare</h1>";
     $text .= "<h2>".$dataArr['Author']['Firstname']." " . $dataArr['Author']['Lastname'] ."</h2>";
+    $text .= "<img src='".$dataArr['Author']['ImageLink']."' height='600px' />";
     $text .= "<p><b>Land:</b> ".$dataArr['Author']['Country']."<br />";
     $text .= "<b>Född:</b> " .$dataArr['Author']['Born']."<br />";
 
@@ -76,13 +77,14 @@ function ShowAuthor($dataArr,$role)
 function AddNewAuthor()
 {
     $text = "<h1>Skapa ny författare</h1>";
-    $text .= "<form method='post' action='".prefix."author/addauthor'>";
+    $text .= "<form method='post' action='".prefix."author/addauthor' enctype='multipart/form-data'>";
     $text .= "<table>";
     $text .= "<tr><td><label for='firstname'>Firstname</label></td> <td><input type='text' class='form-control' id='firstname' name='Fname' required /></td> </tr>";  
     $text .= "<tr><td><label for='lastname'>Lastname</label></td> <td><input type='text' class='form-control' id='lastname' name='Lname' required /></td> </tr>"; 
     $text .= "<tr><td><label for='country'>Country</label></td> <td><input type='text' class='form-control' id='country' name='Country' required /></td> </tr>"; 
     $text .= "<tr><td><label for='born'>Born</label></td> <td><input type='date' class='form-control' id='born' name='Born' required/></td> </tr>"; 
-    $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' class='form-control' id='death' name='Death' /></td> </tr>"; 
+    $text .= "<tr><td><label for='death'>Death</label></td> <td><input type='date' class='form-control' id='death' name='Death' /></td> </tr>";
+    $text .= "<tr> <td><label for='txtAuthorPicture'>Bild</label></td> <td><input type='file' class='form-control' id='txtAuthorPicture' name='AuthorPicture' /></td> </tr>";
 
     // behöver lägga till bild table i db
     //$text .= "<tr> <td><label for='authorpic'>Bild</label></td> <td><input type='file' id='authorpic' name='AuthorPic' /></td> </tr>";

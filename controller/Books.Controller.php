@@ -111,7 +111,9 @@ class BooksController extends BaseController
             $safe = $this->ScrubIndexNumber($_POST['id']);
             if($this->db->ReviveBook($safe))
             {
-                $this->ShowAllBooks();
+                require_once "controller/Admin.Controller.php";
+                $controllerAdmin = new AdminController();
+                $controllerAdmin->AdminPanel();
             }
             else
             {

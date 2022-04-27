@@ -29,7 +29,7 @@ class AuthorsModel extends PDOHandler
     public function GetAuthor($id)
     {
         $stmt = $this->Connect()->prepare(
-        "SELECT Id, Firstname, Lastname, Country, Born, Death, Flagged 
+        "SELECT Id, Firstname, Lastname, Country, Born, Death, Flagged, ImagePath 
         FROM authors
         WHERE Id = :id AND Flagged = 0 AND IsDeleted = 0;");
         $stmt->bindParam(":id",$id,PDO::PARAM_INT);
@@ -40,10 +40,10 @@ class AuthorsModel extends PDOHandler
     public function InsertAuthor($inputArr)
     {
         $stmt = $this->Connect()->prepare(
-            "INSERT INTO authors (Firstname, Lastname, Country, Created, Born, Death)
-            VALUES (?,?,?,?,?,?)
+            "INSERT INTO authors (Firstname, Lastname, Country, Created, Born, Death, ImagePath)
+            VALUES (?,?,?,?,?,?,?)
             ");
-        $stmt->execute($inputArr);
+        return $stmt->execute($inputArr);
     }
 
     public function UpdateAuthor($authorObj)

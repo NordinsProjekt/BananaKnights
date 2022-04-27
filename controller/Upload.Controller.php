@@ -44,11 +44,8 @@ class UploadController
 
     private function CreateFolder($folder)
     {
-        echo "inne i createfolder";
-        var_dump($folder);
         if (!file_exists($folder)) 
         { 
-            echo "nu skapar vi katalogen";
             mkdir($folder, 0777, true); 
         }
     }
@@ -63,8 +60,17 @@ class UploadController
 
     private function CheckFileSize()
     {
-        if ($_FILES["BookPicture"]["size"] > 2000000) {
-            return false;
+        if (key_exists('BookPicture',$_FILES))
+        {
+            if ($_FILES["BookPicture"]["size"] > 2000000) {
+                return false;
+            }
+        }
+        if (key_exists('AuthorPicture',$_FILES))
+        {
+            if ($_FILES["AuthorPicture"]["size"] > 2000000) {
+                return false;
+            }
         }
         return true;
     }

@@ -57,12 +57,30 @@ class AuthorsController extends BaseController
             $role = "";
             require_once "views/authors.php";
             require_once "views/default.php";
+
             if (str_contains($user['Roles'],"Moderator"))
             { $role = "Moderator"; }
 
             if (str_contains($user['Roles'],"Admin"))
             { $role = "Admin"; }
 
+            if (file_exists("img/authors/". $dataArr['Author']['ImagePath']))
+            {
+                $pictures = scandir("img/authors/". $dataArr['Author']['ImagePath'] . "/");
+                if (!empty($pictures[2]))
+                {
+                    $imageLink = prefix."img/authors/". $dataArr['Author']['ImagePath'] ."/". $pictures[2];
+                }
+                else
+                {
+                    $imageLink = prefix."img/authors/noimage.jpg";
+                }
+            }
+            else
+            {
+                $imageLink = prefix."img/authors/noimage.jpg";
+            }
+            $dataArr['Author']['ImageLink'] = $imageLink;
             echo StartPage("Visa Författare");
             IndexNav($user['Roles'],$user['Username']);
             echo ShowAuthor($dataArr,$role);
@@ -100,9 +118,9 @@ class AuthorsController extends BaseController
         $user = $this->GetUserInformation();
         if (str_contains($user['Roles'],"Admin"))
         {
-            $inputArr = array (
+            $inputArr = array(
                 $_POST['Fname'],$_POST['Lname'],$_POST['Country'], 
-                date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death']
+                date("Y-m-d h:i:s"),$_POST['Born'],$_POST['Death'],$this->ImagePathScrubber($_POST['Fname'].$_POST['Lname'])
             );
             $cleanArr = $this->ScrubSaveAuthorArr($inputArr);
     
@@ -111,16 +129,24 @@ class AuthorsController extends BaseController
                 //saknas validering för tom input
                 if(is_numeric($cleanArr[$i]))
                 {
-                    echo "Wrong input! Try again";
+                    $this->ShowError("Wrong input! Try again");
                     break;
                 }
                 else
                 {
                     $result = $this->db->InsertAuthor($cleanArr);
-                    if (!$result)
+                    if ($result)
                     {
-                        echo "Författaren lades till";
-                        header("Location: ".prefix. "authors/showall");
+                        require_once "controller/Upload.Controller.php";
+                        $uploadController = new UploadController();
+                        if ($uploadController->AddImage("img/authors/".$inputArr[6],$_FILES['AuthorPicture']))
+                        {
+                            $this->ShowAllAuthors();
+                        }
+                        else
+                        {
+                            $this->ShowError("Kunde inte lägga till bilden");
+                        }
                         break;
                     }
                     else
@@ -272,7 +298,9 @@ class AuthorsController extends BaseController
             $result = $this->db->UpdateIsDeletedAuthor(0,$safe);
             if ($result)
             {
-                $this->ShowAllAuthors();
+                require_once "controller/Admin.Controller.php";
+                $controllerAdmin = new AdminController();
+                $controllerAdmin->AdminPanel();
             }
             else
             {
@@ -299,6 +327,12 @@ class AuthorsController extends BaseController
       $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
+    }
+    private function ImagePathScrubber($imagePath)
+    {
+        $banlist = array(" ",".");
+        $safe = trim(str_replace($banlist,"",$imagePath));
+        return $safe;
     }
 }
 ?>

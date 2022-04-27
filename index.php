@@ -311,24 +311,22 @@ if (key_exists('url',$_GET))
                 $controller->UnFlagComment($_POST['id']);
             }
             break;
-            case "reply/flag":
-                if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
-                {
-                    require_once "controller/Comments.Controller.php";
-                    $controller = new CommentsController();
-                    $controller->FlagReply($_POST['id']);
-                }
-                break;
-            case "reply/unflag":
-                if (key_exists('id',$_POST))
-                {
-                    require_once "controller/Comments.Controller.php";
-                    $controller = new CommentsController();
-                    $controller->UnFlagReply($_POST['id']);
-                }
-                break;
-                
-
+        case "reply/flag":
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->FlagReply($_POST['id']);
+            }
+            break;
+        case "reply/unflag":
+            if (key_exists('id',$_POST))
+            {
+                require_once "controller/Comments.Controller.php";
+                $controller = new CommentsController();
+                $controller->UnFlagReply($_POST['id']);
+            }
+            break;
         /*ABOUT AND CONTACT PAGE */
         case "about":
             require_once "controller/About.Controller.php";
@@ -345,14 +343,13 @@ if (key_exists('url',$_GET))
         default:
             break;
     }
+    exit();
 }
-else
-{
-    require_once "controller/Home.Controller.php";
-    $controller = new HomeController();
-    $controller->ShowHomePage();
-    //include_once "views/default.php";
-}
+require_once "controller/Home.Controller.php";
+$controller = new HomeController();
+$controller->ShowHomePage();
+//include_once "views/default.php";
+
 ?>
 <?php
 function ReviewRoute($action)
@@ -494,7 +491,6 @@ function BooksRoute($action)
         default:
             break;
     }
-    exit();
 }
 
 function UserRoute($action)
@@ -518,7 +514,6 @@ function UserRoute($action)
             $controller->Logout(); //Loggar ut och förstör session
             break;
     }
-    exit();
 }
 function AdminRoute($action)
 {
@@ -559,7 +554,6 @@ function AdminRoute($action)
         default:
             break;
     }
-    exit();
 }
 
 function ModeratorRoute($action)
@@ -574,6 +568,5 @@ function ModeratorRoute($action)
         default:
             break;
     }
-    exit();
 }
 ?>

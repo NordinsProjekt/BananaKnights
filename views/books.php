@@ -168,13 +168,13 @@ function ShowAllBooks($arr,$role)
 
     if ($role == "Admin")
     {
-        $text .= "<table id='myTable' class='table'><thead><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
-        <th>Edit</th><th>Radera</th></tr></thead>";
+        $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
+        <th>Edit</th><th>Radera</th></tr>";
     }
     else
     {
-        $text .= "<table id='myTable' class='table'><thead><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
-        </tr></thead>";
+        $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
+        </tr>";
     }
     
     foreach ($arr as $key => $row) {
@@ -193,7 +193,7 @@ function ShowAllBooks($arr,$role)
             $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
-        $text.= "</tr></tbody>";
+        $text.= "</tr>";
     }
     if ($role == "Admin")
     {
@@ -222,11 +222,11 @@ function ShowAllGenre($arr,$role)
     $text = "<h1>Visa alla genre</h1>";
     if (str_contains($role,"Admin"))
     {
-        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     }
     else
     {
-        $text .= "<table><tr> <th>Namn</th> <th>Beskrivning</th> <th>Visa</th></tr>";
+        $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Namn</th> <th>Beskrivning</th> <th>Visa</th></tr>";
     }
     
     foreach ($arr as $key => $row) {
