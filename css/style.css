@@ -36,3 +36,35 @@ body {
 }
 
 
+/* COMMENTS CSS */
+.img-sm {
+    width: 46px;
+    height: 46px;
+}
+
+
+.media-block .media-left {
+    display: block;
+    float: left;
+}
+
+.media-block .media-right {
+    float: right;
+}
+
+.media-block .media-body {
+    display: block;
+    overflow: hidden;
+    width: auto;
+}
+
+.text-muted, a.text-muted:hover, a.text-muted:focus {
+    color: #acacac;
+}
+.text-sm {
+    font-size: 0.9em;
+}
+.text-5x, .text-4x, .text-5x, .text-2x, .text-lg, .text-sm, .text-xs {
+    line-height: 1.25;
+}
+
