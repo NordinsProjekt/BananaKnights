@@ -63,7 +63,6 @@ else
     //session_unset();
     //session_destroy();
     //Använd inte else om det finns kod nedanför.
-
 }
 
 //Vanliga routern
@@ -383,20 +382,23 @@ if (key_exists('url',$_GET))
             $controller->ShowContactPage();
             break;
         default:
-            require_once "controller/Home.Controller.php";
-            $controller = new HomeController();
-            $controller->ShowHomePage();
+            ShowHomePage();
             break;
     }
     exit();
 }
-require_once "controller/Home.Controller.php";
-$controller = new HomeController();
-$controller->ShowHomePage();
-//include_once "views/default.php";
+ShowHomePage();
 
 ?>
 <?php
+function ShowHomePage()
+{
+    require_once "controller/Home.Controller.php";
+    $controller = new HomeController();
+    $controller->ShowHomePage();
+    exit();
+}
+
 function ReviewRoute($action)
 {
     require_once "controller/Reviews.Controller.php";
@@ -416,6 +418,9 @@ function ReviewRoute($action)
                 $controller->UpdateReview($_SESSION['form'][$name]['reviewId']);
             }
             break;
+        default:
+            ShowHomePage();
+            break;
     }
 }
 
@@ -433,6 +438,9 @@ function AuthorRoute($action)
             break;
         case "saveeditauthor":
             $controller->UpdateAuthor();
+            break;
+        default:
+            ShowHomePage();
             break;
     }
 }
@@ -534,6 +542,7 @@ function BooksRoute($action)
             $controller->ShowSearchBook("%".$safe."%");
             break;
         default:
+            ShowHomePage();
             break;
     }
     exit();
@@ -558,6 +567,9 @@ function UserRoute($action)
             break;
         case "logoutuser":
             $controller->Logout(); //Loggar ut och förstör session
+            break;
+        default:
+            ShowHomePage();
             break;
     }
     exit();
@@ -599,6 +611,7 @@ function AdminRoute($action)
             }
             break;
         default:
+            ShowHomePage();
             break;
     }
     exit();
@@ -614,6 +627,7 @@ function ModeratorRoute($action)
             $controller->ShowModeratorPage();
             break;
         default:
+            ShowHomePage();
             break;
     }
     exit();
