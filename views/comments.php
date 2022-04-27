@@ -15,7 +15,11 @@ function CreateNewComment($arr)
         $text .= "</div>";
         $text .= "</div>";
         $text .= "</form><br><br>";
-        
+        $text .= "<script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>";
         return $text;
 }
 
@@ -36,7 +40,7 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         $text .="<div class='panel'>";
         $text .="  <div class='panel-body'>";
         $text .="  <div class='media-block'>";
-        $text .="  <a class='media-left' href='#'><img class='img-circle img-sm' alt='Profile Picture' src='../img/books/noimage.jpg'></a>";
+        $text .="  <a class='media-left' href='#'><img class='img-circle img-sm' alt='Profile Picture' src='".prefix."img/books/noimage.jpg'></a>";
         $text .="   <div class='media-body'>";
         $text .="    <div class='mar-btm'>";
         $text .="      <a href='#' class='btn-link text-semibold media-heading box-inline'>".$commentrow['UserName']."</a>";
@@ -74,7 +78,7 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
             {      
                 $text .="   <div>";
                 $text .="     <div class='media-block'>";
-                $text .="     <a class='media-left' href='#'><img class='img-circle img-sm' alt='Profile Picture' src='../img/books/noimage.jpg'></a>";
+                $text .="     <a class='media-left' href='#'><img class='img-circle img-sm' alt='Profile Picture' src='".prefix."img/books/noimage.jpg'></a>";
                 $text .="       <div class='media-body'>";
                 $text .="         <div class='mar-btm'>";
                 $text .="          <a href='#' class='btn-link text-semibold media-heading box-inline'>".$replyrow['UserName']."</a>";
