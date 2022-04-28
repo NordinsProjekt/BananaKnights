@@ -156,8 +156,6 @@ function ShowAllBooks($arr,$role)
 {  
     $text = "<h1>Visa alla böcker</h1>";
 
-    $text .= "<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>";
-    $text .= "<script src='".prefix."js/OpenFilterList.js'></script>";
     $text .= "<div class='links-unordered'>";
     $text .= "<a class='toggle-button' href='#'>Advanced Search</a>";
     $text .= "<ul style='display:none;'>";
