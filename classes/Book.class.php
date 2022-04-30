@@ -117,10 +117,12 @@ class Book
     {
         return $this->validated;
     }
+
     public function getImagePath()
     {
         return $this->imgPath;
     }
+    
     public function ToArray()
     {
         $arr = array (

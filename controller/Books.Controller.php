@@ -35,7 +35,6 @@ class BooksController extends BaseController
         {
             $this->ShowError("Kan inte visa sidan");
         }
-
     }
 
     function ShowBook($id)
