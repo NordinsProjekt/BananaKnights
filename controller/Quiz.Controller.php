@@ -39,6 +39,7 @@ class QuizController extends BaseController
 
     public function SaveQuizForm()
     {
+        //TODO behöver validera alla inputs från formulären
         $user = $this->GetUserInformation();
         //Användare som tillhör UserGruppen kan skapa Quiz
         if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
@@ -89,7 +90,20 @@ class QuizController extends BaseController
 
     public function SaveQuestions()
     {
-
+        $user = $this->GetUserInformation();
+        if (!$user['Roles'] == "")
+        {
+            $form = $_SESSION['form'][$_POST['formname']];
+            for ($i=0; $i < $form['NumberOfQuestions']; $i++) 
+            { 
+                //Bygger en array för varje fråga
+                $arr[] = array(
+                    $_POST['question'][$i],$_POST['answer1'][$i],$_POST['answer2'][$i],
+                    $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i]
+                );
+            }
+            //Anropa databasen och modellen kommer inserta en rad för varje array och koppla till quizen
+        }
     }
 
     public function EditQuiz($id)

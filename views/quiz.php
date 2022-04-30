@@ -32,10 +32,10 @@ function QuestionForm($formData)
     $formId = uniqid($formData['User']['Id'],true);
     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
     $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/savequestions",
-    "userId"=>$formData['User']['Id']);
+    "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ']);
     //Här genereras en fråga text och 4 alternativ och ett val om vilket svar som är korrekt.
     $text = "";
-    $text .= "<form><table><tr> <th></th> <th></th> </tr>";
+    $text .= "<form method='post'><table><tr> <th></th> <th></th> </tr>";
     for ($i=0; $i < $formData['NumberOfQ']; $i++) 
     { 
         $text .= "<tr><td>Fråga ".($i+1)."</td><td></td></tr>";
@@ -44,10 +44,10 @@ function QuestionForm($formData)
         $text .= "<tr> <td><label for='answer2_".$i."'>Svar 2</label></td> <td><input type='text' class='form-control' id='answer2_".$i."' name='answer2[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer3_".$i."'>Svar 3</label></td> <td><input type='text' class='form-control' id='answer3_".$i."' name='answer3[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer4_".$i."'>Svar 4</label></td> <td><input type='text' class='form-control' id='answer4_".$i."' name='answer4[]' required /></td> </tr>";
-        $text .= "<tr> <td><label for='realanswer_".$i."'>Svar</label></td> <td><input type='text' class='form-control' id='realanswer_".$i."' name='realanswer[]' required /></td> </tr>";
+        $text .= "<tr> <td><label for='realanswer_".$i."'>Svar</label></td> <td><input type='number' pattern='[1-4]{1}' class='form-control' id='realanswer_".$i."' name='realanswer[]' required /></td> </tr>";
         $text .= "<tr> <td> </td> <td> </td> </tr>";
     }
-    $text .= "<input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></form>";
+    $text .= "<tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
     return $text;
 }
 ?>
