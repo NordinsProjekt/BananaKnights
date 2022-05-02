@@ -33,4 +33,39 @@ function LoginForm()
     $text .= "<tr> <td></td><td><input type='submit' id='btnLoginUser' class='btn btn-primary' name='LoginUser' value='Logga in' /></td></tr>";
     return $text;
 }
+
+
+function Profile($user, $userDetails, $userInfo)
+{
+    $text = "";
+    $text.= "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'>";
+    $text.= "<link href='".prefix."/css/style.css' rel='stylesheet'>";
+    $text.= "<div class='container mt-5'>";
+    $text.= "    <div class='row'>";
+    $text.= "        <div class='col-xs-12 col-md-4 col-lg-3'>";
+    $text.= "            <div class='userProfileInfo'>";
+    $text.= "                <div class='image text-center'>";
+    $text.= "                    <img src='".prefix."img/profile/noimage.png' alt='#' class='img-responsive'>";
+    $text.= "                </div>";
+    $text.= "                <div class='box' style='color: black;'>";
+    $text.= "                    <div class='name'><strong>".$userDetails['UserName']."</strong></div>";
+    $text.= "                    <div class='info'>";
+    $text.= "                        <a style='padding:0;' href=''>".$userDetails['PhoneNumber']."</a><br>";
+    $text.= "                        <a style='padding:0;' href=''>".$userDetails['Email']."</a><br>";
+    $text.= "                        <span>".$userInfo['Address']."<br>".$userInfo['PostalCode'].", ".$userInfo['City']."</span>";
+    $text.= "                    </div>";
+    $text.= "                </div>";
+    $text.= "            </div>";
+    $text.= "        </div>";
+    $text.= "        <div class='col-xs-12 col-md-8 col-lg-9' style='color: black;'>";
+    $text.= "           <div class='box'>";
+    $text.="            <div><a href='".prefix."user/profile'>Hem</a><a href='".prefix."user/readlist'>Läslista</a><a href='".prefix."user/reviews'>Mina reviews</a></div><hr>";
+    $text.= "               <h2 class='boxTitle'>Welcome Back ".$userDetails['UserName']."</h2>";
+    $text.= "            </div>";
+    $text.= "        </div>";
+    $text.= "    </div>";
+    $text.= "</div>";
+
+    return $text;
+}
 ?>

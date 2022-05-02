@@ -37,7 +37,7 @@ function ReviewNavigation()
 function IndexNav($role,$username)
 {
     $text = "
-    <body>
+    <body style='max-width: 100%;overflow-x: hidden;'>
         <nav class='navbar navbar-expand-lg navbar-dark bg-dark' style='box-shadow: 0px 15px 10px -15px black;'>
         <div class='container-fluid'>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation'>
@@ -60,7 +60,7 @@ function IndexNav($role,$username)
             <input class='form-control me-2 mt-2 mb-2' type='search' placeholder='Search' aria-label='Search' name='search' />
             <button class='btn btn-outline-success mt-2 mb-2' type='submit'>Search</button>
             </form>";
-            $text .="<ul class='navbar-nav me-auto mb-2 mb-lg-0'>";
+            $text .="<ul class='navbar-nav mb-2 mb-lg-0'>";
             if (str_contains($role,"Admin") || str_contains($role,"Moderator"))
             {
                 $text .= "<li><a class='nav-link' href='".prefix."books/showall'>Böcker</a></li>";
@@ -133,7 +133,7 @@ function IndexTop()
         <div class='row'><br>
         <div class='col'><br>
 
-            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='300px' />
+            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='400px' />
             <form method='post' action='".prefix."showbook?id=".$bookinfo[$rnd]['Id']."'><button type='submit' class='btn btn-primary'>Läs mer</button></form>
         </div>
         <div class='col-md-10'>
@@ -146,7 +146,7 @@ function IndexTop()
             </div>
         </div>
         </div>
-        </div><br><br>";   
+        </div><br>";   
     echo nl2br($text);
 }
 
@@ -160,10 +160,10 @@ function IndexCards()
     $model = new BooksModel();
     $sorted = $model->GetAllBooksSorted();
     
-    $text = 
-    "<div class='container-fluid'>
-    <div class='row' style='text-align: center'>
-    <br>";
+    $text = "";
+    $text.= "<div class='container'>";
+    $text.="<div class='row' style='text-align: left; --bs-gutter-x:4.5rem;'><br>";
+
     for($i = 0; $i < count($sorted); $i++)
     {
         if (file_exists("img/books/". $sorted[$i]['ImagePath']))
@@ -183,12 +183,20 @@ function IndexCards()
             $imageLink = prefix."img/books/noimage.jpg";
         }
     $text .= 
-    "<div class='col text-white bg-secondary' style='border-radius: 8px'><br>
-    <img src='" . $imageLink . "' alt='book bild' height='100px'><br>"
-    . $sorted[$i]["Title"] . "<br>"
-    . $sorted[$i]["GenreName"] . "<br><br>
-    <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."'><button type='submit' class='btn btn-primary'>Läs mer</button></form><br>
+    "<div class='col text-white' style='border-radius: 8px;'><br>
+    <img src='" . $imageLink . "' alt='book bild' height='250rem'><br>
+    <a style='padding:0;' href='".prefix."showbook?id=".$sorted[$i]['Id']."'>". $sorted[$i]["Title"] . "</a><br>
+    <small>". $sorted[$i]["Firstname"] ." ". $sorted[$i]["Lastname"] . "</small><br>
+    <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."' style='padding-top:10px;'><button type='submit' class='btn btn-outline-primary'>Läs mer</button></form><br>
     </div><br>";
+
+    if($i == 3)
+    {
+        $text.="</div>";
+        $text.="<div class='row' style='text-align: left; padding-top: 2rem; --bs-gutter-x:4.5rem;'><br>";
+    }
+
+    
     }
     $text .= "</div></div><br>";
 
