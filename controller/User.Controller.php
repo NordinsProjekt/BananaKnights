@@ -168,6 +168,22 @@ class UserController extends BaseController
         //kunna se alla sina reviews och sånt.
     }
 
+    public function ShowProfile()
+    {
+        require_once "model/User.Model.php";
+
+        $user = $this->GetUserInformation();
+        $userDetails = $this->db->GetEntireUser($user['Id']);
+        $userInfo = $this->db->GetEntireUserInfo($user['Id']);
+
+        require_once "views/users.php";
+        require_once "views/default.php";
+        echo StartPage("Profil");
+        echo IndexNav($user['Roles'],$user['Username']);
+        echo Profile($user, $userDetails, $userInfo);
+        echo EndPage();
+    }
+
     public function Logout()
     {
         session_unset();

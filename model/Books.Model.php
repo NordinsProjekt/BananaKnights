@@ -184,7 +184,7 @@ class BooksModel extends PDOHandler
     public function GetAllBooksSorted()
     {
         $stmt = $this->Connect()->prepare(
-            "SELECT b.Id,b.Title,b.Description,
+            "SELECT b.Id,b.Title,b.Description, a.Firstname, a.Lastname,
             IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
             b.ISBN,b.Created,b.ImagePath,IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName
             FROM books AS b
