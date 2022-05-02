@@ -48,6 +48,7 @@ class QuizController extends BaseController
             if( $_SESSION['form'][$this->ScrubFormName($_POST['formname'])]['userId'] == $user['Id'])
             {
                 $form = $_SESSION['form'][$this->ScrubFormName($_POST['formname'])];
+                unset($_SESSION['form']);
                 //Allt är ok.
                 //(Title,UserId,BookId,EndDate,Link)
                 $access = "";
@@ -91,18 +92,30 @@ class QuizController extends BaseController
     public function SaveQuestions()
     {
         $user = $this->GetUserInformation();
-        if (!$user['Roles'] == "")
+        if (!$user['Roles'] = "")
         {
             $form = $_SESSION['form'][$_POST['formname']];
+            $quizId = $form['QuizId'];
             for ($i=0; $i < $form['NumberOfQuestions']; $i++) 
             { 
                 //Bygger en array för varje fråga
                 $arr[] = array(
                     $_POST['question'][$i],$_POST['answer1'][$i],$_POST['answer2'][$i],
-                    $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i]
+                    $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i],$quizId
                 );
             }
             //Anropa databasen och modellen kommer inserta en rad för varje array och koppla till quizen
+            $result = $this->db->InsertQuestions($arr);
+            if ($result)
+            {
+                require_once "controller/Home.Controller.php";
+                $homeController = new HomeController();
+                $homeController->ShowHomePage();
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att spara Quizet!");
+            }
         }
     }
 

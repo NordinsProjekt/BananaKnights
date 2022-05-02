@@ -28,5 +28,23 @@ class QuizModel extends PDOHandler
         $result = $stmt->fetch();
         return $result['Id'];
     }
+
+    public function InsertQuestions($arr)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO questions (Question,Alt1,Alt2,Alt3,Alt4,Answer,QuizId) 
+        VALUES (?,?,?,?,?,?,?);");
+        for ($i=0; $i < count($arr); $i++) 
+        { 
+            if ($stmt->execute($arr[$i]))
+            {
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 ?>

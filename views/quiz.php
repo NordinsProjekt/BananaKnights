@@ -32,7 +32,7 @@ function QuestionForm($formData)
     $formId = uniqid($formData['User']['Id'],true);
     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
     $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/savequestions",
-    "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ']);
+    "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ'],"QuizId"=>$formData['QuizId']);
     //Här genereras en fråga text och 4 alternativ och ett val om vilket svar som är korrekt.
     $text = "";
     $text .= "<form method='post'><table><tr> <th></th> <th></th> </tr>";
@@ -44,7 +44,8 @@ function QuestionForm($formData)
         $text .= "<tr> <td><label for='answer2_".$i."'>Svar 2</label></td> <td><input type='text' class='form-control' id='answer2_".$i."' name='answer2[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer3_".$i."'>Svar 3</label></td> <td><input type='text' class='form-control' id='answer3_".$i."' name='answer3[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer4_".$i."'>Svar 4</label></td> <td><input type='text' class='form-control' id='answer4_".$i."' name='answer4[]' required /></td> </tr>";
-        $text .= "<tr> <td><label for='realanswer_".$i."'>Svar</label></td> <td><input type='number' pattern='[1-4]{1}' class='form-control' id='realanswer_".$i."' name='realanswer[]' required /></td> </tr>";
+        $text .= "<tr> <td><label for='realanswer_".$i."'>Rätta svaret</label></td> <td><select class='form-control' id='realanswer_".$i."' name='realanswer[]'>
+        <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></td> </tr>";
         $text .= "<tr> <td> </td> <td> </td> </tr>";
     }
     $text .= "<tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
