@@ -36,6 +36,9 @@ if (isset($_POST['formname']) && key_exists('form',$_SESSION))
             case "book":
                 BooksRoute($arr[3]);
                 break;
+            case "quiz":
+                QuizRoute($arr[3]);
+                break;
         }
         exit();
     }
@@ -109,6 +112,12 @@ if (key_exists('url',$_GET))
             else
             {
                 ModeratorRoute("");
+            }
+            break;
+        case "quiz":
+            if (count($url) == 2)
+            {
+                QuizRoute($url[1]);
             }
             break;
     }
@@ -635,4 +644,48 @@ function ModeratorRoute($action)
     }
     exit();
 }
+
+function QuizRoute($action)
+{
+    require_once "controller/Quiz.Controller.php";
+    $controller = new QuizController();
+    switch ($action)
+    {
+        case "create":
+            $controller->CreateQuizForm();
+            break;
+        case "savequiz":
+            $controller->SaveQuizForm();
+            break;
+        case "savequestions":
+            $controller->SaveQuestions();
+            break;
+        case "show":
+            if (isset($_POST['id']))
+            {
+                $controller->ShowQuiz();
+            }
+            break;
+        case "checkanswers":
+            if (isset($_POST['QuizId']))
+            {
+                $controller->CheckAnswers();
+            }
+            break;
+        default:
+            ShowHomePage();
+            break;
+    }
+    exit();
+}
+    // if (key_exists('formname',$_POST))
+    // {
+    //     if (isset($_SESSION['form'][ScrubUserInputs($_POST['formname'])]))
+    //     {
+
+    // }
+    // else
+    // {
+    //     ShowHomePage();
+    // }
 ?>

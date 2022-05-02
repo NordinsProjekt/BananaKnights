@@ -24,6 +24,7 @@ class HomeController extends BaseController
         IndexTop();
         IndexCards(); 
         echo EndPage();
+        exit();
     }
 }
 ?>

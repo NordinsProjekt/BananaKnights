@@ -109,6 +109,18 @@ abstract class BaseController
         $safe = stripslashes(htmlspecialchars($safe));
         return $safe;
     }
+
+    protected function GenerateLink()
+    {
+        $link = "";
+        $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        for ($i=0; $i < 20; $i++) 
+        { 
+            $link .= $characters[rand(0,strlen($characters)-1)];
+        }
+        $link .= uniqid($link,true);
+        return $link;
+    }
     
     public function ScrubIndexNumber($notsafeText)
     {

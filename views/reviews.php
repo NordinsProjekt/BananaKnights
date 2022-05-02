@@ -157,11 +157,15 @@
             }
             else
             {
-                if ($row['UserName'] == $_SESSION['Username'])
+                if (isset($_SESSION['Username']))
                 {
-                    $text .= "<td><form method='post' action='".prefix."review/edit'>
-                    <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>";
+                    if ($row['UserName'] == $_SESSION['Username'])
+                    {
+                        $text .= "<td><form method='post' action='".prefix."review/edit'>
+                        <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>";
+                    }
                 }
+
             }
         }
         $text .= "</table>";
