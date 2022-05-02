@@ -51,4 +51,65 @@ function QuestionForm($formData)
     $text .= "<tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
     return $text;
 }
+
+function ShowAllQuiz($quiz,$role)
+{
+    $text = "";
+    //TODO lägga in roller kontroll
+    $text = "<h1>Visa alla Quiz</h1>";
+    $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr><th onclick='sortTable(0)'>Quiztitel</th> <th onclick='sortTable(1)'>Användare</th> <th onclick='sortTable(2)'>Skapad</th>";
+    $text .= "<th>Visa</th>";
+    if (str_contains($role,"Moderator"))
+    {
+        $text .= "<th>Flagga</th>";
+    }
+    if (str_contains($role,"Admin"))
+    {
+        $text .= "<th>Radera</th>";
+    }
+    $text .= "</tr>";
+    foreach ($quiz as $key => $row) {
+        $text .= "<tr>
+        <td>".$row['Title']."</td> <td>".$row['UserName']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."quiz/show'>
+        <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+        if (str_contains($role,"Moderator"))
+        {
+            $formId = uniqid($row['Id'],true);
+            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/flagged",
+            "reviewId"=>$row['Id']);
+            $text .= "<td><form method='post'>
+            <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
+            <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
+        }
+        if (str_contains($role,"Admin"))
+        {
+            $text .= "
+            <td><form method='post' action='".prefix."quiz/delete'>
+            <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+            </tr>";
+        }
+    }
+    $text .= "</table>";
+    return $text;
+}
+function ShowQuiz($formData,$user)
+{
+    $text = "";
+    $text .= "<h1>Quiz</h1>";
+    $text .= "<form method='post' action='".prefix."quiz/checkanswers'>";
+    for ($i=0; $i < count($formData['Quiz']['Questions']); $i++) 
+    { 
+        $text .= "<h2>".$formData['Quiz']['Questions'][$i]['Question']."</h2>";
+        $text .= "<fieldset id='answer".$i."'>";
+            $text .= "<input type='radio' id='answer1' name='answer".$i."' value='1' required /><label for='answer1'>".$formData['Quiz']['Questions'][$i]['Alt1']."</label><br />";
+            $text .= "<input type='radio' id='answer2' name='answer".$i."' value='2' /><label for='answer2'>".$formData['Quiz']['Questions'][$i]['Alt2']."</label><br />";
+            $text .= "<input type='radio' id='answer3' name='answer".$i."' value='3' /><label for='answer3'>".$formData['Quiz']['Questions'][$i]['Alt3']."</label><br />";
+            $text .= "<input type='radio' id='answer4' name='answer".$i."' value='4' /><label for='answer4'>".$formData['Quiz']['Questions'][$i]['Alt4']."</label><br />";
+        $text .= "</fieldset><hr>";
+    }
+    $text .= "<input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
+    $text .= "<input type='submit' value='Skicka' />";
+    $text .= "</form>";
+    return $text;
+}
 ?>

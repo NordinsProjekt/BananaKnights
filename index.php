@@ -656,6 +656,19 @@ function QuizRoute($action)
             break;
         case "savequestions":
             $controller->SaveQuestions();
+            break;
+        case "show":
+            if (isset($_POST['id']))
+            {
+                $controller->ShowQuiz();
+            }
+            break;
+        case "checkanswers":
+            if (isset($_POST['QuizId']))
+            {
+                $controller->CheckAnswers();
+            }
+            break;
         default:
             ShowHomePage();
             break;

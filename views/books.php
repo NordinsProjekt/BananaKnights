@@ -94,6 +94,9 @@ function ShowBook($book,$imageLink,$role)
     {
         $text .= "<form method='post' action='".prefix."review/newreview' >
         <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";
+        $text .= "<form method='post' action='".prefix."quiz/create' >
+        <button type='submit' name='bookId' value='".$book['Id']."'>Skapa ett quiz</button></form>";
+
     }
 
     return $text;

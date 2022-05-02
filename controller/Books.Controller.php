@@ -84,15 +84,23 @@ class BooksController extends BaseController
             require_once "views/books.php";
             require_once "views/default.php";
             require_once "views/reviews.php";
+            require_once "views/quiz.php";
             echo StartPage("Visa bok");
             IndexNav($user['Roles'],$user['Username']);
             echo nl2br(ShowBook($result,$imageLink,$user['Roles']));
             require_once "model/Reviews.Model.php";
+            require_once "model/Quiz.Model.php";
             $reviewDB = new ReviewsModel();
             $reviews = $reviewDB->GetAllReviewsBook($result['Id']);
+            $quizDB = new QuizModel();
+            $quiz = $quizDB->GetAllQuizForBook($id);
             if ($reviews)
             {
                 echo ShowAllReviews($reviews,$user['Roles']);
+            }
+            if ($quiz)
+            {
+                echo ShowAllQuiz($quiz,$user['Roles']);
             }
             echo EndPage();
           }
