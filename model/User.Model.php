@@ -72,6 +72,15 @@ class UserModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetch();
     }
+
+    public function GetEntireUserInfo($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT * FROM userinfo WHERE Userid = :userId");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
     public function GetUserID($username,$passwordhash)
     {
         $stmt = $this->Connect()->prepare("SELECT Id FROM users 

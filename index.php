@@ -568,6 +568,9 @@ function UserRoute($action)
         case "logoutuser":
             $controller->Logout(); //Loggar ut och förstör session
             break;
+        case "profile":
+            $controller->ShowProfile(); 
+            break;
         default:
             ShowHomePage();
             break;

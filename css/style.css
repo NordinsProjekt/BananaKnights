@@ -30,10 +30,17 @@ body {
     background-color: #212529 !important; 
     color: whitesmoke !important;
 }
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 .card {
     background-color: #212529 !important; 
     color: whitesmoke !important;
 }
+
 
 
 /* COMMENTS CSS */
@@ -66,5 +73,23 @@ body {
 }
 .text-5x, .text-4x, .text-5x, .text-2x, .text-lg, .text-sm, .text-xs {
     line-height: 1.25;
+}
+
+
+/* PROFILE CSS */
+.userProfileInfo .image {
+    position: relative
+}
+
+.box {
+    background: #fff;
+    padding: 30px;
+    margin: 0 0 24px 0
+}
+
+@media (min-width: 992px) {
+    .userProfileInfo .image img {
+        width: 100%;
+    }
 }
 
