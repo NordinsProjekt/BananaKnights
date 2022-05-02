@@ -96,18 +96,18 @@ function ShowQuiz($formData,$user)
 {
     $text = "";
     $text .= "<h1>Quiz</h1>";
-    $text .= "<form method='post' action='".prefix."quiz/checkanswers'>";
+    $text .= "<form method='post' action='".prefix."quiz/checkanswers'><div id='quizparent'>";
     for ($i=0; $i < count($formData['Quiz']['Questions']); $i++) 
     { 
-        $text .= "<h2>".$formData['Quiz']['Questions'][$i]['Question']."</h2>";
+        $text .= "<div class='quizchild'><h2>".$formData['Quiz']['Questions'][$i]['Question']."</h2>";
         $text .= "<fieldset id='answer".$i."'>";
-            $text .= "<input type='radio' id='answer1' name='answer".$i."' value='1' required /><label for='answer1'>".$formData['Quiz']['Questions'][$i]['Alt1']."</label><br />";
-            $text .= "<input type='radio' id='answer2' name='answer".$i."' value='2' /><label for='answer2'>".$formData['Quiz']['Questions'][$i]['Alt2']."</label><br />";
-            $text .= "<input type='radio' id='answer3' name='answer".$i."' value='3' /><label for='answer3'>".$formData['Quiz']['Questions'][$i]['Alt3']."</label><br />";
-            $text .= "<input type='radio' id='answer4' name='answer".$i."' value='4' /><label for='answer4'>".$formData['Quiz']['Questions'][$i]['Alt4']."</label><br />";
-        $text .= "</fieldset><hr>";
+            $text .= "<input type='radio' id='".$i."answer1' name='answer".$i."' value='1' required /><label for='".$i."answer1'>".$formData['Quiz']['Questions'][$i]['Alt1']."</label><br />";
+            $text .= "<input type='radio' id='".$i."answer2' name='answer".$i."' value='2' /><label for='".$i."answer2'>".$formData['Quiz']['Questions'][$i]['Alt2']."</label><br />";
+            $text .= "<input type='radio' id='".$i."answer3' name='answer".$i."' value='3' /><label for='".$i."answer3'>".$formData['Quiz']['Questions'][$i]['Alt3']."</label><br />";
+            $text .= "<input type='radio' id='".$i."answer4' name='answer".$i."' value='4' /><label for='".$i."answer4'>".$formData['Quiz']['Questions'][$i]['Alt4']."</label><br />";
+        $text .= "</fieldset></div>";
     }
-    $text .= "<input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
+    $text .= "</div><input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
     $text .= "<input type='submit' value='Skicka' />";
     $text .= "</form>";
     return $text;

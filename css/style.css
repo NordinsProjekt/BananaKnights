@@ -68,3 +68,19 @@ body {
     line-height: 1.25;
 }
 
+/* QUIZ CSS */
+#quizparent {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.quizchild {
+    height: 300px;
+    width: 800px;
+    padding: 20px;
+    background-color: slategray;
+    margin: 10px;
+}
+
