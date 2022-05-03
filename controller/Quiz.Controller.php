@@ -116,7 +116,7 @@ class QuizController extends BaseController
                         }
                 }
                 $arr = array(
-                    $_POST['title'],$form['userId'],$form['bookId'],date("Y-m-d H:i:s"),$_POST['enddate'],0,0,$access
+                    $_POST['title'],$form['userId'],$form['bookId'],date("Y-m-d H:i:s"),$_POST['enddate'],0,0,$access,0
                 );
                 $result = $this->db->CreateQuiz($arr);
                 if ($result)
@@ -170,6 +170,7 @@ class QuizController extends BaseController
             $result = $this->db->InsertQuestions($arr);
             if ($result)
             {
+                $this->db->UpdateQuizDone($quizId);
                 require_once "controller/Home.Controller.php";
                 $homeController = new HomeController();
                 $homeController->ShowHomePage();

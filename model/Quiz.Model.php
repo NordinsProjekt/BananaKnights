@@ -17,7 +17,7 @@ class QuizModel extends PDOHandler
     {
         $stmt = $this->Connect()->prepare("SELECT q.Id ,q.Title, u.UserName, q.Created FROM quiz AS q 
         INNER JOIN users AS u ON q.UserId = u.Id 
-        WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND q.BookId = :bookId;");
+        WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND q.BookId = :bookId AND q.Done = 1;");
         $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(); 
@@ -33,15 +33,15 @@ class QuizModel extends PDOHandler
 
     public function CreateQuiz($quizArr)
     {
-        $stmt = $this->Connect()->prepare("INSERT quiz (Title,UserId,BookId,Created,EndDate,IsDeleted,Flagged,Link) VALUES 
-        (?,?,?,?,?,?,?,?);");
+        $stmt = $this->Connect()->prepare("INSERT quiz (Title,UserId,BookId,Created,EndDate,IsDeleted,Flagged,Link,Done) VALUES 
+        (?,?,?,?,?,?,?,?,?);");
         return $stmt->execute($quizArr);
     }
 
     public function GetQuizId($arr)
     {
         $stmt = $this->Connect()->prepare("SELECT Id FROM quiz WHERE 
-        Title = ? AND UserId = ? AND BookId = ? AND Created = ? AND EndDate = ? AND IsDeleted = ? AND Flagged = ? AND Link = ?;");
+        Title = ? AND UserId = ? AND BookId = ? AND Created = ? AND EndDate = ? AND IsDeleted = ? AND Flagged = ? AND Link = ? AND Done = ?;");
         $stmt->execute($arr);
         $result = $stmt->fetch();
         return $result['Id'];
@@ -64,6 +64,12 @@ class QuizModel extends PDOHandler
             }
         }
         return true;
+    }
+    public function UpdateQuizDone($quizId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE quiz SET Done = 1 WHERE Id = :quizId");
+        $stmt->bindParam(":quizId",$quizId,PDO::PARAM_INT);
+        return $stmt->execute();
     }
 }
 ?>
