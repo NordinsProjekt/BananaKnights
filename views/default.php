@@ -203,6 +203,51 @@ function IndexCards()
     echo $text;
 }
 
+function IndexCardsV2($sorted)
+{
+    $text = "";
+    $text.= "<div class='container'>";
+    $text.="<div class='row' style='text-align: left; --bs-gutter-x:4.5rem;'><br>";
+
+    for($i = 0; $i < count($sorted); $i++)
+    {
+        if (file_exists("img/books/". $sorted[$i]['ImagePath']))
+        {
+            $pictures = scandir("img/books/". $sorted[$i]['ImagePath']);
+            if (empty($pictures[2]))
+            {
+                $imageLink = prefix."img/books/noimage.jpg";
+            }
+            else
+            {
+                $imageLink = prefix."img/books/". $sorted[$i]['ImagePath'] ."/". $pictures[2];
+            }
+        }
+        else
+        {
+            $imageLink = prefix."img/books/noimage.jpg";
+        }
+    $text .= 
+    "<div class='col text-white' style='border-radius: 8px;'><br>
+    <img src='" . $imageLink . "' alt='book bild' height='250rem'><br>
+    <a style='padding:0;' href='".prefix."showbook?id=".$sorted[$i]['Id']."'>". $sorted[$i]["Title"] . "</a><br>
+    <small>". $sorted[$i]["AuthorName"] . "</small><br />
+    <small>Rating: ".$sorted[$i]['Rating']."</small><br />
+    <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."' style='padding-top:10px;'><button type='submit' class='btn btn-outline-primary'>Läs mer</button></form><br>
+    </div><br>";
+
+        if($i == 4)
+        {
+            $text.="</div>";
+            $text.="<div class='row' style='text-align: left; padding-top: 2rem; --bs-gutter-x:4.5rem;'><br>";
+        }
+
+    
+    }
+    $text .= "</div></div><br>";
+
+    echo $text;
+}
 
 function SearchReview()
 {

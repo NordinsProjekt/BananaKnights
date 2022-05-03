@@ -131,6 +131,13 @@ class UserModel extends PDOHandler
         $result = $stmt->execute($arr);
         return $result;
     }
+
+    public function SetUserInformation($arr)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO userinfo VALUES (?,?,?,?,?,?,?,?,?,?);");
+        $result = $stmt->execute($arr);
+        return $result;
+    }
     public function SetUserGroup($groupId,$userId)
     {
         $stmt = $this->Connect()->prepare("INSERT INTO usergroups (RolesId,UserId) 

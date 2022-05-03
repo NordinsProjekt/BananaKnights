@@ -84,11 +84,12 @@ html, body {
     justify-content: space-around;
 }
 .quizchild {
-    height: 300px;
+    height: auto;
     width: 800px;
     padding: 20px;
     background-color: slategray;
     margin: 10px;
+}
 
 
 /* PROFILE CSS */

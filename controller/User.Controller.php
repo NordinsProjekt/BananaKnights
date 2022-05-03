@@ -74,6 +74,9 @@ class UserController extends BaseController
                     $result = $this->db->SetUserGroup($groupId['Id'],$userId['Id']);
                     if ($result)
                     {
+                        $this->db->SetUserInformation(array(
+                            NULL,$userId['Id'],"","","","","","","",date("Y-m-d H:i:s")
+                        ));
                         //Skickar användaren till inloggningssidan
                         header("Location: ". prefix ."user/loginpage");
                     }
@@ -175,7 +178,13 @@ class UserController extends BaseController
         $user = $this->GetUserInformation();
         $userDetails = $this->db->GetEntireUser($user['Id']);
         $userInfo = $this->db->GetEntireUserInfo($user['Id']);
-
+        //Hanterar om det inte finns någon information sparad i databasen
+        if (!$userInfo)
+        {
+            $userInfo['City'] = "N/A";
+            $userInfo['Address'] = "N/A";
+            $userInfo['PostalCode'] = "N/A";
+        }
         require_once "views/users.php";
         require_once "views/default.php";
         echo StartPage("Profil");

@@ -538,6 +538,25 @@ class BooksController extends BaseController
         }
     }
 
+    public function ShowTop5Books()
+    {
+        $user = $this->GetUserInformation();
+        $books = $this->db->GetBookAVGRatingTop5();
+        if ($books)
+        {
+            require_once "views/default.php";
+            echo StartPage("Top 5 Böcker");
+            IndexNav($user['Roles'],$user['Username']);
+            echo IndexCardsV2($books);
+            echo EndPage();
+        }
+        else
+        {
+            $this->ShowError("Finns inte 5 böcker med reviews");
+        }
+
+    }
+
     private function AddGenreToBook($bookId,$genreId)
     {
         $arr = array($genreId,$bookId);
