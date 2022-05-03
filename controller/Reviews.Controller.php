@@ -168,6 +168,16 @@ class ReviewsController extends BaseController
                 echo ShowAllReviews($result,$user['Roles']);
                 echo EndPage();
             }
+            else
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav($user['Roles'],$user['Username']);
+                echo SearchReview();
+                echo "<h2>Fanns inga recensioner som matchar sökningen</h2>";
+                echo EndPage();
+            }
 
         }
         else
