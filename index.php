@@ -550,6 +550,9 @@ function BooksRoute($action)
             $safe = ScrubUserInputs($_POST['author']);
             $controller->ShowSearchBook("%".$safe."%");
             break;
+        case "top5":
+            $controller->ShowTop5Books();
+            break;
         default:
             ShowHomePage();
             break;
