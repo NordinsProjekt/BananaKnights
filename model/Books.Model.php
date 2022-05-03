@@ -274,5 +274,39 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
+
+    public function GetBookAVGRatingTop5()
+    {
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+         b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath ,AVG(Rating) AS Rating FROM books AS b 
+        INNER JOIN reviews AS r ON b.Id = r.BookId 
+        INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+        INNER JOIN genres AS g ON g.Id = gb.GenreId
+        INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        GROUP BY Id
+        ORDER BY Rating DESC LIMIT 5;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    public function GetBookAVGRatingLowest5()
+    {
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+         b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath ,AVG(Rating) AS Rating FROM books AS b 
+        INNER JOIN reviews AS r ON b.Id = r.BookId 
+        INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+        INNER JOIN genres AS g ON g.Id = gb.GenreId
+        INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        GROUP BY Id
+        ORDER BY Rating ASC LIMIT 5;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
 ?>
