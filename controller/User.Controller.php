@@ -178,8 +178,10 @@ class UserController extends BaseController
         if ($user['Roles'] != "")
         {
             require_once "model/Reviews.Model.php";
+            require_once "model/Books.Model.php";
             require_once "views/reviews.php";
             $reviewDB = new ReviewsModel();
+            $booksDB = new BooksModel();
             $userDetails = $this->db->GetEntireUser($user['Id']);
             $userInfo = $this->db->GetEntireUserInfo($user['Id']);
             //Hanterar om det inte finns någon information sparad i databasen
@@ -194,11 +196,11 @@ class UserController extends BaseController
             {
                 case "userinfo":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Personuppgifter</h2>";
-                    $window['body'] = "";
+                    $window['Body'] = "";
                     break;
                 case "readlist":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina lästa böcker</h2>";
-                    $window['body'] = "";
+                    $window['Body'] = "";
                     break;
                 case "reviews":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina recensioner</h2>";
