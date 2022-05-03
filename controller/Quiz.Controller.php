@@ -106,18 +106,10 @@ class QuizController extends BaseController
                 $form = $_SESSION['form'][$this->ScrubFormName($_POST['formname'])];
                 unset($_SESSION['form']);
                 //Allt är ok.
-                //(Title,UserId,BookId,EndDate,Link)
-                $access = "";
-                if ($_POST['access'] == "public" || $_POST['access'] = "private")
-                {
-                        if ($_POST['access'] == "private")
-                        {
-                            $access = $this->GenerateLink();
-                        }
-                }
                 $arr = array(
-                    $_POST['title'],$form['userId'],$form['bookId'],date("Y-m-d H:i:s"),$_POST['enddate'],0,0,$access,0
+                    $_POST['title'],$form['userId'],$form['bookId'],date("Y-m-d H:i:s"),0,0,0
                 );
+                $arr[0] = $this->ScrubVar($arr[0]);
                 $result = $this->db->CreateQuiz($arr);
                 if ($result)
                 {
@@ -159,6 +151,7 @@ class QuizController extends BaseController
                     $_POST['question'][$i],$_POST['answer1'][$i],$_POST['answer2'][$i],
                     $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i],$quizId
                 );
+                $this->ScrubText($arr);
                 //Kastar användaren till errorsidan och avbryter allt.
                 if (!$this->ValidateArray($arr))
                 {            
@@ -219,6 +212,27 @@ class QuizController extends BaseController
     {
         $banlist = array("\t",".",";","/",",","<",">",")","(","=","[","]","+","*");
         $safe = str_replace($banlist,"",$notsafeText);
+        return $safe;
+    }
+    //Mellanslag, comma och punkt tillåtna
+    private function ScrubText($arr)
+    {
+        $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
+        foreach ($arr as $key => $row) 
+        {
+            foreach($row as $key => $value) 
+            {
+                $safe = str_replace($banlist,"",$value);
+                $value = $safe;
+            }
+        }
+        return $arr;
+    }
+    //Mellanslag, comma och punkt tillåtna
+    private function ScrubVar($notsafe)
+    {
+        $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
+        $safe = str_replace($banlist,"",$notsafe);
         return $safe;
     }
 }

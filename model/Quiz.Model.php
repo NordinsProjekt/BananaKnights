@@ -33,15 +33,15 @@ class QuizModel extends PDOHandler
 
     public function CreateQuiz($quizArr)
     {
-        $stmt = $this->Connect()->prepare("INSERT quiz (Title,UserId,BookId,Created,EndDate,IsDeleted,Flagged,Link,Done) VALUES 
-        (?,?,?,?,?,?,?,?,?);");
+        $stmt = $this->Connect()->prepare("INSERT quiz (Title,UserId,BookId,Created,IsDeleted,Flagged,Done) VALUES 
+        (?,?,?,?,?,?,?);");
         return $stmt->execute($quizArr);
     }
 
     public function GetQuizId($arr)
     {
         $stmt = $this->Connect()->prepare("SELECT Id FROM quiz WHERE 
-        Title = ? AND UserId = ? AND BookId = ? AND Created = ? AND EndDate = ? AND IsDeleted = ? AND Flagged = ? AND Link = ? AND Done = ?;");
+        Title = ? AND UserId = ? AND BookId = ? AND Created = ? AND IsDeleted = ? AND Flagged = ? AND Done = ?;");
         $stmt->execute($arr);
         $result = $stmt->fetch();
         return $result['Id'];

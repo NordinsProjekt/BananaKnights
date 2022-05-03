@@ -19,9 +19,6 @@ function QuizForm($formData)
     $text .= "<table><tr> <th></th> <th></th> </tr>";
     $text .= "<tr> <td><label for='title'>Titel</label></td> <td><input type='text' id='title' name='title' required /></td> </tr>";
     $text .= "<tr> <td><label for='antalQ'>Antal frågor</label></td> <td><input type='number' id='antalQ' name='antalQ' required /></td> </tr>";
-    $text .= "<tr> <td><label for='accessability'>Typ av Quiz</label></td> <td><select name='access' id='accessability'><option value='private'>Privat</option>
-    <option value='public'>Publik</option></select></td> </tr>";
-    $text .= "<tr> <td><label for='enddate'>Avslut</label></td> <td><input type='date' id='enddate' name='enddate' placeholder='Möjlighet att sätta slutdatum' /></td> </tr>";
     $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' value='Spara' /></td> <td></td></tr>";
     $text .= "</table></form>";
     return $text;
@@ -29,6 +26,10 @@ function QuizForm($formData)
 
 function QuestionForm($formData)
 {
+    if ($formData['NumberOfQ'] <=0)
+    {
+        return "<h1>Antal frågor < 0</h1>";
+    }
     $formId = uniqid($formData['User']['Id'],true);
     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
     $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/savequestions",
