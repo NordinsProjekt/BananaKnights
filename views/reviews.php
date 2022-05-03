@@ -59,15 +59,16 @@
 
         return $text;
     }
-    function ShowReview($review,$role)
+    function ShowReview($review,$user)
     {
         //$review['ReviewText'] = str_replace('\n','<br />',$review['ReviewText']);
         $text = "<h1>Visa enskild recension</h1>";
         $text .= "<h2>".$review['ReviewTitle']."</h2>";
         $text .= "<div width='300px'>".$review['ReviewText']."</div>";
-        $text .= "<br /><p><b>Skriven av: </b>".$review['UserName']."</p>";
+        $text .= "<p><b>Betyg: </b>".$review['Rating']." av 5</p>";
+        $text .= "<p><b>Skriven av: </b>".$review['UserName']."</p>";
         $text .= "<p>Skapad: ".$review['Created']."</p>";
-        if ($role != "")
+        if ($user['Roles'] != "")
         {
             $text .= "<form method='post' action='".prefix."review/usefull'>";
             if ($review['Usefull'])
@@ -79,7 +80,12 @@
                 $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
         }
-        if (str_contains($role,"Moderator") && $review['Flagged'] == 0)
+        if ($review['UserName'] == $user['Username'])
+        {
+            $text .= "<td><form method='post' action='".prefix."review/edit'>
+                        <button type='submit' name='id' value='".$review['Id']."'>Edit</button></form></td>";
+        }
+        if (str_contains($user['Roles'],"Moderator") && $review['Flagged'] == 0)
         {
             //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
             $formId = uniqid($review['Id'],true);
@@ -88,15 +94,15 @@
             $text .= "<form method='post' action='lol'>
             <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Flagga</button></form>";
         }
-        if (str_contains($role,"Admin") && $review['Flagged'] == 1)
-        {
-            //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
-            $formId = uniqid($review['Id'],true);
-            $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/unflag",
-            "reviewId"=>$review['Id']);
-            $text .= "<form method='post' action='lol'>
-            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
-        }
+        // if (str_contains($user['Roles'],"Admin") && $review['Flagged'] == 1)
+        // {
+        //     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+        //     $formId = uniqid($review['Id'],true);
+        //     $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/unflag",
+        //     "reviewId"=>$review['Id']);
+        //     $text .= "<form method='post' action='lol'>
+        //     <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
+        // }
         $_SESSION['ReviewId'] = $review['Id'];
         return $text;
     }
@@ -170,6 +176,15 @@
         }
         $text .= "</table>";
         $text.= "<script src='".prefix."js/sortMe.js'></script>";
+        return $text;
+    }
+    function ShowUserReviews($reviews)
+    {
+        $text = "";
+        foreach ($reviews as $key => $row) {
+            $text .= "<a href='".prefix."showreview?id=".$row['Id']."'>".$row['BookTitle']."("
+            .$row['BookYear'].") ".$row['ReviewTitle']." Betyg: ".$row['Rating']." av 5</a><br />";
+        }
         return $text;
     }
 ?>

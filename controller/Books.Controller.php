@@ -39,11 +39,24 @@ class BooksController extends BaseController
 
     function ShowBook($id)
     {
+        $safe = $this->ScrubIndexNumber($id);
         $user = $this->GetUserInformation();
         $result = $this->db->GetBook($id);
 
         if ($result)
         {
+            if ($user['Roles'] != "")
+            {
+                $usefull = $this->db->IsRecommendedSet($safe,$user['Id']);
+                if ($usefull['Antal'] == 1)
+                {
+                    $result+= ["Recommend" => true];
+                }
+                else
+                {
+                    $result+= ["Recommend" => false];
+                }
+            }
             require_once "model/Reviews.Model.php";
             $reviewDB = new ReviewsModel();
             $reviews = $reviewDB->GetAllReviewsBook($id);
@@ -545,7 +558,7 @@ class BooksController extends BaseController
         if ($books)
         {
             require_once "views/default.php";
-            echo StartPage("Top 5 Böcker");
+            echo StartPage("5 böcker som är rankade högst");
             IndexNav($user['Roles'],$user['Username']);
             echo IndexCardsV2($books);
             echo EndPage();
@@ -555,6 +568,51 @@ class BooksController extends BaseController
             $this->ShowError("Finns inte 5 böcker med reviews");
         }
 
+    }
+    
+    public function ShowLow5Books()
+    {
+        $user = $this->GetUserInformation();
+        $books = $this->db->GetBookAVGRatingLowest5();
+        if ($books)
+        {
+            require_once "views/default.php";
+            echo StartPage("5 böcker som är rankade sist");
+            IndexNav($user['Roles'],$user['Username']);
+            echo IndexCardsV2($books);
+            echo EndPage();
+        }
+        else
+        {
+            $this->ShowError("Finns inte 5 böcker med reviews");
+        }
+    }
+
+    public function RecommendBook($id)
+    {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($id);
+        if (str_contains($user['Roles'],"User") && $safe > 0)
+        {
+            //Kollar om det användaren har tryckt på knappen eller inte
+            $result = $this->db->IsRecommendedSet($safe,$user['Id']);
+            if ($result['Antal'] == 1)
+            {
+                //Radera i databasen
+                $this->db->DeleteRecommendBook($safe,$user['Id']);
+                $this->ShowBook($safe);
+            }
+            else
+            {
+                //Lägg till i databasen
+                $this->db->SetRecommendBook($safe,$user['Id']);
+                $this->ShowBook($safe);
+            }
+        }
+        else
+        {
+            $this->ShowError("Logga in om du vill använda denna funktionen");
+        }
     }
 
     private function AddGenreToBook($bookId,$genreId)

@@ -308,5 +308,35 @@ class BooksModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    public function IsRecommendedSet($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT COUNT(*) AS Antal FROM recommendbook 
+        WHERE UserId = :userId AND BookId = :bookId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function SetRecommendBook($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO recommendbook 
+        (UserId,BookId) VALUES (:userId,:bookId);");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function DeleteRecommendBook($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("DELETE FROM recommendbook WHERE 
+        UserId = :userId AND BookId = :bookId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+
+    }
 }
 ?>

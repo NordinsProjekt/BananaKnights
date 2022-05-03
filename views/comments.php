@@ -69,7 +69,7 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
             $text.= "<form method='post' action='".prefix."comment/flag'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Flagga</button>
             <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' /></form>";
         }
-        $text .="</div>";
+        $text .="<br /></div>";
         $text .="<hr>";
 
         //REPLIES  

@@ -553,6 +553,15 @@ function BooksRoute($action)
         case "top5":
             $controller->ShowTop5Books();
             break;
+        case "low5":
+            $controller->ShowLow5Books();
+            break;
+        case "recommend":
+            if (key_exists('id',$_POST))
+            {
+                $controller->RecommendBook($_POST['id']);
+            }
+            break;
         default:
             ShowHomePage();
             break;
@@ -581,7 +590,15 @@ function UserRoute($action)
             $controller->Logout(); //Loggar ut och förstör session
             break;
         case "profile":
-            $controller->ShowProfile(); 
+            if (isset($_GET['show']))
+            {
+                $controller->ShowProfile($_GET['show']); 
+            }
+            else
+            {
+                $controller->ShowProfile(""); 
+            }
+
             break;
         default:
             ShowHomePage();

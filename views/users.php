@@ -35,7 +35,7 @@ function LoginForm()
 }
 
 
-function Profile($user, $userDetails, $userInfo)
+function Profile($user, $userDetails, $userInfo,$window)
 {
     $text = "";
     $text.= "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'>";
@@ -59,8 +59,10 @@ function Profile($user, $userDetails, $userInfo)
     $text.= "        </div>";
     $text.= "        <div class='col-xs-12 col-md-8 col-lg-9' style='color: black;'>";
     $text.= "           <div class='box'>";
-    $text.="            <div><a href='".prefix."user/profile'>Hem</a><a href='".prefix."user/readlist'>Läslista</a><a href='".prefix."user/reviews'>Mina reviews</a></div><hr>";
-    $text.= "               <h2 class='boxTitle'>Welcome Back ".$userDetails['UserName']."</h2>";
+    $text.="            <div><a href='".prefix."user/profile'>Hem</a><a href='".prefix."user/profile?show=readlist'>Läslista</a><a href='".prefix."user/profile?show=reviews'>Mina reviews</a>
+                            <a href='".prefix."user/profile?show=userinfo'>Personuppgifter</a></div><hr>";
+    $text.= "               <h2 class='boxTitle'>".$window['WindowTitle']."</h2>
+                            ".$window['Body'].""; //Här ska listor läggas
     $text.= "            </div>";
     $text.= "        </div>";
     $text.= "    </div>";

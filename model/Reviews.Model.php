@@ -150,6 +150,19 @@ class ReviewsModel extends PDOHandler
         $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
         return $stmt->execute();
     }
+    public function GetAllUserReviews($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,
+        b.Title AS BookTitle, b.PublicationYear AS BookYear, b.ImagePath AS BookImagePath FROM reviews AS r 
+        INNER JOIN users AS u ON r.UserId = u.Id 
+        INNER JOIN books AS b ON r.BookId = b.Id 
+        WHERE b.IsDeleted = 0 AND r.Flagged = 0 AND r.IsDeleted = 0 AND u.Id = :userId
+        ORDER BY b.Title;
+        ");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }
 
 ?>
