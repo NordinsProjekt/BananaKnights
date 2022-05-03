@@ -177,5 +177,11 @@ class UserModel extends PDOHandler
         $result = $stmt->fetch();
         return $result['NumberOfUsers'];
     }
+    public function UpdateUserInput($arr)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE userinfo SET Firstname = ?, Lastname = ?, Phone = ?,
+        Address = ?, Address2 = ?, PostalCode = ?, City = ? WHERE UserId = ?;");
+        return $stmt->execute($arr);
+    }
 }
 ?>

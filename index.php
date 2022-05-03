@@ -39,6 +39,9 @@ if (isset($_POST['formname']) && key_exists('form',$_SESSION))
             case "quiz":
                 QuizRoute($arr[3]);
                 break;
+            case "user":
+                UserRoute($arr[3]);
+                break;
         }
         exit();
     }
@@ -599,6 +602,13 @@ function UserRoute($action)
                 $controller->ShowProfile(""); 
             }
 
+            break;
+        case "updateinfo":
+            if (isset($_POST['formname']) && isset($_SESSION['form']))
+            {
+                $safe = ScrubUserInputs($_POST['formname']);
+                $controller->UpdateUserInfo($_SESSION['form'][$safe]['UserId']);
+            }
             break;
         default:
             ShowHomePage();

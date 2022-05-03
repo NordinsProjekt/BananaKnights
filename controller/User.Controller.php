@@ -181,6 +181,7 @@ class UserController extends BaseController
             require_once "model/Books.Model.php";
             require_once "views/reviews.php";
             require_once "views/default.php";
+            require_once "views/users.php";
             $reviewDB = new ReviewsModel();
             $booksDB = new BooksModel();
             $userDetails = $this->db->GetEntireUser($user['Id']);
@@ -197,7 +198,7 @@ class UserController extends BaseController
             {
                 case "userinfo":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Personuppgifter</h2>";
-                    $window['Body'] = "";
+                    $window['Body'] = UserInformationForm($user);
                     break;
                 case "readlist":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina lästa böcker</h2>";
@@ -243,12 +244,51 @@ class UserController extends BaseController
         }
 
     }
+    public function UpdateUserInfo($userId)
+    {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($userId);
+        //Samma användare som skickar formuläret som är inloggad
+        if ($safe == $user['Id'])
+        {
+            $arr = array(
+                $_POST['firstname'],$_POST['lastname'],$_POST['phone'],$_POST['address'],
+                $_POST['address2'],$_POST['postalcode'],$_POST['city'],$user['Id']
+            );
+            $arr = $this->ScrubText($arr);
+            $result = $this->db->UpdateUserInput($arr);
+            if ($result)
+            {
+                $this->ShowProfile("");
+            }
+            else
+            {
+                $this->ShowError("Kunde inte spara personuppgifter");
+            }
+
+        }
+        else
+        {
+
+        }
+    }
 
     public function Logout()
     {
         session_unset();
         session_destroy();
         header("Location:".prefix);
+    }
+
+    private function ScrubText($arr)
+    {
+        $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
+        foreach($arr as $key => $value) 
+        {
+            $safe = str_replace($banlist,"",$value);
+            $value = $safe;
+        }
+        return $arr;
     }
 
     private function ScrubInputs($notsafeText)
