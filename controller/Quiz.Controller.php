@@ -109,6 +109,10 @@ class QuizController extends BaseController
                 $arr = array(
                     $_POST['title'],$form['userId'],$form['bookId'],date("Y-m-d H:i:s"),0,0,0
                 );
+                if ($_POST['antalQ'] <=0)
+                {
+
+                }
                 $arr[0] = $this->ScrubVar($arr[0]);
                 $result = $this->db->CreateQuiz($arr);
                 if ($result)

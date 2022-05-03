@@ -180,6 +180,7 @@ class UserController extends BaseController
             require_once "model/Reviews.Model.php";
             require_once "model/Books.Model.php";
             require_once "views/reviews.php";
+            require_once "views/default.php";
             $reviewDB = new ReviewsModel();
             $booksDB = new BooksModel();
             $userDetails = $this->db->GetEntireUser($user['Id']);
@@ -200,7 +201,16 @@ class UserController extends BaseController
                     break;
                 case "readlist":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina lästa böcker</h2>";
-                    $window['Body'] = "";
+                    $result = $booksDB->GetAllRecommendedBooksByUser($user['Id']);
+                    if ($result)
+                    {
+                        $window['Body'] = IndexCardsProfile($result);
+                    }
+                    else
+                    {
+                        $window['Body'] = "<p>Fanns inga lästa böcker</p>";
+                    }
+                    
                     break;
                 case "reviews":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina recensioner</h2>";
@@ -217,7 +227,7 @@ class UserController extends BaseController
                     break;
                 default:
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Welcome Back ".$userDetails['UserName']."</h2>";
-                    $window['body'] = "";
+                    $window['Body'] = "";
                     break;
             }
             require_once "views/users.php";
