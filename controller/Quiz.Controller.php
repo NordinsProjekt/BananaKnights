@@ -48,10 +48,20 @@ class QuizController extends BaseController
         $score = 0;
         for ($i=0; $i < count($result); $i++) 
         { 
-            if ($result[$i]['Answer'] == $answers['answer'.$i])
+            //Kollar om svaret är ett nummer mellan 1-4
+            if ($this->ValidateAnswers($answers['answer'.$i]))
             {
-                $score += 1;
+                if ($result[$i]['Answer'] == $answers['answer'.$i])
+                {
+                    $score += 1;
+                }
             }
+            else
+            {
+                $this->ShowError("Felaktig data från användaren!!");
+                exit();
+            }
+
         }
         require_once "views/default.php";
         echo StartPage("Resultat");
@@ -149,6 +159,12 @@ class QuizController extends BaseController
                     $_POST['question'][$i],$_POST['answer1'][$i],$_POST['answer2'][$i],
                     $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i],$quizId
                 );
+                //Kastar användaren till errorsidan och avbryter allt.
+                if (!$this->ValidateArray($arr))
+                {            
+                    $this->ShowError("Felaktig data från användaren!!");
+                    exit();
+                }
             }
             //Anropa databasen och modellen kommer inserta en rad för varje array och koppla till quizen
             $result = $this->db->InsertQuestions($arr);
@@ -170,6 +186,26 @@ class QuizController extends BaseController
 
     }
 
+    private function ValidateArray($arr)
+    {
+        foreach ($arr as $key => $value) 
+        {
+            if ($value == NULL || $value = "")
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private function ValidateAnswers($answer)
+    {
+        if (is_numeric($answer) && $answer >0 && $answer <= 4)
+        {
+            return true;
+        }
+        return false;
+    }
     private function CheckUserInputs($notsafeText)
     {
       $banlist = array("\t",".",";"," ","/",",","<",">",")","(","=","[","]","+","*");
