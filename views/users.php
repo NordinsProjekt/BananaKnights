@@ -35,7 +35,7 @@ function LoginForm()
 }
 
 
-function Profile($user, $userDetails, $userInfo)
+function Profile($user, $userDetails, $userInfo,$window)
 {
     $text = "";
     $text.= "<link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet'>";
@@ -59,13 +59,35 @@ function Profile($user, $userDetails, $userInfo)
     $text.= "        </div>";
     $text.= "        <div class='col-xs-12 col-md-8 col-lg-9' style='color: black;'>";
     $text.= "           <div class='box'>";
-    $text.="            <div><a href='".prefix."user/profile'>Hem</a><a href='".prefix."user/readlist'>Läslista</a><a href='".prefix."user/reviews'>Mina reviews</a></div><hr>";
-    $text.= "               <h2 class='boxTitle'>Welcome Back ".$userDetails['UserName']."</h2>";
+    $text.="            <div><a href='".prefix."user/profile'>Hem</a><a href='".prefix."user/profile?show=readlist'>Läslista</a><a href='".prefix."user/profile?show=reviews'>Mina reviews</a>
+                            <a href='".prefix."user/profile?show=userinfo'>Personuppgifter</a></div><hr>";
+    $text.= "               <h2 class='boxTitle'>".$window['WindowTitle']."</h2>
+                            ".$window['Body'].""; //Här ska listor läggas
     $text.= "            </div>";
     $text.= "        </div>";
     $text.= "    </div>";
     $text.= "</div>";
 
+    return $text;
+}
+function UserInformationForm($user)
+{
+    $formId = uniqid($user['Id'],true);
+    //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
+    $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."user/updateinfo",
+    "UserId"=>$user['Id']);
+    $text = "";
+    $text .= "<form method='post'>";
+    $text .= "<table><tr> <th></th> <th></th> </tr>";
+    $text .= "<tr> <td><label for='firstname'>Förnamn</label></td> <td><input type='text' class='form-control' id='firstname' name='firstname' /></td> </tr>";
+    $text .= "<tr> <td><label for='lastname'>Efternamn</label></td> <td><input type='text' class='form-control' id='lastname' name='lastname' /></td> </tr>";
+    $text .= "<tr> <td><label for='phone'>Telefon</label></td> <td><input type='text' class='form-control' id='phone' name='phone' /></td> </tr>";
+    $text .= "<tr> <td><label for='address'>Adress</label></td> <td><input type='text' class='form-control' id='address' name='address' /></td> </tr>";
+    $text .= "<tr> <td><label for='address2'>Adress 2</label></td> <td><input type='text' class='form-control' id='address2' name='address2' /></td> </tr>";
+    $text .= "<tr> <td><label for='postalcode'>Postnummer</label></td> <td><input type='text' class='form-control' id='postalcode' name='postalcode' /></td> </tr>";
+    $text .= "<tr> <td><label for='city'>Stad</label></td> <td><input type='text' class='form-control' id='city' name='city' required /></td> </tr>";
+    $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' value='Spara' /></td> <td></td></tr>";
+    $text .= "</table></form>";
     return $text;
 }
 ?>

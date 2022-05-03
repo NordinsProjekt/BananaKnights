@@ -95,7 +95,7 @@ class ReviewsController extends BaseController
             echo StartPage("Review");
             IndexNav($user['Roles'],$user['Username']);
 
-            echo nl2br(ShowReview($result,$user['Roles'])); //nl2br ersätter \n (newline) med br
+            echo nl2br(ShowReview($result,$user)); //nl2br ersätter \n (newline) med br
             require_once "model/Comments.Model.php";
             require_once "views/comments.php";
             $comments = new CommentsModel();

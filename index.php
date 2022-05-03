@@ -39,6 +39,9 @@ if (isset($_POST['formname']) && key_exists('form',$_SESSION))
             case "quiz":
                 QuizRoute($arr[3]);
                 break;
+            case "user":
+                UserRoute($arr[3]);
+                break;
         }
         exit();
     }
@@ -553,6 +556,15 @@ function BooksRoute($action)
         case "top5":
             $controller->ShowTop5Books();
             break;
+        case "low5":
+            $controller->ShowLow5Books();
+            break;
+        case "recommend":
+            if (key_exists('id',$_POST))
+            {
+                $controller->RecommendBook($_POST['id']);
+            }
+            break;
         default:
             ShowHomePage();
             break;
@@ -581,7 +593,22 @@ function UserRoute($action)
             $controller->Logout(); //Loggar ut och förstör session
             break;
         case "profile":
-            $controller->ShowProfile(); 
+            if (isset($_GET['show']))
+            {
+                $controller->ShowProfile($_GET['show']); 
+            }
+            else
+            {
+                $controller->ShowProfile(""); 
+            }
+
+            break;
+        case "updateinfo":
+            if (isset($_POST['formname']) && isset($_SESSION['form']))
+            {
+                $safe = ScrubUserInputs($_POST['formname']);
+                $controller->UpdateUserInfo($_SESSION['form'][$safe]['UserId']);
+            }
             break;
         default:
             ShowHomePage();

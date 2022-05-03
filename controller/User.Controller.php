@@ -171,26 +171,106 @@ class UserController extends BaseController
         //kunna se alla sina reviews och sånt.
     }
 
-    public function ShowProfile()
+    public function ShowProfile($show)
     {
-        require_once "model/User.Model.php";
-
+        $safeShow = $this->ScrubInputs($show);
         $user = $this->GetUserInformation();
-        $userDetails = $this->db->GetEntireUser($user['Id']);
-        $userInfo = $this->db->GetEntireUserInfo($user['Id']);
-        //Hanterar om det inte finns någon information sparad i databasen
-        if (!$userInfo)
+        if ($user['Roles'] != "")
         {
-            $userInfo['City'] = "N/A";
-            $userInfo['Address'] = "N/A";
-            $userInfo['PostalCode'] = "N/A";
+            require_once "model/Reviews.Model.php";
+            require_once "model/Books.Model.php";
+            require_once "views/reviews.php";
+            require_once "views/default.php";
+            require_once "views/users.php";
+            $reviewDB = new ReviewsModel();
+            $booksDB = new BooksModel();
+            $userDetails = $this->db->GetEntireUser($user['Id']);
+            $userInfo = $this->db->GetEntireUserInfo($user['Id']);
+            //Hanterar om det inte finns någon information sparad i databasen
+            if (!$userInfo)
+            {
+                $userInfo['City'] = "N/A";
+                $userInfo['Address'] = "N/A";
+                $userInfo['PostalCode'] = "N/A";
+            }
+            $window;
+            switch($safeShow)
+            {
+                case "userinfo":
+                    $window['WindowTitle'] = "<h2 class='boxTitle'>Personuppgifter</h2>";
+                    $window['Body'] = UserInformationForm($user);
+                    break;
+                case "readlist":
+                    $window['WindowTitle'] = "<h2 class='boxTitle'>Dina lästa böcker</h2>";
+                    $result = $booksDB->GetAllRecommendedBooksByUser($user['Id']);
+                    if ($result)
+                    {
+                        $window['Body'] = IndexCardsProfile($result);
+                    }
+                    else
+                    {
+                        $window['Body'] = "<p>Fanns inga lästa böcker</p>";
+                    }
+                    
+                    break;
+                case "reviews":
+                    $window['WindowTitle'] = "<h2 class='boxTitle'>Dina recensioner</h2>";
+                    $result = $reviewDB->GetAllUserReviews($user['Id']);
+                    if ($result)
+                    {
+                        $window['Body'] = ShowUserReviews($result);
+                    }
+                    else
+                    {
+                        $window['Body'] = "<p>Fanns inga recensioner</p>";
+                    }
+                    
+                    break;
+                default:
+                    $window['WindowTitle'] = "<h2 class='boxTitle'>Welcome Back ".$userDetails['UserName']."</h2>";
+                    $window['Body'] = "";
+                    break;
+            }
+            require_once "views/users.php";
+            require_once "views/default.php";
+            echo StartPage("Profil");
+            echo IndexNav($user['Roles'],$user['Username']);
+            echo Profile($user, $userDetails, $userInfo, $window);
+            echo EndPage();
         }
-        require_once "views/users.php";
-        require_once "views/default.php";
-        echo StartPage("Profil");
-        echo IndexNav($user['Roles'],$user['Username']);
-        echo Profile($user, $userDetails, $userInfo);
-        echo EndPage();
+        else
+        {
+            $this->ShowError("Du måste vara inloggad");
+        }
+
+    }
+    public function UpdateUserInfo($userId)
+    {
+        $user = $this->GetUserInformation();
+        $safe = $this->ScrubIndexNumber($userId);
+        //Samma användare som skickar formuläret som är inloggad
+        if ($safe == $user['Id'])
+        {
+            $arr = array(
+                $_POST['firstname'],$_POST['lastname'],$_POST['phone'],$_POST['address'],
+                $_POST['address2'],$_POST['postalcode'],$_POST['city'],$user['Id']
+            );
+            $arr = $this->ScrubText($arr);
+            $result = $this->db->UpdateUserInput($arr);
+            if ($result)
+            {
+                $this->ShowProfile("");
+            }
+            else
+            {
+                $this->ShowError("Kunde inte spara personuppgifter");
+            }
+
+        }
+        else
+        {
+
+        }
     }
 
     public function Logout()
@@ -198,6 +278,17 @@ class UserController extends BaseController
         session_unset();
         session_destroy();
         header("Location:".prefix);
+    }
+
+    private function ScrubText($arr)
+    {
+        $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
+        foreach($arr as $key => $value) 
+        {
+            $safe = str_replace($banlist,"",$value);
+            $value = $safe;
+        }
+        return $arr;
     }
 
     private function ScrubInputs($notsafeText)

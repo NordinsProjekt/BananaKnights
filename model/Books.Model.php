@@ -286,6 +286,7 @@ class BooksModel extends PDOHandler
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        WHERE b.IsDeleted = 0 AND b.Flagged = 0
         GROUP BY Id
         ORDER BY Rating DESC LIMIT 5;");
         $stmt->execute();
@@ -303,8 +304,58 @@ class BooksModel extends PDOHandler
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        WHERE b.IsDeleted = 0 AND b.Flagged = 0
         GROUP BY Id
         ORDER BY Rating ASC LIMIT 5;");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+    public function IsRecommendedSet($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT COUNT(*) AS Antal FROM recommendbook 
+        WHERE UserId = :userId AND BookId = :bookId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function SetRecommendBook($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("INSERT INTO recommendbook 
+        (UserId,BookId) VALUES (:userId,:bookId);");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function DeleteRecommendBook($bookId,$userId)
+    {
+        $stmt = $this->Connect()->prepare("DELETE FROM recommendbook WHERE 
+        UserId = :userId AND BookId = :bookId;");
+        $stmt->bindParam(":userId",$userId,PDO::PARAM_INT);
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch();
+    }
+
+    public function GetAllRecommendedBooksByUser($userId)
+    {
+        $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
+        IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
+         b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath ,AVG(Rating) AS Rating FROM books AS b 
+        INNER JOIN reviews AS r ON b.Id = r.BookId 
+        INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
+        INNER JOIN genres AS g ON g.Id = gb.GenreId
+        INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
+        INNER JOIN authors AS a ON a.Id = ba.AuthorId 
+        INNER JOIN recommendbook AS rb ON b.Id = rb.BookId 
+        WHERE rb.UserId = :userId AND b.IsDeleted = 0 AND b.Flagged = 0
+        GROUP BY Id
+        ORDER BY b.Title;");
+        $stmt->bindParam("userId",$userId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll();
     }

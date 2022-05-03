@@ -90,6 +90,18 @@ function ShowBook($book,$imageLink,$role)
     }
     $text .= "<h3>Beskrivning</h3>";
     $text .= "<p>".$book['Description']."</p>";
+    if ($role != "")
+    {
+        $text .= "<form method='post' action='".prefix."books/recommend'>";
+        if ($book['Recommend'])
+        {
+            $text .= "<button type='submit' name='id' value='".$book['Id']."' style='background-color:green'>Lägg till läslistan</button></form>";
+        }
+        else
+        {
+            $text .= "<button type='submit' name='id' value='".$book['Id']."'>Lägg till läslistan</button></form>";
+        }
+    }
     if (str_contains($role,"User") || str_contains($role,"Admin"))
     {
         $text .= "<form method='post' action='".prefix."review/newreview' >

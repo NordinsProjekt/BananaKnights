@@ -17,38 +17,40 @@ function QuizForm($formData)
     $text .= "<h1>Skapa Quiz</h1>";
     $text .= "<form method='post'>";
     $text .= "<table><tr> <th></th> <th></th> </tr>";
-    $text .= "<tr> <td><label for='title'>Titel</label></td> <td><input type='text' id='title' name='title' required /></td> </tr>";
-    $text .= "<tr> <td><label for='antalQ'>Antal frågor</label></td> <td><input type='number' id='antalQ' name='antalQ' required /></td> </tr>";
-    $text .= "<tr> <td><label for='accessability'>Typ av Quiz</label></td> <td><select name='access' id='accessability'><option value='private'>Privat</option>
-    <option value='public'>Publik</option></select></td> </tr>";
-    $text .= "<tr> <td><label for='enddate'>Avslut</label></td> <td><input type='date' id='enddate' name='enddate' placeholder='Möjlighet att sätta slutdatum' /></td> </tr>";
-    $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' value='Spara' /></td> <td></td></tr>";
+    $text .= "<tr> <td><label for='title'>Titel</label></td> <td><input type='text' class='form-control' id='title' name='title' required /></td> </tr>";
+    $text .= "<tr> <td><label for='antalQ'>Antal frågor</label></td> <td><input type='number' class='form-control' id='antalQ' name='antalQ' required /></td> </tr>";
+    $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' value='Spara' /></td> <td></td></tr>";
     $text .= "</table></form>";
     return $text;
 }
 
 function QuestionForm($formData)
 {
+    if ($formData['NumberOfQ'] <=0)
+    {
+        return "<h1>Antal frågor < 0</h1>";
+    }
     $formId = uniqid($formData['User']['Id'],true);
     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
     $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/savequestions",
     "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ'],"QuizId"=>$formData['QuizId']);
     //Här genereras en fråga text och 4 alternativ och ett val om vilket svar som är korrekt.
     $text = "";
-    $text .= "<form method='post'><table><tr> <th></th> <th></th> </tr>";
+    $text .= "<form method='post'><div id='quizformparent'>";
     for ($i=0; $i < $formData['NumberOfQ']; $i++) 
     { 
-        $text .= "<tr><td>Fråga ".($i+1)."</td><td></td></tr>";
+        $text .= "<div class='quizformchild'><table><tr> <th></th> <th></th> </tr>";
+        $text .= "<tr><td><h2>Fråga ".($i+1)."</h2></td><td></td></tr>";
         $text .= "<tr> <td><label for='question_".$i."'>Fråga</label></td> <td><textarea id='question_".$i."' class='form-control' name='question[]' required ></textarea></td> </tr>";
         $text .= "<tr> <td><label for='answer1_".$i."'>Svar 1</label></td> <td><input type='text' class='form-control' id='answer1_".$i."' name='answer1[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer2_".$i."'>Svar 2</label></td> <td><input type='text' class='form-control' id='answer2_".$i."' name='answer2[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer3_".$i."'>Svar 3</label></td> <td><input type='text' class='form-control' id='answer3_".$i."' name='answer3[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer4_".$i."'>Svar 4</label></td> <td><input type='text' class='form-control' id='answer4_".$i."' name='answer4[]' required /></td> </tr>";
-        $text .= "<tr> <td><label for='realanswer_".$i."'>Rätta svaret</label></td> <td><select class='form-control' id='realanswer_".$i."' name='realanswer[]'>
+        $text .= "<tr> <td><label for='realanswer_".$i."'>Rätta svaret</label></td> <td><select class='form-select' id='realanswer_".$i."' name='realanswer[]'>
         <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></td> </tr>";
-        $text .= "<tr> <td> </td> <td> </td> </tr>";
+        $text .= "<tr> <td> </td> <td> </td> </tr></table></div>";
     }
-    $text .= "<tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
+    $text .= "</div><table><tr><td><input type='submit' class='btn btn-primary' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
     return $text;
 }
 
@@ -108,7 +110,7 @@ function ShowQuiz($formData,$user)
         $text .= "</fieldset></div>";
     }
     $text .= "</div><input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
-    $text .= "<input type='submit' value='Skicka' />";
+    $text .= "<input type='submit' class='btn btn-primary' value='Skicka' />";
     $text .= "</form>";
     return $text;
 }
