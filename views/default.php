@@ -37,8 +37,8 @@ function ReviewNavigation()
 function IndexNav($role,$username)
 {
     $text = "
-    <body style='max-width: 100%;overflow-x: hidden;'>
-        <nav class='navbar navbar-expand-lg navbar-dark bg-dark' style='box-shadow: 0px 15px 10px -15px black;'>
+    <body style='max-width: 100%; overflow-x: hidden;'>
+        <nav class='navbar navbar-expand-lg navbar-dark bg-dark' style='box-shadow: 0px 5px 10px -6px black;'>
         <div class='container-fluid'>
             <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarTogglerDemo01' aria-controls='navbarTogglerDemo01' aria-expanded='false' aria-label='Toggle navigation'>
             <span class='navbar-toggler-icon'></span>
@@ -129,14 +129,13 @@ function IndexTop()
     {
         $imageLink = prefix."img/books/noimage.jpg";
     }
-    $text = "<br><div class='card'>
-        <div class='row'><br>
-        <div class='col'><br>
-
-            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='400px' />
-            <form method='post' action='".prefix."showbook?id=".$bookinfo[$rnd]['Id']."'><button type='submit' class='btn btn-primary'>Läs mer</button></form>
+    $text = "<br><div class='card' style='width:50%; float: left; padding: 0 0 0 50px'>
+        <div class='row align-items-center'><br>
+        <div class='col-4'><br>
+            <img src='" . $imageLink . "' class='img-fluid rounded-start' alt='book photo' height='800rem' />
+            <form method='post' action='".prefix."showbook?id=".$bookinfo[$rnd]['Id']."'><button type='submit' class='btn btn-outline-primary' style='margin-top: 20px;'>Läs mer</button></form>
         </div>
-        <div class='col-md-10'>
+        <div class='col-6' style='padding: 0 0 60px 0;'>
             <div class='card-body'><br><br>
             <h5 class='card-title'>" . $bookinfo[$rnd]["Title"] . "</h5>
             <p class='card-text'>" . $bookinfo[$rnd]["Description"] ."</p>
@@ -146,8 +145,25 @@ function IndexTop()
             </div>
         </div>
         </div>
-        </div><br>";   
-    echo nl2br($text);
+        </div><br>"; 
+
+    echo $text;
+}
+
+
+function HomeNavMeny()
+{
+    $text = "";
+    $text.= "<div class='container bg-dark' style='padding: 50px 0 0 0;'>";
+    $text.= "<div class='list-group'>
+            <a class='btn btn-outline-primary' href='".prefix."books/showall'>Visa alla böcker</a>
+            <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."books/top5'>Topplista</a>
+            <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."'>Sämst betyg</a>
+            <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."'>Visa alla quiz</a>
+    </div>";
+    $text.= "</div>";
+
+    echo $text;
 }
 
 
@@ -161,8 +177,9 @@ function IndexCards()
     $sorted = $model->GetAllBooksSorted();
     
     $text = "";
-    $text.= "<div class='container'>";
-    $text.="<div class='row' style='text-align: left; --bs-gutter-x:4.5rem;'><br>";
+    $text.= "<div class='container' style='max-width: 100%; padding: 50px 0 0 30px; float:left;'>";
+    $text.="<div class='row' style='text-align: left;'><br>";
+    $text .= "<hr>";
 
     for($i = 0; $i < count($sorted); $i++)
     {
@@ -184,19 +201,11 @@ function IndexCards()
         }
     $text .= 
     "<div class='col text-white' style='border-radius: 8px;'><br>
-    <img src='" . $imageLink . "' alt='book bild' height='250rem'><br>
+    <img src='" . $imageLink . "' alt='book bild' height='200rem' width='140rem'><br>
     <a style='padding:0;' href='".prefix."showbook?id=".$sorted[$i]['Id']."'>". $sorted[$i]["Title"] . "</a><br>
     <small>". $sorted[$i]["Firstname"] ." ". $sorted[$i]["Lastname"] . "</small><br>
     <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."' style='padding-top:10px;'><button type='submit' class='btn btn-outline-primary'>Läs mer</button></form><br>
     </div><br>";
-
-    if($i == 3)
-    {
-        $text.="</div>";
-        $text.="<div class='row' style='text-align: left; padding-top: 2rem; --bs-gutter-x:4.5rem;'><br>";
-    }
-
-    
     }
     $text .= "</div></div><br>";
 

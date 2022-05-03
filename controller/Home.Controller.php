@@ -22,6 +22,7 @@ class HomeController extends BaseController
         echo StartPage("Cool Books");
         IndexNav($user['Roles'],$user['Username']);
         IndexTop();
+        HomeNavMeny();
         IndexCards(); 
         echo EndPage();
         exit();
