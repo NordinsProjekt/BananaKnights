@@ -36,10 +36,11 @@ function QuestionForm($formData)
     "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ'],"QuizId"=>$formData['QuizId']);
     //Här genereras en fråga text och 4 alternativ och ett val om vilket svar som är korrekt.
     $text = "";
-    $text .= "<form method='post'><table><tr> <th></th> <th></th> </tr>";
+    $text .= "<form method='post'><div id='quizformparent'>";
     for ($i=0; $i < $formData['NumberOfQ']; $i++) 
     { 
-        $text .= "<tr><td>Fråga ".($i+1)."</td><td></td></tr>";
+        $text .= "<div class='quizformchild'><table><tr> <th></th> <th></th> </tr>";
+        $text .= "<tr><td><h2>Fråga ".($i+1)."</h2></td><td></td></tr>";
         $text .= "<tr> <td><label for='question_".$i."'>Fråga</label></td> <td><textarea id='question_".$i."' class='form-control' name='question[]' required ></textarea></td> </tr>";
         $text .= "<tr> <td><label for='answer1_".$i."'>Svar 1</label></td> <td><input type='text' class='form-control' id='answer1_".$i."' name='answer1[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='answer2_".$i."'>Svar 2</label></td> <td><input type='text' class='form-control' id='answer2_".$i."' name='answer2[]' required /></td> </tr>";
@@ -47,9 +48,9 @@ function QuestionForm($formData)
         $text .= "<tr> <td><label for='answer4_".$i."'>Svar 4</label></td> <td><input type='text' class='form-control' id='answer4_".$i."' name='answer4[]' required /></td> </tr>";
         $text .= "<tr> <td><label for='realanswer_".$i."'>Rätta svaret</label></td> <td><select class='form-control' id='realanswer_".$i."' name='realanswer[]'>
         <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></td> </tr>";
-        $text .= "<tr> <td> </td> <td> </td> </tr>";
+        $text .= "<tr> <td> </td> <td> </td> </tr></table></div>";
     }
-    $text .= "<tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
+    $text .= "</div><table><tr><td><input type='submit' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
     return $text;
 }
 

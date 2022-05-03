@@ -90,6 +90,17 @@ html, body {
     background-color: slategray;
     margin: 10px;
 }
+#quizformparent {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.quizformchild {
+    height: auto;
+    width: 400px;
+    padding: 20px;
+    margin: 10px;
+}
 
 
 /* PROFILE CSS */
