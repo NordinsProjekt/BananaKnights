@@ -189,7 +189,7 @@ class ReviewsController extends BaseController
                 echo StartPage("Alla reviews");
                 IndexNav($user['Roles'],$user['Username']);
                 echo SearchReview();
-                echo "<h2>Fanns inga recensioner som matchar sökningen</h2>";
+                echo "<h2 class='display-4' style='text-align: center;'>Fanns inga recensioner som matchar sökningen</h2>";
                 echo EndPage();
             }
 

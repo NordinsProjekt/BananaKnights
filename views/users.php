@@ -17,7 +17,7 @@ function SignUpForm($message)
     <td><input type='password' class='form-control' id='txtConfirmPassword' name='ConfirmPassword' pattern='.{8,}' placeholder='Minst 8 tecken' required /></td></tr>";
     $text .= "<tr> <td><label for='txtEmail' />Email </label></td>
     <td><input type='email' class='form-control' id='txtEmail'name='Email' pattern='.{5,}' placeholder='ex user@gmail.com' required /></td></tr>";
-    $text .= "<tr> <td></td><td><input type='submit' id='btnRegisterUser 'name='RegisterUser' class='btn btn-primary' value='Registrera konto' /></td></tr>";
+    $text .= "<tr> <td></td><td><input type='submit' id='btnRegisterUser 'name='RegisterUser' class='btn btn-outline-primary' value='Registrera konto' /></td></tr>";
     return $text;
 }
 
@@ -30,7 +30,7 @@ function LoginForm()
     <td><input type='text' class='form-control' id='txtUsername' name='Username' required /></td></tr>";
     $text .= "<tr> <td><label for='txtPassword' />Lösenord </label></td>
     <td><input type='password' class='form-control' id='txtPassword'name='Password' required /></td></tr>";
-    $text .= "<tr> <td></td><td><input type='submit' id='btnLoginUser' class='btn btn-primary' name='LoginUser' value='Logga in' /></td></tr>";
+    $text .= "<tr> <td></td><td><input type='submit' id='btnLoginUser' class='btn btn-outline-primary' name='LoginUser' value='Logga in' /></td></tr>";
     return $text;
 }
 
@@ -86,7 +86,7 @@ function UserInformationForm($user,$userInfo)
     $text .= "<tr> <td><label for='address2'>Adress 2</label></td> <td><input type='text' class='form-control' id='address2' name='address2' value='".$userInfo['Address2']."'  /></td> </tr>";
     $text .= "<tr> <td><label for='postalcode'>Postnummer</label></td> <td><input type='text' class='form-control' id='postalcode' name='postalcode' value='".$userInfo['PostalCode']."'  /></td> </tr>";
     $text .= "<tr> <td><label for='city'>Stad</label></td> <td><input type='text' class='form-control' id='city' name='city' value='".$userInfo['City']."' /></td> </tr>";
-    $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' value='Spara' /></td> <td></td></tr>";
+    $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-outline-primary' value='Spara' /></td> <td></td></tr>";
     $text .= "</table></form>";
     return $text;
 }

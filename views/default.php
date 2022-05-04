@@ -20,6 +20,16 @@ function StartPage($titel)
 function EndPage()
 {
     $text= "";
+    /*
+    $text .= "<div id='google_element'></div>";
+    $text .= "<script src='http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>";
+    $text .= " </script>";
+    $text .= "<script>
+    function loadGoogleTranslate(){
+            new google.translate.TranslateElement('google_element');
+    }
+    </script>";
+    */
     $text .= "</body></html>";
     return $text;
 }
@@ -303,15 +313,21 @@ function IndexCardsProfile($sorted)
     return $text;
 }
 
+
 function SearchReview()
 {
-    $text = "<br><br><form class='me-auto' method='post' action='".prefix."review/search'>";
-    $text .= "<input type='search' placeholder='Review title....' name='search'/>";
-    $text .= "<button type='submit'>Search Review</button>";
-    $text .= "</form><br>";
-    $text .= "<form class='me-auto' method='post' action='".prefix."review/showall'>";
-    $text .= "<button type='submit'>Visa alla</button>";
+    $text = "";
+    $text .= "<div style='width: 100%; display: flex; justify-content: center; margin-top: 50px;'>";
+    $text .= "<form method='post' action='".prefix."review/search'>";
+    $text .= "<input style='height: 38px;' type='search' placeholder='Review title....' name='search'/>";
+    $text .= "<button style='vertical-align: baseline;' class='btn btn-outline-primary' type='submit'>Search Review</button>";
+    $text .= "</div>";
     $text .= "</form>";
+    $text .= "<div style='width: 100%; display: flex; justify-content: center; margin-top: 15px;'>";
+    $text .= "<form method='post' action='".prefix."review/showall'>";
+    $text .= "<button class='btn btn-outline-primary' type='submit'>Visa alla</button>";
+    $text .= "</form>";
+    $text .= "</div>";
     echo $text;
 }
 ?>

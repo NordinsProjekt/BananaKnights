@@ -36,7 +36,7 @@ function GenerateTableWithFlaggedQuiz($quiz)
 
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/unflag",
         "QuizId"=>$row['Id'],"BookId"=>$row['BookId']);
-            $text.= "<td><form method='post'><button type='submit'>Återställ</input>
+            $text.= "<td><form method='post'><button class='btn btn-outline-warning' type='submit'>Återställ</input>
             <input type='hidden' name='formname' value='".$formId."' />
             </form></td>";
 
@@ -59,7 +59,7 @@ function GenerateTableFlaggedComments($comments,$reply)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Text']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."comment/unflag'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."comment/unflag'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
         $text.= "</tr>";
     }
@@ -69,7 +69,7 @@ function GenerateTableFlaggedComments($comments,$reply)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Text']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."reply/unflag'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."reply/unflag'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
         $text.= "</tr>";
     }
@@ -113,7 +113,7 @@ function GenerateTableWithFlaggedReviews($reviews)
         <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
         <td>".$row['Rating']."</td> <td>".$row['Created']."</td>
             <td><form method='post'>
-            <button type='submit'>Återställ</button>
+            <button class='btn btn-outline-warning' type='submit'>Återställ</button>
             <input type='hidden' name='formname' value='".$formId."' /></form></td>
             </tr>";
     }
@@ -137,7 +137,7 @@ function GenerateTableWithFlaggedAuthors($authors)
         $formId = uniqid($row['Id'],true);
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."author/unflag",
         "authorId"=>$row['Id']);
-            $text.= "<td><form method='post'><button type='submit'>Återställ</input>
+            $text.= "<td><form method='post'><button class='btn btn-outline-warning' type='submit'>Återställ</input>
             <input type='hidden' name='formname' value='".$formId."' />
             </form></td>";
 
