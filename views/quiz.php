@@ -94,6 +94,27 @@ function ShowAllQuiz($quiz,$role)
     $text .= "</table>";
     return $text;
 }
+
+function ShowAllQuizAllBooks($quiz)
+{
+    $text = "";
+    if (empty($quiz))
+    {
+        return $text;
+    }
+        $text .= "<table><tr> <th>Bok titel</th> <th>Quiz titel</th> <th>Användarnamn</th> <th>Visa</th> </tr>";
+    foreach ($quiz as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['BookTitle']."</td>";
+        $text.= "<td>".$row['Title']."</td>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td><form method='post' action='".prefix."quiz/show'>
+            <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    return $text;
+}
 function ShowQuiz($formData,$user)
 {
     $text = "";

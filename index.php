@@ -714,6 +714,9 @@ function QuizRoute($action)
                 $controller->UnFlagQuiz();
             }
             break;
+        case "showall":
+            $controller->ShowAll();
+            break;
         default:
             ShowHomePage();
             break;

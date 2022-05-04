@@ -16,6 +16,17 @@ class QuizController extends BaseController
         
     }
 
+    public function ShowAll()
+    {
+        $user = $this->GetUserInformation();
+        $result = $this->db->GetAllQuiz();
+        require_once "views/default.php";
+        require_once "views/quiz.php";
+        echo StartPage("Quiztime");
+        IndexNav($user['Roles'],$user['Username']);
+        echo ShowAllQuizAllBooks($result);
+        EndPage();
+    }
     public function ShowQuiz()
     {
         $safeId = $this->ScrubIndexNumber($_POST['id']);
