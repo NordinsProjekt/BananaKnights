@@ -25,15 +25,18 @@ class moderatorController extends BaseController
             require_once "model/Reviews.Model.php";
             require_once "model/Books.Model.php";
             require_once "model/Comments.Model.php";
+            require_once "model/Quiz.Model.php";
             $authorDB = new AuthorsModel();
             $reviewDB = new ReviewsModel();
             $bookDB = new BooksModel();
             $commentDB = new CommentsModel();
+            $quizDB = new QuizModel();
 
             $formData['BannedComments'] = $commentDB->GetAllFlaggedComments();
             $formData['BannedReply'] = $commentDB->GetAllFlaggedReplies();
             $formData['BannedAuthors'] = $authorDB->GetAllFlaggedAuthors();
             $formData['BannedReviews'] = $reviewDB->GetAllFlaggedReviews();
+            $formData['BannedQuiz'] = $quizDB->GetAllFlaggedQuiz();
 
             echo StartPage("Moderatorpanelen");
             IndexNav($user['Roles'],$user['Username']);

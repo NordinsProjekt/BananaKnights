@@ -198,7 +198,7 @@ class UserController extends BaseController
             {
                 case "userinfo":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Personuppgifter</h2>";
-                    $window['Body'] = UserInformationForm($user);
+                    $window['Body'] = UserInformationForm($user,$userInfo);
                     break;
                 case "readlist":
                     $window['WindowTitle'] = "<h2 class='boxTitle'>Dina lästa böcker</h2>";

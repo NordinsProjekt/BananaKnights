@@ -14,7 +14,7 @@ class ReviewsController extends BaseController
     function NewReview()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"User"))
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
         {
             require_once "views/reviews.php";
             require_once "views/default.php";
@@ -43,7 +43,8 @@ class ReviewsController extends BaseController
 
     function AddReview()
     {
-        if ($this->VerifyUserRole("User"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
         {
             $arr = array (
                 $_POST['id'], $_SESSION['UserId'], $_POST['Title'],
@@ -144,6 +145,19 @@ class ReviewsController extends BaseController
                 echo ShowAllReviews($result,$user['Roles']);
                 echo EndPage();
             }
+            else
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav($user['Roles'],$user['Username']);
+                if(str_contains($user['Roles'],"Moderator"))
+                {
+                    echo SearchReview();
+                }
+                echo ShowAllReviews($result,$user['Roles']);
+                echo EndPage();
+            }
 
         }
         else
@@ -197,7 +211,7 @@ class ReviewsController extends BaseController
                 unset($_SESSION['ReviewId']); //Raderar backupvärdet.
                 $user = $this->GetUserInformation();
                 $safe = $this->CheckUserInputs($_POST['id']);
-                if (str_contains($user['Roles'],"User") && $safe > 0)
+                if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Moderator") || str_contains($user['Roles'],"Admin") && $safe > 0)
                 {
                     //Kollar om det användaren har tryckt på knappen eller inte
                     $result = $this->db->IsUsefullSet($safe,$user['Id']);
@@ -280,6 +294,7 @@ class ReviewsController extends BaseController
             $this->ShowError("Ingen rättighet för detta");
         }
     }
+    
     public function EditReview($id)
     {
         $user = $this->GetUserInformation();

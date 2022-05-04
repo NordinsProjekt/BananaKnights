@@ -16,6 +16,17 @@ class QuizController extends BaseController
         
     }
 
+    public function ShowAll()
+    {
+        $user = $this->GetUserInformation();
+        $result = $this->db->GetAllQuiz();
+        require_once "views/default.php";
+        require_once "views/quiz.php";
+        echo StartPage("Alla Quiz");
+        IndexNav($user['Roles'],$user['Username']);
+        echo ShowAllQuizAllBooks($result);
+        echo EndPage();
+    }
     public function ShowQuiz()
     {
         $safeId = $this->ScrubIndexNumber($_POST['id']);
@@ -30,7 +41,7 @@ class QuizController extends BaseController
             echo StartPage("Quiztime");
             IndexNav($user['Roles'],$user['Username']);
             echo ShowQuiz($formData,$user);
-            EndPage();
+            echo EndPage();
         }
         else
         {
@@ -182,6 +193,62 @@ class QuizController extends BaseController
     public function EditQuiz($id)
     {
 
+    }
+
+    //Återställer från flaggat tillstånd
+    public function UnFlagQuiz()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['QuizId']);
+            $bookId = $_SESSION['form'][$formName]['BookId'];
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagQuiz(0,$safe);
+            if ($result)
+            {
+                require_once "controller/Books.Controller.php";
+                $bookController = new BooksController();
+                $bookController->ShowBook($bookId);
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att återställa författaren");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
+
+    //Flaggar för kontroll
+    public function FlagQuiz()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['QuizId']);
+            $bookId = $_SESSION['form'][$formName]['BookId'];
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagQuiz(1,$safe);
+            if ($result)
+            {
+                require_once "controller/Books.Controller.php";
+                $bookController = new BooksController();
+                $bookController->ShowBook($bookId);
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
     }
 
     private function ValidateArray($arr)

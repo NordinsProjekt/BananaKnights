@@ -187,7 +187,7 @@ function EditBook($formData,$role)
     }
     return $text;
 }
-function ShowAllBooks($arr,$role)
+function ShowAllBooks($arr,$user)
 {  
     $text = "";
     $text .= "<div style='padding-top: 40px;'>";
@@ -210,7 +210,7 @@ function ShowAllBooks($arr,$role)
         $text.= "</div>";
     }
 
-    if ($role == "Admin")
+    if (str_contains($user['Roles'],"Admin"))
     {
         $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th onclick='sortTable(0)'>Titel</th> <th onclick='sortTable(1)'>År</th> <th>Beskrivning</th> <th onclick='sortTable(3)'>Genre</th> <th onclick='sortTable(4)'>Författare</th> <th>Visa</th>
         <th>Edit</th><th>Radera</th></tr>";
@@ -230,7 +230,7 @@ function ShowAllBooks($arr,$role)
         $text.= "<td>".$row['AuthorName']."</td>";
         $text.= "<td><form method='post' action='".prefix."books/show'><button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
-        if ($role == "Admin")
+        if (str_contains($user['Roles'],"Admin"))
         {
             $text.= "<td><form method='post' action='".prefix."books/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
@@ -238,6 +238,11 @@ function ShowAllBooks($arr,$role)
             </form></td>";
         }
         $text.= "</tr>";
+    }
+
+    if (str_contains($user['Roles'],"Admin") || str_contains($user['Roles'],"User"))
+    {
+        $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
     }
     $text.= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;

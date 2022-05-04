@@ -65,10 +65,10 @@ function ShowAllQuiz($quiz,$role)
     {
         $text .= "<th>Flagga</th>";
     }
-    if (str_contains($role,"Admin"))
-    {
-        $text .= "<th>Radera</th>";
-    }
+    // if (str_contains($role,"Admin"))
+    // {
+    //     $text .= "<th>Radera</th>";
+    // }
     $text .= "</tr>";
     foreach ($quiz as $key => $row) {
         $text .= "<tr>
@@ -78,20 +78,44 @@ function ShowAllQuiz($quiz,$role)
         {
             $formId = uniqid($row['Id'],true);
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/flagged",
-            "reviewId"=>$row['Id']);
+            "QuizId"=>$row['Id'],"BookId"=>$row['BookId']);
             $text .= "<td><form method='post'>
             <button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Flagga</button>
             <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
         }
-        if (str_contains($role,"Admin"))
-        {
-            $text .= "
-            <td><form method='post' action='".prefix."quiz/delete'>
-            <button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
-            </tr>";
-        }
+
+        // if (str_contains($role,"Admin"))
+        // {
+        //     $text .= "
+        //     <td><form method='post' action='".prefix."quiz/delete'>
+        //     <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+        //     </tr>";
+        // }
     }
     $text .= "</table>";
+    return $text;
+}
+
+function ShowAllQuizAllBooks($quiz)
+{
+    $text = "";
+    if (empty($quiz))
+    {
+        return $text;
+    }
+    $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th onclick='sortTable(0)'>Bok titel</th> <th onclick='sortTable(1)'>Quiz titel</th> <th>Användarnamn</th> <th>Visa</th>
+    </tr>";
+    foreach ($quiz as $key => $row) {
+        $text.= "<tr>";
+        $text.= "<td>".$row['BookTitle']."</td>";
+        $text.= "<td>".$row['Title']."</td>";
+        $text.= "<td>".$row['UserName']."</td>";
+        $text.= "<td><form method='post' action='".prefix."quiz/show'>
+            <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+        $text.= "</tr>";
+    }
+    $text .= "</table>";
+    $text .= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;
 }
 function ShowQuiz($formData,$user)

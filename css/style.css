@@ -25,6 +25,9 @@ input[type="checkbox"]:checked +.RowHighlight{
 a {
     padding: 10px;
 }
+.bookImage {
+    height:400px;
+}
 
 body {
     background-color: #212529 !important; 
@@ -40,7 +43,10 @@ html, body {
     background-color: #212529 !important; 
     color: whitesmoke !important;
 }
-
+/* AUTHOR CSS */
+.authorImage {
+    height:400px;
+}
 
 
 /* COMMENTS CSS */
