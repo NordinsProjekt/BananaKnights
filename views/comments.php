@@ -3,18 +3,22 @@
 function CreateNewComment($arr)
     {
         $text  = "";
+        $text .= "<div style='width: 100%; display: flex; justify-content: center; padding: 10px 0 50px 0;'>";
+        $text .= "<div style='width: 60rem;'>";
         $text .= "<form method='post' action='".prefix."review/addcomment'>";
         $text .= "<div class='container bootdey'>";
         $text .= "<div class='col-md-12 bootstrap snippets'>";
         $text .= "<div class='panel'>";
         $text .= "<div class='panel-body'>";
-        $text .= "<textarea name='Comment' id='txtComment' class='form-control' rows='2' placeholder='What are you thinking?' ></textarea>";
+        $text .= "<textarea name='Comment' id='txtComment' class='form-control' rows='2' placeholder='Lägg till en kommentar...' ></textarea>";
         $text .= "<div class='mar-top clearfix'>";
-        $text .= "<button class='btn btn-sm btn-primary' type='submit' name='id' value='".$arr['Id']."'>Submit</input>";
+        $text .= "<button style='margin-top: 10px;' class='btn btn-outline-primary' type='submit' name='id' value='".$arr['Id']."'>Submit</input>";
         $text .= "</div>";
         $text .= "</div>";
         $text .= "</div>";
         $text .= "</form><br><br>";
+        $text .= "</div>";
+        $text .= "</div>";
         $text .= "<script>
         if ( window.history.replaceState ) {
             window.history.replaceState( null, null, window.location.href );

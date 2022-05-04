@@ -58,7 +58,7 @@ function ShowAllQuiz($quiz,$role)
 {
     $text = "";
     //TODO lägga in roller kontroll
-    $text = "<h1>Visa alla Quiz</h1>";
+    $text = "<h1 class='display-4' style='text-align:center; padding: 10px 0 20px 0'>Visa alla Quiz</h1>";
     $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr><th onclick='sortTable(0)'>Quiztitel</th> <th onclick='sortTable(1)'>Användare</th> <th onclick='sortTable(2)'>Skapad</th>";
     $text .= "<th>Visa</th>";
     if (str_contains($role,"Moderator"))
@@ -73,21 +73,21 @@ function ShowAllQuiz($quiz,$role)
     foreach ($quiz as $key => $row) {
         $text .= "<tr>
         <td>".$row['Title']."</td> <td>".$row['UserName']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."quiz/show'>
-        <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+        <button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
         if (str_contains($role,"Moderator"))
         {
             $formId = uniqid($row['Id'],true);
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/flagged",
             "reviewId"=>$row['Id']);
             $text .= "<td><form method='post'>
-            <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
+            <button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Flagga</button>
             <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
         }
         if (str_contains($role,"Admin"))
         {
             $text .= "
             <td><form method='post' action='".prefix."quiz/delete'>
-            <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+            <button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
             </tr>";
         }
     }
@@ -97,7 +97,7 @@ function ShowAllQuiz($quiz,$role)
 function ShowQuiz($formData,$user)
 {
     $text = "";
-    $text .= "<h1>Quiz</h1>";
+    $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0; text-align: center;'>Quiz</h1>";
     $text .= "<form method='post' action='".prefix."quiz/checkanswers'><div id='quizparent'>";
     for ($i=0; $i < count($formData['Quiz']['Questions']); $i++) 
     { 
@@ -109,8 +109,11 @@ function ShowQuiz($formData,$user)
             $text .= "<input type='radio' id='".$i."answer4' name='answer".$i."' value='4' /><label for='".$i."answer4'>".$formData['Quiz']['Questions'][$i]['Alt4']."</label><br />";
         $text .= "</fieldset></div>";
     }
-    $text .= "</div><input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
-    $text .= "<input type='submit' class='btn btn-primary' value='Skicka' />";
+    $text .= "</div>";
+    $text .= "<div style='width: 100%; display: flex; justify-content: center; padding: 10px 0 100px 0'>";
+    $text .= "<input type='hidden' name='QuizId' value='".$formData['Quiz']['Id']."' />";
+    $text .= "<input style='width: 53%;' type='submit' class='btn btn-outline-primary' value='Skicka' />";
+    $text .= "</div>";
     $text .= "</form>";
     return $text;
 }

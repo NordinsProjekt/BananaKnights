@@ -158,7 +158,7 @@ function HomeNavMeny()
     $text.= "<div class='list-group'>
             <a class='btn btn-outline-primary' href='".prefix."books/showall'>Visa alla böcker</a>
             <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."books/top5'>Topplista</a>
-            <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."'>Sämst betyg</a>
+            <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."books/low5'>Sämst betyg</a>
             <a style='margin-top:10px;' class='btn btn-outline-primary' href='".prefix."'>Visa alla quiz</a>
     </div>";
     $text.= "</div>";
