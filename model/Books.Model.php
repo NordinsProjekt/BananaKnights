@@ -345,15 +345,13 @@ class BooksModel extends PDOHandler
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,
         IF(b.PublicationYear IS NULL or b.PublicationYear = '','n/a', b.PublicationYear) AS PublicationYear,
          b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 
-        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath ,AVG(Rating) AS Rating FROM books AS b 
-        INNER JOIN reviews AS r ON b.Id = r.BookId 
+        IF(a.IsDeleted=1,'n/a',CONCAT(a.Firstname, ' ', a.Lastname)) AS AuthorName, b.Created, b.ImagePath FROM books AS b 
         INNER JOIN genrebooks AS gb ON b.Id = gb.BookId 
         INNER JOIN genres AS g ON g.Id = gb.GenreId
         INNER JOIN bookauthors AS ba ON b.Id = ba.BookId 
         INNER JOIN authors AS a ON a.Id = ba.AuthorId 
         INNER JOIN recommendbook AS rb ON b.Id = rb.BookId 
         WHERE rb.UserId = :userId AND b.IsDeleted = 0 AND b.Flagged = 0
-        GROUP BY Id
         ORDER BY b.Title;");
         $stmt->bindParam("userId",$userId,PDO::PARAM_INT);
         $stmt->execute();

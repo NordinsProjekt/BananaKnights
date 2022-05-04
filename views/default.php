@@ -288,7 +288,6 @@ function IndexCardsProfile($sorted)
     <a style='padding:0;' href='".prefix."showbook?id=".$sorted[$i]['Id']."'>". $sorted[$i]["Title"] . "</a><br>
     <small>". $sorted[$i]["AuthorName"] . "</small><br />
     <small>". $sorted[$i]["GenreName"] . "</small><br />
-    <small>Rating: ".$sorted[$i]['Rating']." av 5</small><br />
     <form method='post' action='".prefix."showbook?id=".$sorted[$i]['Id']."' style='padding-top:10px;'><button type='submit' class='btn btn-outline-primary'>Läs mer</button></form><br>
     </div><br>";
 
