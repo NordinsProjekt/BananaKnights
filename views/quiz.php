@@ -154,6 +154,7 @@ function Winner($score)
     <div id='sketch-holder' style='padding-top: 40px;'>
     <h1 class='display-4' style='text-align: center;'>Grattis</h1>
     <h2 class='display-8' style='text-align: center;'>".$score."</h2>
+    <center><img src='".prefix."img/winner.png' height='400px' /><center>
     </div>";
     return $text;
 }
