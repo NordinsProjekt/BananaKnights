@@ -22,10 +22,10 @@ class QuizController extends BaseController
         $result = $this->db->GetAllQuiz();
         require_once "views/default.php";
         require_once "views/quiz.php";
-        echo StartPage("Quiztime");
+        echo StartPage("Alla Quiz");
         IndexNav($user['Roles'],$user['Username']);
         echo ShowAllQuizAllBooks($result);
-        EndPage();
+        echo EndPage();
     }
     public function ShowQuiz()
     {
@@ -41,7 +41,7 @@ class QuizController extends BaseController
             echo StartPage("Quiztime");
             IndexNav($user['Roles'],$user['Username']);
             echo ShowQuiz($formData,$user);
-            EndPage();
+            echo EndPage();
         }
         else
         {

@@ -102,7 +102,8 @@ function ShowAllQuizAllBooks($quiz)
     {
         return $text;
     }
-        $text .= "<table><tr> <th>Bok titel</th> <th>Quiz titel</th> <th>Användarnamn</th> <th>Visa</th> </tr>";
+    $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th onclick='sortTable(0)'>Bok titel</th> <th onclick='sortTable(1)'>Quiz titel</th> <th>Användarnamn</th> <th>Visa</th>
+    </tr>";
     foreach ($quiz as $key => $row) {
         $text.= "<tr>";
         $text.= "<td>".$row['BookTitle']."</td>";
@@ -113,6 +114,7 @@ function ShowAllQuizAllBooks($quiz)
         $text.= "</tr>";
     }
     $text .= "</table>";
+    $text .= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;
 }
 function ShowQuiz($formData,$user)

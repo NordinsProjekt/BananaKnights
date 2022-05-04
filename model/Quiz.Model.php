@@ -30,7 +30,6 @@ class QuizModel extends PDOHandler
         INNER JOIN users AS u ON q.UserId = u.Id 
         INNER JOIN books AS b ON q.BookId = b.Id
         WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND b.IsDeleted = 0 AND q.Done = 1;");
-        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(); 
     }
