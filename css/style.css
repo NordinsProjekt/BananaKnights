@@ -107,6 +107,15 @@ html, body {
     padding: 20px;
     margin: 10px;
 }
+#defaultCanvas0 {
+    position: absolute;
+    top: 50%;  /* position the top  edge of the element at the middle of the parent */
+    left: 50%; /* position the left edge of the element at the middle of the parent */
+
+    transform: translate(-50%, -50%); /* This is a shorthand of
+                                         translateX(-50%) and translateY(-50%) */
+    z-index: -1;
+}
 
 
 /* PROFILE CSS */
@@ -119,6 +128,8 @@ html, body {
     padding: 30px;
     margin: 0 0 24px 0
 }
+
+
 
 @media (min-width: 992px) {
     .userProfileInfo .image img {

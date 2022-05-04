@@ -66,12 +66,13 @@ abstract class BaseController
 
     protected function ShowError($errorText) //Sida som visar fel
     {
+        //Hämtar den inloggade personen
         $user = $this->GetUserInformation();
-
         //Loggar händelsen i databasen
         require_once "model/Log.Model.php";
         $logDB = new LogModel();
         $trace = debug_backtrace();
+        //Bygger en array med det som skall loggas
         $arr = array (
             $user['Id'],$trace[1]['class'],$trace[1]['function'],$errorText,
             $_SERVER['REMOTE_ADDR'],$_SERVER['HTTP_USER_AGENT'],date("Y-m-d H:i:s")
@@ -83,23 +84,6 @@ abstract class BaseController
         echo "<h1>FEL</h1><p>" . $errorText . "</p>";
         echo EndPage();
         exit();
-    }
-
-    protected function VerifyUserRole($roleName)
-    {
-        if (isset($_SESSION['is_logged_in']) && isset($_SESSION['UserId']))
-        {
-            if ($_SESSION['is_logged_in'] === true && $_SESSION['UserId']>0)
-            {
-                require_once "model/User.Model.php";
-                $userDB = new UserModel();
-                if ($userDB->DoesUserHaveRole($roleName,$_SESSION['UserId']) == 1)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     protected function ScrubFormName($notsafeText)
