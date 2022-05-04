@@ -36,22 +36,26 @@ function CreateNewBook($arrGenre,$arrAuthor)
 function CreateNewGenre()
 {
         //Skapa Genre formulär
-        $text = "<h1>Skapa ny genre</h1>";
-        $text .= "<form method='post' action='".prefix."books/savegenre'>";
+        $text = "";
+        $text .= "<div class='container' style='text-align: center; padding-top: 50px;'>";
+        $text .= "<h1 class='display-4'>Skapa ny genre</h1>";
+        $text .= "<form style='padding: 0 0 0 420px;' method='post' action='".prefix."books/savegenre'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' class='form-control' id='txtBookGenre' 
         name='BookGenre' placeholder='Genre namn' required /></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
                   <td><textarea id='txtGenreDescription' class='form-control' name='GenreDescription' rows='5' cols='30' 
                   pattern='.{5,}' placeholder='Beskrivning' required></textarea></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-primary' name='btnSaveGenre' value='Spara' /></td> </tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-outline-primary' name='btnSaveGenre' value='Spara' /></td> </tr>";
         $text .= "</table></form>";
+        $text .= "</div>";
         return $text;
 }
 
 function EditGenre($genre,$role)
 {
     $text = "";
+    $text .= "<div class='container' style='text-align: center;'>";
     if (str_contains($role,"Admin"))
     {
         //Skapa Genre formulär
@@ -59,18 +63,19 @@ function EditGenre($genre,$role)
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."book/saveeditgenre",
         "genreId"=>$genre['Id']);
 
-        $text = "<h1>Editera ".$genre['Name']."</h1>";
-        $text .= "<form method='post'>";
+        $text = "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>Editera ".$genre['Name']."</h1>";
+        $text .= "<form method='post' style='padding: 0 0 0 580px;'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookGenre'>Genre</label></td> <td><input type='text' id='txtBookGenre' 
         name='BookGenre' placeholder='Genre namn' class='form-control' value='".$genre['Name']."' required /></td> </tr>";
         $text .= "<tr> <td><label for='txtGenreDescription'>Beskrivning</label></td> 
                     <td><textarea id='txtGenreDescription' class='form-control' name='GenreDescription' rows='5' cols='30' 
                  placeholder='Beskrivning' required >".$genre['Description']."</textarea></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnEditGenre' class='btn btn-primary' value='Edit' />
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnEditGenre' class='btn btn-outline-primary' value='Edit' />
         <input type='hidden' name='formname' value='".$formId."' /></td></tr>";
         $text .= "</table></form>";
     }
+    $text .= "</div>";
     return $text;
 }
 
@@ -239,34 +244,38 @@ function ShowAllBooks($arr,$user)
         }
         $text.= "</tr>";
     }
-
-    if (str_contains($user['Roles'],"Admin") || str_contains($user['Roles'],"User"))
-    {
-        $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
-    }
     $text.= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;
 }
 
 function ShowGenre($dataArr)
 {
-    $text = "<h1>Visa Genre</h1>";
-    $text .= "<h2>".$dataArr['Genre']['Name']."</h2>";
-    $text .= "<p><b>Beskrivning</b> ".$dataArr['Genre']['Description']."<br />";
-    $text .= "<b>Skapad</b> " .$dataArr['Genre']['Created']."<br />";
+    $text = "";
+    $text .= "<div class='container' style='text-align: center; padding-top: 50px;'>";
+    $text .= "<h1 class='display-4'>".$dataArr['Genre']['Name']."</h1>";
+    $text .= "<p><b>Beskrivning:</b><br> ".$dataArr['Genre']['Description']."<br><br>";
+    $text .= "<small class='text-muted'><b>Skapad</b> " .$dataArr['Genre']['Created']."</small><br/>";
 
-    $text .= "<h2>Böcker som finns i denna genre</h2>";
+    $text .= "<hr>";
+    $text .= "<h4>Böcker som finns i denna genre</h4>";
     foreach ($dataArr['Books'] as $key => $row) {
         $text .= "<a href='".prefix."showbook?id=".$row['Id']."'>".$row['Title']."(".$row['PublicationYear'].")</a><br />";
     }
+    $text .= "</div>";
     return $text;
 }
 
 function ShowAllGenre($arr,$role)
 {
-    $text = "<h1>Visa alla genre</h1>";
+    $text = "";
+    $text .= "<h1 class='display-4' style='text-align:center; padding: 20px 0 20px 0'>Visa alla genre</h1>";
+
     if (str_contains($role,"Admin"))
     {
+        $text.= "<div style='text-align: center; padding-bottom: 50px;'>";
+        $text.= "</table><form method='post' action='".prefix."books/creategenre'><button class='btn btn-outline-primary' type='submit'>Skapa ny genre</button></form>";
+        $text.= "</div>";
+
         $text .= "<table class='table table-bordered table-dark table-hover'><tr> <th>Namn</th> <th>Beskrivning</th> <th>Skapad</th> <th>Visa</th> <th>Edit</th> <th>Radera</th></tr>";
     }
     else
@@ -279,27 +288,18 @@ function ShowAllGenre($arr,$role)
         $text.= "<td>".$row['Name']."</td>";
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."showgenre?id=".$row['Id']."'><button type='submit'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."showgenre?id=".$row['Id']."'><button class='btn btn-outline-primary' type='submit'>Visa</input>
         </form></td>";
         if (str_contains($role,"Admin"))
         {
-            $text.= "<td><form method='post' action='".prefix."books/editgenre'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            $text.= "<td><form method='post' action='".prefix."books/editgenre'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."books/deletegenre'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            $text.= "<td><form method='post' action='".prefix."books/deletegenre'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
         $text.= "</tr>";
     }
-    if (str_contains($role,"Admin"))
-    {
-        $text.= "</table><form method='post' action='".prefix."books/creategenre'><button type='submit'>Skapa ny genre</button></form>";
-    }
     return $text;
-}
-
-function ShowSearch()
-{
-    
 }
 
 ?>

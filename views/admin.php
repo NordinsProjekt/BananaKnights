@@ -36,7 +36,7 @@ function GenerateTableWithGenre($genre)
         $text.= "<td>".$row['Name']."</td>";
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."books/revivegenre'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
         $text.= "</tr>";
     }
@@ -57,7 +57,7 @@ function GenerateDeletedComments($comments,$reply)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Text']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."comment/undelete'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."comment/undelete'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
         $text.= "</tr>";
     }
@@ -67,7 +67,7 @@ function GenerateDeletedComments($comments,$reply)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Text']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."reply/undelete'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."reply/undelete'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</button><input type='hidden' name='ReviewId' value='".$row['ReviewId']."' /></form></td>";
         $text.= "</tr>";
     }
@@ -90,7 +90,7 @@ function GenereateTableDeletedReviews($reviews)
         $text.= "<td>".$row['Rating']."</td>";
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."review/undelete'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."review/undelete'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
         $text.= "</tr>";
     }
@@ -111,7 +111,7 @@ function GenerateTableDeletedBooks($books)
         $text.= "<td>".$row['AuthorName']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['PublicationYear']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/undelete'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."books/undelete'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
         $text.= "</tr>";
     }
@@ -133,7 +133,7 @@ function GenerateTableDeletedAuthors($authors)
         $text.= "<td>".$row['Lastname']."</td>";
         $text.= "<td>".$row['Country']."</td>";
         $text.= "<td>".$row['Created']."</td>";
-        $text.= "<td><form method='post' action='".prefix."authors/undelete'><button type='submit' name='id' 
+        $text.= "<td><form method='post' action='".prefix."authors/undelete'><button class='btn btn-outline-warning' type='submit' name='id' 
         value='".$row['Id']."'>Återställ</input></form></td>";
         $text.= "</tr>";
     }
@@ -171,13 +171,13 @@ function GenerateTableWithUsers($users)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Email']."</td>";
         $text.= "<td>".$row['Roles']."</td>";
-        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            $text.= "<td><form method='post' action='".prefix."user/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            $text.= "<td><form method='post' action='".prefix."user/delete'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."admin/resetpassword'><button type='submit' name='id' value='".$row['Id']."'>Återställ lösenord</input>
+            $text.= "<td><form method='post' action='".prefix."admin/resetpassword'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Återställ lösenord</input>
             </form></td>";
         $text.= "</tr>";
     }
@@ -204,7 +204,7 @@ function ShowUserAdmin($formData)
         $formId = uniqid($row['Id'],true);
         $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='lol'>
         <input type='hidden' name='formname' value='".$formId."'>
-        <button type='submit'>Radera</button></form></td></tr>";
+        <button class='btn btn-outline-danger' type='submit'>Radera</button></form></td></tr>";
         //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."admin/removerolefromuser",
         "userId"=>$formData['User']['Id'], "roleId"=>$row['Id']);
@@ -222,7 +222,7 @@ function ShowUserAdmin($formData)
             $formId = uniqid($row['Id'],true);
             $text .= "<tr><td>".$row['Name']."</td><td><form method='post' action='lol'>
             <input type='hidden' name='formname' value='".$formId."'>
-            <button type='submit'>Lägg till</button></form></td></tr>";
+            <button class='btn btn-outline-primary' type='submit'>Lägg till</button></form></td></tr>";
             //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."admin/addrolestouser",
             "userId"=>$formData['User']['Id'], "roleId"=>$row['Id']);
@@ -251,20 +251,20 @@ function ShowAllUsersAdmin($users,$role)
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td>".$row['Email']."</td>";
         $text.= "<td>".$row['Roles']."</td>";
-        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button type='submit' name='id' value='".$row['Id']."'>Ändra roller</input>
+        $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Ändra roller</input>
         </form></td>";
         if ($role == "Admin")
         {
-            $text.= "<td><form method='post' action='".prefix."user/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            $text.= "<td><form method='post' action='".prefix."user/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            $text.= "<td><form method='post' action='".prefix."user/delete'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
         $text.= "</tr>";
     }
     if ($role == "Admin")
     {
-        $text.= "</table><form method='post' action='".prefix."admin/createuser'><button type='submit'>Skapa ny användare</button></form>";
+        $text.= "</table><form method='post' action='".prefix."admin/createuser'><button class='btn btn-outline-primary' type='submit'>Skapa ny användare</button></form>";
     }
     return $text;
 }

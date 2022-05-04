@@ -14,13 +14,15 @@ function QuizForm($formData)
     "userId"=>$formData['User']['Id'],"bookId"=>$formData['Book']['Id']);
     //Ha med sessionform spara bookid
     $text = "";
-    $text .= "<h1>Skapa Quiz</h1>";
-    $text .= "<form method='post'>";
+    $text .= "<div class='container' style='text-align: center;'>";
+    $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0;'>Skapa Quiz</h1>";
+    $text .= "<form method='post' style='padding: 0 0 0 500px;'>";
     $text .= "<table><tr> <th></th> <th></th> </tr>";
     $text .= "<tr> <td><label for='title'>Titel</label></td> <td><input type='text' class='form-control' id='title' name='title' required /></td> </tr>";
     $text .= "<tr> <td><label for='antalQ'>Antal frågor</label></td> <td><input type='number' class='form-control' id='antalQ' name='antalQ' required /></td> </tr>";
     $text .= "<tr><td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' value='Spara' /></td> <td></td></tr>";
     $text .= "</table></form>";
+    $text .= "</div>";
     return $text;
 }
 
@@ -36,6 +38,7 @@ function QuestionForm($formData)
     "userId"=>$formData['User']['Id'],"NumberOfQuestions"=>$formData['NumberOfQ'],"QuizId"=>$formData['QuizId']);
     //Här genereras en fråga text och 4 alternativ och ett val om vilket svar som är korrekt.
     $text = "";
+    $text .= "<div class='container' style='text-align: center;'>";
     $text .= "<form method='post'><div id='quizformparent'>";
     for ($i=0; $i < $formData['NumberOfQ']; $i++) 
     { 
@@ -50,7 +53,8 @@ function QuestionForm($formData)
         <option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option></select></td> </tr>";
         $text .= "<tr> <td> </td> <td> </td> </tr></table></div>";
     }
-    $text .= "</div><table><tr><td><input type='submit' class='btn btn-primary' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
+    $text .= "</div><table><tr><td><input type='submit' class='btn btn-outline-primary' value='Spara' /><input type='hidden' name='formname' value='".$formId."' /></td><td></td></tr></table></form>";
+    $text .= "</div>";
     return $text;
 }
 
@@ -99,6 +103,7 @@ function ShowAllQuiz($quiz,$role)
 function ShowAllQuizAllBooks($quiz)
 {
     $text = "";
+    $text .= "<h1 class='display-4' style='text-align: center; padding: 50px; 0 20px 0;'>Visa alla quiz</h1>";
     if (empty($quiz))
     {
         return $text;
@@ -111,7 +116,7 @@ function ShowAllQuizAllBooks($quiz)
         $text.= "<td>".$row['Title']."</td>";
         $text.= "<td>".$row['UserName']."</td>";
         $text.= "<td><form method='post' action='".prefix."quiz/show'>
-            <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+            <button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
         $text.= "</tr>";
     }
     $text .= "</table>";

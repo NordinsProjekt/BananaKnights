@@ -1,9 +1,11 @@
 <?php
     function AddNewReview($book)
     {
-        $text = "<h1>Skriv en Review</h1>";
+        $text = "";
+        $text .= "<div class='container' style='text-align: center;'>";
+        $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0;'>Skriv en Review</h1>";
         $text .= "<h2>Recension för ".$book['Title']." (".$book['PublicationYear'].")</h2>";
-        $text .= "<form method='post' action='".prefix."review/addreview'>";
+        $text .= "<form method='post' action='".prefix."review/addreview' style='padding: 0 0 0 400px;'>";
         $text .= "<table>";
 
         $text .= "<tr><td><input type='hidden' id='bookid' name='id' value='".$book['Id']."' /></td></tr>";  
@@ -15,8 +17,9 @@
         $text .= "<option value=3>3</option>";
         $text .= "<option value=4>4</option>";
         $text .= "<option value=5>5</option></select>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' class='btn btn-primary' value='Spara'/></td></tr>";
+        $text .= "<tr> <td></td> <td><input type='submit' name='addreview' class='btn btn-outline-primary' value='Spara'/></td></tr>";
         $text .= "</table></form>";
+        $text .= "</div>";
         return $text;
     }
 
@@ -123,8 +126,9 @@
 
     function ShowAllReviews($result,$role)
     {
+        $text = "";
         //TODO lägga in roller kontroll
-        $text = "<h1 class='display-4' style='text-align:center; padding: 10px 0 20px 0'>Visa alla reviews</h1>";
+        $text .= "<h1 class='display-4' style='text-align:center; padding: 20px 0 20px 0'>Visa alla reviews</h1>";
         $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>";
         $text .= "<th>Visa</th>";
         if (str_contains($role,"Moderator"))
