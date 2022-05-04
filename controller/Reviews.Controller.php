@@ -280,6 +280,7 @@ class ReviewsController extends BaseController
             $this->ShowError("Ingen rättighet för detta");
         }
     }
+    
     public function EditReview($id)
     {
         $user = $this->GetUserInformation();

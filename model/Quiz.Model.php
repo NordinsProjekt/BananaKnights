@@ -15,9 +15,21 @@ class QuizModel extends PDOHandler
     
     public function GetAllQuizForBook($bookId)
     {
-        $stmt = $this->Connect()->prepare("SELECT q.Id ,q.Title, u.UserName, q.Created FROM quiz AS q 
+        $stmt = $this->Connect()->prepare("SELECT q.Id ,q.Title, u.UserName, q.Created, b.Title AS BookTitle,b.Id AS BookId FROM quiz AS q 
         INNER JOIN users AS u ON q.UserId = u.Id 
-        WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND q.BookId = :bookId AND q.Done = 1;");
+        INNER JOIN books AS b ON q.BookId = b.Id
+        WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND b.IsDeleted = 0 AND q.Done = 1 AND q.BookId = :bookId;");
+        $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(); 
+    }
+
+    public function GetAllQuiz()
+    {
+        $stmt = $this->Connect()->prepare("SELECT q.Id ,q.Title, u.UserName, q.Created, b.Title AS BookTitle FROM quiz AS q 
+        INNER JOIN users AS u ON q.UserId = u.Id 
+        INNER JOIN books AS b ON q.BookId = b.Id
+        WHERE q.IsDeleted = 0 AND q.Flagged = 0 AND b.IsDeleted = 0 AND q.Done = 1;");
         $stmt->bindParam(":bookId",$bookId,PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(); 
@@ -65,11 +77,31 @@ class QuizModel extends PDOHandler
         }
         return true;
     }
+
     public function UpdateQuizDone($quizId)
     {
         $stmt = $this->Connect()->prepare("UPDATE quiz SET Done = 1 WHERE Id = :quizId");
         $stmt->bindParam(":quizId",$quizId,PDO::PARAM_INT);
         return $stmt->execute();
+    }
+
+    public function UpdateFlagQuiz($flag,$quizId)
+    {
+        $stmt = $this->Connect()->prepare("UPDATE quiz SET Flagged = :flag 
+        WHERE Id = :quizId;");
+        $stmt->bindParam(":flag",$flag,PDO::PARAM_INT);
+        $stmt->bindParam(":quizId",$quizId,PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function GetAllFlaggedQuiz()
+    {
+        $stmt = $this->Connect()->prepare("SELECT q.Id,q.Title,u.UserName, b.Title AS BookTitle,b.Id AS BookId FROM quiz AS q
+        INNER JOIN books AS b ON q.BookId = b.Id 
+        INNER JOIN users AS u ON q.UserId = u.Id
+        WHERE b.IsDeleted = 0 AND q.Flagged = 1 AND q.Done = 1;");
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 }
 ?>

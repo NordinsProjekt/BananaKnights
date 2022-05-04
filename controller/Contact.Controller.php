@@ -19,6 +19,10 @@ class ContactController extends BaseController
         echo contactForm();
         echo EndPage();
     }
+    public function SaveMessage()
+    {
+        
+    }
 
 }
 

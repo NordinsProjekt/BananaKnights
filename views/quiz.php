@@ -78,7 +78,7 @@ function ShowAllQuiz($quiz,$role)
         {
             $formId = uniqid($row['Id'],true);
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."quiz/flagged",
-            "reviewId"=>$row['Id']);
+            "QuizId"=>$row['Id'],"BookId"=>$row['BookId']);
             $text .= "<td><form method='post'>
             <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
             <input type='hidden' name='formname' value='".$formId."' /'></form></td>";

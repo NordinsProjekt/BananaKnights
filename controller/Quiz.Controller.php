@@ -184,6 +184,62 @@ class QuizController extends BaseController
 
     }
 
+    //Återställer från flaggat tillstånd
+    public function UnFlagQuiz()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['QuizId']);
+            $bookId = $_SESSION['form'][$formName]['BookId'];
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagQuiz(0,$safe);
+            if ($result)
+            {
+                require_once "controller/Books.Controller.php";
+                $bookController = new BooksController();
+                $bookController->ShowBook($bookId);
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att återställa författaren");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
+
+    //Flaggar för kontroll
+    public function FlagQuiz()
+    {
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Moderator"))
+        {
+            $formName = $this->ScrubFormName($_POST['formname']);
+            $safe = $this->ScrubIndexNumber($_SESSION['form'][$formName]['QuizId']);
+            $bookId = $_SESSION['form'][$formName]['BookId'];
+            unset($_SESSION['form']);
+            $result = $this->db->UpdateFlagQuiz(1,$safe);
+            if ($result)
+            {
+                require_once "controller/Books.Controller.php";
+                $bookController = new BooksController();
+                $bookController->ShowBook($bookId);
+            }
+            else
+            {
+                $this->ShowError("Något gick fel med att flagga innehållet");
+            }
+        }   
+        else
+        {
+            $this->ShowError("Ingen rättighet för detta");
+        }
+    }
+
     private function ValidateArray($arr)
     {
         foreach ($arr as $key => $value) 

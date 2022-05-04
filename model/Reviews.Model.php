@@ -97,6 +97,7 @@ class ReviewsModel extends PDOHandler
         $stmt->execute();
         return $stmt->fetchAll();
     }
+    
     public function SetWasReviewUsefull($reviewId,$userId)
     {
         $stmt = $this->Connect()->prepare("INSERT INTO reviewusefull 
@@ -150,6 +151,7 @@ class ReviewsModel extends PDOHandler
         $stmt->bindParam(":reviewId",$reviewId,PDO::PARAM_INT);
         return $stmt->execute();
     }
+
     public function GetAllUserReviews($userId)
     {
         $stmt = $this->Connect()->prepare("SELECT r.Id, r.Title AS ReviewTitle,r.Text AS ReviewText,r.Rating,r.Created,u.UserName,

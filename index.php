@@ -702,6 +702,18 @@ function QuizRoute($action)
                 $controller->CheckAnswers();
             }
             break;
+        case "flagged":
+            if (isset($_POST['formname']) && $_SESSION['form'])
+            {
+                $controller->FlagQuiz();
+            }
+            break;
+        case "unflag":
+            if (isset($_POST['formname']) && $_SESSION['form'])
+            {
+                $controller->UnFlagQuiz();
+            }
+            break;
         default:
             ShowHomePage();
             break;
