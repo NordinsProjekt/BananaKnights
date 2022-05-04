@@ -3,8 +3,10 @@
 function CreateNewBook($arrGenre,$arrAuthor)
 {
     //Skapa Bok formuläret
-    $text = "<h1>Skapa ny bok</h1>";
-    $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data'>";
+    $text = "";
+    $text .= "<div class='container' style='text-align: center;'>";
+    $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0;'>Skapa ny bok</h1>";
+    $text .= "<form method='post' action='".prefix."books/savebook' enctype='multipart/form-data' style='padding: 0 0 0 420px;'>";
     $text .= "<table><tr><th></th><th></th></tr>";
     $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> <td><input class='form-control' type='text' id='txtBookTitle' name='BookTitle' placeholder='Bokens titel' required /></td> </tr>";
     $text .= "<tr> <td><label for='selAuthor'>Författare</label></td> <td><select name='BookAuthor' id='selAuthor' class='form-select' >";
@@ -25,8 +27,9 @@ function CreateNewBook($arrGenre,$arrAuthor)
     $text .= "<tr> <td><label for='txtBookISBN'>ISBN</label></td> <td><input type='text' id='txtBookISBN' name='BookISBN'
      placeholder='ISBN nummer' class='form-control' required /></td> </tr>";
     $text .= "<tr> <td><label for='txtBookPicture'>Bild</label></td> <td><input type='file' class='form-control' id='txtBookPicture' name='BookPicture' /></td> </tr>";
-    $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-primary' name='btnSaveBook' value='Spara' /></td> </tr>";
+    $text .= "<tr> <td></td> <td><input type='submit' class='btn btn-outline-primary' name='btnSaveBook' value='Spara' /></td> </tr>";
     $text .= "</table></form>";
+    $text .= "</div>";
     return $text;
 }
 
@@ -73,11 +76,15 @@ function EditGenre($genre,$role)
 
 function ShowBook($book,$imageLink,$role)
 {
-    $text = "<h1>Visa enskild bok</h1>";
-    $text .= "<h2>".$book['Title']."</h2>";
-    $text .= "<img src='".$imageLink."' />";
-    $text .= "<p><b>Författare:</b> <a href='".prefix."showauthor?id=".$book['AuthorId']."'>".$book['AuthorName']."</a><br />";
-    $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br />";
+    $text = "";
+    $text .= "<div style='width: 100%; display: flex; justify-content: center; padding: 50px 0 50px 0;'>";
+    $text .= "<div style='width: 60rem;'>";
+    $text .= "<img width='250px' height='400px' src='".$imageLink."' style='float:left;'/>";
+    $text .= "<div class='card mb-3'>";
+    $text .= "<div class='card-body'>";
+    $text .=   "<h1 class='card-title'>".$book['Title']."</h1>";
+    $text .= "<p><b>Författare:</b> <a href='".prefix."showauthor?id=".$book['AuthorId']."'>".$book['AuthorName']."</a><br>";
+    $text .= "<b>Genre:</b><a href='".prefix."showgenre?id=".$book['GenreId']."'>".$book['GenreName']."</a><br>";
     $text .= "<b>Utgivningsår:</b> ".$book['PublicationYear']."<br />";
     $text .= "<b>ISBN: </b>".$book['ISBN']."<br />";
     if ($book['Rating'] != "n/a")
@@ -88,29 +95,38 @@ function ShowBook($book,$imageLink,$role)
     {
         $text .= "<b>Betyg: </b>".$book['Rating']."<br /></p>";
     }
-    $text .= "<h3>Beskrivning</h3>";
+    $text .= "<h4>Beskrivning:</h4>";
     $text .= "<p>".$book['Description']."</p>";
+    $text .=   "<p class='card-text'><small class='text-muted'><b>Tillagd:</b> ".$book['Created']."</small></p>";
+    $text .= "<div style='width: 100%; display: flex; justify-content: flex-start;'>";
     if ($role != "")
     {
-        $text .= "<form method='post' action='".prefix."books/recommend'>";
+        $text .= "<form method='post' action='".prefix."books/recommend' style='padding-top: 24px;'>";
         if ($book['Recommend'])
         {
-            $text .= "<button type='submit' name='id' value='".$book['Id']."' style='background-color:green'>Lägg till läslistan</button></form>";
+            $text .= "<button style='margin-right: 10px;' class='btn btn-success' type='submit' name='id' value='".$book['Id']."'>Ta bort läslistan</button></form>";
         }
         else
         {
-            $text .= "<button type='submit' name='id' value='".$book['Id']."'>Lägg till läslistan</button></form>";
+            $text .= "<button style='margin-right: 10px;' class='btn btn-outline-success' type='submit' name='id' value='".$book['Id']."'>Lägg till läslistan</button></form>";
         }
     }
     if (str_contains($role,"User") || str_contains($role,"Admin"))
     {
-        $text .= "<form method='post' action='".prefix."review/newreview' >
-        <button type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";
-        $text .= "<form method='post' action='".prefix."quiz/create' >
-        <button type='submit' name='bookId' value='".$book['Id']."'>Skapa ett quiz</button></form>";
+        $text .= "<form style='margin-right: 10px;' method='post' action='".prefix."review/newreview' >
+        <button class='btn btn-outline-primary' type='submit' name='bookId'value='".$book['Id']."'>Skriv recension</button></form>";
+        $text .= "<form style='margin-right: 10px;' method='post' action='".prefix."quiz/create' >
+        <button class='btn btn-outline-primary' type='submit' name='bookId' value='".$book['Id']."'>Skapa ett quiz</button></form>";
 
     }
+    $text .= "</div>";
 
+    $text .="</div>";
+    $text .="</div>";
+    $text .="</div>";
+    $text .="</div>";
+    $text .="<hr>";
+    $text .= "</div>";
     return $text;
 }
 function EditBook($formData,$role)
@@ -122,8 +138,11 @@ function EditBook($formData,$role)
         $formId = uniqid($formData['Book']['Id'],true);
         $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."book/saveeditbook",
         "bookId"=>$formData['Book']['Id']);
-        $text = "<h1>Editera ".$formData['Book']['Title']."</h1>";
-        $text .= "<form method='post'>";
+        
+        $text = "";
+        $text .= "<div class='container' style='text-align: center;'>";
+        $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0;'>Editera ".$formData['Book']['Title']."</h1>";
+        $text .= "<form method='post' style='padding: 0 0 0 420px;'>";
         $text .= "<table><tr><th></th><th></th></tr>";
         $text .= "<tr> <td><label for='txtBookTitle'>Titel</label></td> 
         <td><input type='text' id='txtBookTitle' name='BookTitle' class='form-control' value='".$formData['Book']['Title']."' required /></td> </tr>";
@@ -160,24 +179,36 @@ function EditBook($formData,$role)
         placeholder='ISBN nummer' value='".$formData['Book']['ISBN']."' required/></td> </tr>";
         $text .= "<tr> <td><label for='txtBookPicture'>Bildpath</label></td> 
         <td><input type='text' id='txtBookPicture' class='form-control' name='BookPicturePath' value='".$formData['Book']['ImagePath']."' required /></td> </tr>";
-        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveEditBook' class='btn btn-primary' value='Spara' />
+        $text .= "<tr> <td></td> <td><input type='submit' name='btnSaveEditBook' class='btn btn-outline-primary' value='Spara' />
             <input type='hidden' name='formname' value='".$formId."' /></td> </tr>";
         $text .= "</table></form>";
+        $text .= "</div>";
         //Skapa add picture/remove picture formulär
     }
     return $text;
 }
 function ShowAllBooks($arr,$role)
 {  
-    $text = "<h1>Visa alla böcker</h1>";
+    $text = "";
+    $text .= "<div style='padding-top: 40px;'>";
+    $text .= "<h1 class='display-4' style='text-align: center;'>Visa alla böcker</h1>";
+    $text .= "</div>";
+    
 
-    $text .= "<div class='links-unordered'>";
-    $text .= "<a class='toggle-button' href='#'>Advanced Search</a>";
-    $text .= "<ul style='display:none;'>";
-    $text .= "<form method='post' action='".prefix."books/searchgenre'><li><label>Genre</label><br><input type='text' name='genre' placeholder='...'><button type='submit'>Filter</button></li></form>";
-    $text .= "<form method='post' action='".prefix."books/searchauthor'><li><label>Författare</label><br><input type='text' name='author' placeholder='...'><button type='submit'>Filter</button></li></form>";
+    $text .= "<div class='links-unordered' style='text-align:center; padding-bottom: 60px;'>";
+    $text .= "<a class='toggle-button' href='#' style='text-decoration:none;'>Avancerad sökning</a>";
+    $text .= "<ul style='display:none; padding: 15px 0 0 0; list-style: none;'>";
+    $text .= "<form method='post' action='".prefix."books/searchgenre' style='padding-bottom: 10px;'><li><small>Genre</small><br><input style='height: 38px;' type='text' name='genre' placeholder='sök...'><button style='vertical-align: baseline;' class='btn btn-outline-primary' type='submit'>Filter</button></li></form>";
+    $text .= "<form method='post' action='".prefix."books/searchauthor'><li><small>Författare</small><br><input style='height: 38px;' type='text' name='author' placeholder='sök...'><button style='vertical-align: baseline;' class='btn btn-outline-primary' type='submit'>Filter</button></li></form>";
     $text .= "</ul>";
     $text .= "</div>";
+    if (isset($_SESSION['is_logged_in']))
+    {
+        $text.= "<div style='text-align: center;'>";
+        $text.= "<small>Saknar du en bok?</small>";
+        $text.= "<form method='post' action='".prefix."books/createbook'><button class='btn btn-outline-primary' style='margin: 5px 0 20px 0;' type='submit'>Skapa ny bok</button></form>";
+        $text.= "</div>";
+    }
 
     if ($role == "Admin")
     {
@@ -197,20 +228,16 @@ function ShowAllBooks($arr,$role)
         $text.= "<td>".$row['Description']."</td>";
         $text.= "<td>".$row['GenreName']."</td>";
         $text.= "<td>".$row['AuthorName']."</td>";
-        $text.= "<td><form method='post' action='".prefix."books/show'><button type='submit' name='id' value='".$row['Id']."'>Visa</input>
+        $text.= "<td><form method='post' action='".prefix."books/show'><button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
         if ($role == "Admin")
         {
-            $text.= "<td><form method='post' action='".prefix."books/edit'><button type='submit' name='id' value='".$row['Id']."'>Edit</input>
+            $text.= "<td><form method='post' action='".prefix."books/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
             </form></td>";
-            $text.= "<td><form method='post' action='".prefix."books/delete'><button type='submit' name='id' value='".$row['Id']."'>Radera</input>
+            $text.= "<td><form method='post' action='".prefix."books/delete'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
             </form></td>";
         }
         $text.= "</tr>";
-    }
-    if ($role == "Admin")
-    {
-        $text.= "</table><form method='post' action='".prefix."books/createbook'><button type='submit'>Skapa ny bok</button></form>";
     }
     $text.= "<script src='".prefix."js/sortMe.js'></script>";
     return $text;

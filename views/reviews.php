@@ -23,6 +23,7 @@
     function EditReview($formData,$user)
     {
         $text = "";
+        $text .= "<div class='container' style='text-align: center;'>";
         //Säkerhetskontroll även i viewn
         if (str_contains($user['Roles'],"Admin") || $user['Id'] == $formData['Review']['UserId'])
         {
@@ -31,9 +32,9 @@
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/saveeditreview",
                 "reviewId"=>$formData['Review']['Id']);
 
-            $text = "<h1>Editera ".$formData['Review']['ReviewTitle']."</h1>";
+            $text .= "<h1 class='display-4' style='padding: 40px 0 30px 0;'>Editera ".$formData['Review']['ReviewTitle']."</h1>";
             $text .= "<h2>Recension för ".$formData['Book']['Title']." (".$formData['Book']['PublicationYear'].")</h2>";
-            $text .= "<form method='post'>";
+            $text .= "<form method='post' style='padding: 0 0 0 420px;'>";
             $text .= "<table>";
             $text .= "<tr><td><label for='title'>Title</label></td>
             <td><input type='text' id='title' class='form-control' name='Title' value='".$formData['Review']['ReviewTitle']."' required /></td> </tr>"; 
@@ -53,8 +54,9 @@
             $text .= "</select>";
             $text .= "<tr><td>Skapad av</td> <td>".$formData['Review']['UserName']."</td> </tr>";
             $text .= "<tr><td>Skapad</td> <td>".$formData['Review']['Created']."</td> </tr>";
-            $text .= "<tr> <td></td> <td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-primary' name='saveeditreview' value='Spara'/></td></tr>";
+            $text .= "<tr> <td></td> <td><input type='hidden' name='formname' value='".$formId."' /><input type='submit' class='btn btn-outline-primary' name='saveeditreview' value='Spara'/></td></tr>";
             $text .= "</table></form>";
+            $text .= "</div>";
         }
 
         return $text;
@@ -62,28 +64,31 @@
     function ShowReview($review,$user)
     {
         //$review['ReviewText'] = str_replace('\n','<br />',$review['ReviewText']);
-        $text = "<h1>Visa enskild recension</h1>";
-        $text .= "<h2>".$review['ReviewTitle']."</h2>";
-        $text .= "<div width='300px'>".$review['ReviewText']."</div>";
+        $text = "";
+        $text .= "<div style='width: 100%; display: flex; justify-content: center; padding: 50px 0 50px 0; text-align:center;'>";
+        $text .= "<div style='width: 60rem;'>";
+        $text .= "<h1>".$review['ReviewTitle']."</h1>";
         $text .= "<p><b>Betyg: </b>".$review['Rating']." av 5</p>";
-        $text .= "<p><b>Skriven av: </b>".$review['UserName']."</p>";
-        $text .= "<p>Skapad: ".$review['Created']."</p>";
+        $text .= "<b>Review: </b><div width='300px'>".$review['ReviewText']."</div><br>";
+        $text .= "<p><small class='text-muted'>Skapad den: ".$review['Created']."<br> skriven av: ".$review['UserName']."</small></p>";
+
+        $text .= "<div style='width: 100%; display: flex; justify-content: center; padding-top: 0'>";
         if ($user['Roles'] != "")
         {
-            $text .= "<form method='post' action='".prefix."review/usefull'>";
+            $text .= "<form method='post' action='".prefix."review/usefull' style='padding-top: 24px;'>";
             if ($review['Usefull'])
             {
-                $text .= "<button type='submit' name='id' value='".$review['Id']."' style='background-color:green'>Hjälpsam</button></form>";
+                $text .= "<button style='margin-right: 10px;' class='btn btn-success' type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
             else
             {
-                $text .= "<button type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
+                $text .= "<button style='margin-right: 10px;' class='btn btn-outline-success' type='submit' name='id' value='".$review['Id']."'>Hjälpsam</button></form>";
             }
         }
         if ($review['UserName'] == $user['Username'])
         {
             $text .= "<td><form method='post' action='".prefix."review/edit'>
-                        <button type='submit' name='id' value='".$review['Id']."'>Edit</button></form></td>";
+                        <button style='margin-right: 10px;' class='btn btn-outline-warning' type='submit' name='id' value='".$review['Id']."'>Edit</button></form></td>";
         }
         if (str_contains($user['Roles'],"Moderator") && $review['Flagged'] == 0)
         {
@@ -92,8 +97,13 @@
             $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
             "reviewId"=>$review['Id']);
             $text .= "<form method='post' action='lol'>
-            <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Flagga</button></form>";
+            <input type='hidden' name='formname' value='".$formId."' /'><button style='margin-right: 10px;' class='btn btn-outline-warning' type='submit'>Flagga</button></form>";
         }
+        $text .="</div>";
+
+        $text .= "</div>";
+        $text .= "</div>";
+        $text.= "<hr>";
         // if (str_contains($user['Roles'],"Admin") && $review['Flagged'] == 1)
         // {
         //     //Säkerhetstest, sparar formuläretsdata i session så den inte kan editeras
@@ -104,13 +114,17 @@
         //     <input type='hidden' name='formname' value='".$formId."' /'><button type='submit'>Återställ</button></form>";
         // }
         $_SESSION['ReviewId'] = $review['Id'];
+    
+        $text.= "<div style='text-align: center; padding: 15px 0 0 0'>";
+        $text.= "<small>Vad tycker du om denna recension?</small>";
+        $text.= "</div>";
         return $text;
     }
 
     function ShowAllReviews($result,$role)
     {
         //TODO lägga in roller kontroll
-        $text = "<h1>Visa alla reviews</h1>";
+        $text = "<h1 class='display-4' style='text-align:center; padding: 10px 0 20px 0'>Visa alla reviews</h1>";
         $text .= "<table id='myTable' class='table table-bordered table-dark table-hover'><tr> <th></th> <th onclick='sortTable(1)'>Boktitel</th> <th onclick='sortTable(2)'>Titel</th> <th onclick='sortTable(3)'>Användare</th> <th onclick='sortTable(4)'>Betyg</th ><th onclick='sortTable(5)'>Skapad</th>";
         $text .= "<th>Visa</th>";
         if (str_contains($role,"Moderator"))
@@ -142,23 +156,23 @@
             $text .= "<tr><td><img src='".$imageLink."' alt='book cover' height='100px' /></td>
             <td>".$row['BookTitle']."</td> <td>".$row['ReviewTitle']."</td> <td>".$row['UserName']."</td>
             <td>".$row['Rating']."</td> <td>".$row['Created']."</td> <td><form method='post' action='".prefix."review/show'>
-            <button type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
+            <button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</button></form></td>";
             if (str_contains($role,"Moderator"))
             {
                 $formId = uniqid($row['Id'],true);
                 $_SESSION['form'][$formId] = array ( "FormAction"=>prefix."review/flagged",
                 "reviewId"=>$row['Id']);
                 $text .= "<td><form method='post'>
-                <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
+                <button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Flagga</button>
                 <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
             }
             if (str_contains($role,"Admin"))
             {
                 $text .= "
                 <td><form method='post' action='".prefix."review/edit'>
-                <button type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>
+                <button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</button></form></td>
                 <td><form method='post' action='".prefix."review/delete'>
-                <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+                <button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
                 </tr>";
             }
             else
