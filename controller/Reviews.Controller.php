@@ -14,7 +14,7 @@ class ReviewsController extends BaseController
     function NewReview()
     {
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"User"))
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
         {
             require_once "views/reviews.php";
             require_once "views/default.php";
@@ -43,7 +43,8 @@ class ReviewsController extends BaseController
 
     function AddReview()
     {
-        if ($this->VerifyUserRole("User"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Admin"))
         {
             $arr = array (
                 $_POST['id'], $_SESSION['UserId'], $_POST['Title'],
