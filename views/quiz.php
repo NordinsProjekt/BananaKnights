@@ -65,10 +65,10 @@ function ShowAllQuiz($quiz,$role)
     {
         $text .= "<th>Flagga</th>";
     }
-    if (str_contains($role,"Admin"))
-    {
-        $text .= "<th>Radera</th>";
-    }
+    // if (str_contains($role,"Admin"))
+    // {
+    //     $text .= "<th>Radera</th>";
+    // }
     $text .= "</tr>";
     foreach ($quiz as $key => $row) {
         $text .= "<tr>
@@ -83,13 +83,13 @@ function ShowAllQuiz($quiz,$role)
             <button type='submit' name='id' value='".$row['Id']."'>Flagga</button>
             <input type='hidden' name='formname' value='".$formId."' /'></form></td>";
         }
-        if (str_contains($role,"Admin"))
-        {
-            $text .= "
-            <td><form method='post' action='".prefix."quiz/delete'>
-            <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
-            </tr>";
-        }
+        // if (str_contains($role,"Admin"))
+        // {
+        //     $text .= "
+        //     <td><form method='post' action='".prefix."quiz/delete'>
+        //     <button type='submit' name='id' value='".$row['Id']."'>Radera</button></form></td>
+        //     </tr>";
+        // }
     }
     $text .= "</table>";
     return $text;
