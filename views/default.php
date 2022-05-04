@@ -66,7 +66,7 @@ function IndexNav($role,$username)
                     <li>
                         <div class='container' style='text-align: center;'>
                         <div id='google_element'></div>
-                        <script src='http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>
+                        <script src='https://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>
                         </script>
                         <script>
                         function loadGoogleTranslate(){
