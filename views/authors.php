@@ -41,7 +41,7 @@ function ShowAuthor($dataArr,$role)
 {
     $text = "<h1>Visa Författare</h1>";
     $text .= "<h2>".$dataArr['Author']['Firstname']." " . $dataArr['Author']['Lastname'] ."</h2>";
-    $text .= "<img src='".$dataArr['Author']['ImageLink']."' height='600px' />";
+    $text .= "<img class='authorImage' src='".$dataArr['Author']['ImageLink']."' />";
     $text .= "<p><b>Land:</b> ".$dataArr['Author']['Country']."<br />";
     $text .= "<b>Född:</b> " .$dataArr['Author']['Born']."<br />";
 
