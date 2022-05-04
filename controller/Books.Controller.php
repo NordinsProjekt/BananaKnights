@@ -582,7 +582,7 @@ class BooksController extends BaseController
     {
         $user = $this->GetUserInformation();
         $safe = $this->ScrubIndexNumber($id);
-        if (str_contains($user['Roles'],"User") && $safe > 0)
+        if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Moderator") || str_contains($user['Roles'],"Admin") && $safe > 0)
         {
             //Kollar om det användaren har tryckt på knappen eller inte
             $result = $this->db->IsRecommendedSet($safe,$user['Id']);
