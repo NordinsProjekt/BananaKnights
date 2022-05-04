@@ -169,12 +169,7 @@ class BooksController extends BaseController
 
     function ShowSearchBook($searchinput)
     {
-        $role = "";
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
-        {
-            $role = "Admin";
-        }
         $safetext = $this->ScrubInputs($searchinput);
 
 
@@ -198,7 +193,7 @@ class BooksController extends BaseController
 
             echo StartPage("Sök Resultat");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowAllBooks($result,$role);
+            echo ShowAllBooks($result,$user);
             echo EndPage();
         }
         else
@@ -213,12 +208,7 @@ class BooksController extends BaseController
 
     function ShowAllBooks()
     {
-        $role = "User";
         $user = $this->GetUserInformation();
-        if (str_contains($user['Roles'],"Admin"))
-        {
-            $role = "Admin";
-        }
         $result = $this->db->GetAllBooks();
         if ($result)
         {
@@ -226,7 +216,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             echo StartPage("Skapa ny Bok");
             IndexNav($user['Roles'],$user['Username']);
-            echo ShowAllBooks($result,$role);
+            echo ShowAllBooks($result,$user);
             echo EndPage();
         }
         else
