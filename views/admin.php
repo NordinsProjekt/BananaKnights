@@ -164,8 +164,7 @@ function GenerateTableWithUsers($users)
     {
         return $text;
     }
-    $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th>
-    <th>Edit</th><th>Radera</th> <th>Återställ lösenord</th></tr>";
+    $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th></tr>";
     foreach ($users as $key => $row) {
         $text.= "<tr>";
         $text.= "<td>".$row['UserName']."</td>";
@@ -173,12 +172,6 @@ function GenerateTableWithUsers($users)
         $text.= "<td>".$row['Roles']."</td>";
         $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button class='btn btn-outline-primary' type='submit' name='id' value='".$row['Id']."'>Visa</input>
         </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
-            </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/delete'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
-            </form></td>";
-            $text.= "<td><form method='post' action='".prefix."admin/resetpassword'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Återställ lösenord</input>
-            </form></td>";
         $text.= "</tr>";
     }
     $text .= "</table>";
@@ -239,8 +232,7 @@ function ShowAllUsersAdmin($users,$role)
     $text = "<h1>Visa alla användare</h1>";
     if ($role == "Admin")
     {
-        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th>
-        <th>Edit</th><th>Radera</th></tr>";
+        $text .= "<table><tr> <th>Användarnamn</th> <th>Email</th> <th>Roller</th> <th>Visa</th></tr>";
     }
     else
     {
@@ -253,18 +245,7 @@ function ShowAllUsersAdmin($users,$role)
         $text.= "<td>".$row['Roles']."</td>";
         $text.= "<td><form method='post' action='".prefix."admin/showuserform'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Ändra roller</input>
         </form></td>";
-        if ($role == "Admin")
-        {
-            $text.= "<td><form method='post' action='".prefix."user/edit'><button class='btn btn-outline-warning' type='submit' name='id' value='".$row['Id']."'>Edit</input>
-            </form></td>";
-            $text.= "<td><form method='post' action='".prefix."user/delete'><button class='btn btn-outline-danger' type='submit' name='id' value='".$row['Id']."'>Radera</input>
-            </form></td>";
-        }
         $text.= "</tr>";
-    }
-    if ($role == "Admin")
-    {
-        $text.= "</table><form method='post' action='".prefix."admin/createuser'><button class='btn btn-outline-primary' type='submit'>Skapa ny användare</button></form>";
     }
     return $text;
 }
