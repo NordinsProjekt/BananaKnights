@@ -77,8 +77,8 @@ class QuizController extends BaseController
         require_once "views/default.php";
         echo StartPage("Resultat");
         IndexNav($user['Roles'],$user['Username']);
-        echo "<h1>Grattis</h1>";
-        echo "<p>Du fick ".$score." av ".count($result)." rätt</p>";
+        echo "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>Grattis</h1>";
+        echo "<p style='text-align: center;'>Du fick ".$score." av ".count($result)." rätt</p>";
         echo EndPage();
     }
 
