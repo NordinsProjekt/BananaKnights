@@ -43,7 +43,10 @@ html, body {
     background-color: #212529 !important; 
     color: whitesmoke !important;
 }
-
+/* AUTHOR CSS */
+.authorImage {
+    height:400px;
+}
 
 
 /* COMMENTS CSS */
