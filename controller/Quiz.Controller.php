@@ -75,10 +75,10 @@ class QuizController extends BaseController
 
         }
         require_once "views/default.php";
+        require_once "views/quiz.php";
         echo StartPage("Resultat");
         IndexNav($user['Roles'],$user['Username']);
-        echo "<h1>Grattis</h1>";
-        echo "<p>Du fick ".$score." av ".count($result)." rätt</p>";
+        echo Winner("Du fick ".$score." av ".count($result)." rätt");
         echo EndPage();
     }
 
@@ -271,20 +271,7 @@ class QuizController extends BaseController
         }
         return false;
     }
-    private function CheckUserInputs($notsafeText)
-    {
-      $banlist = array("\t",".",";"," ","/",",","<",">",")","(","=","[","]","+","*");
-      $safe = str_replace($banlist,"",$notsafeText);
-      return $safe;
-    }
-
-    //Mellanslag tillåtna
-    private function CheckUserName($notsafeText)
-    {
-        $banlist = array("\t",".",";","/",",","<",">",")","(","=","[","]","+","*");
-        $safe = str_replace($banlist,"",$notsafeText);
-        return $safe;
-    }
+    
     //Mellanslag, comma och punkt tillåtna
     private function ScrubText($arr)
     {

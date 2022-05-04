@@ -146,4 +146,15 @@ function ShowQuiz($formData,$user)
     $text .= "</form>";
     return $text;
 }
+function Winner($score)
+{
+    $text = "";
+    $text .= "<script language='javascript' type='text/javascript' src='".prefix."js/p5.min.js'></script>
+    <script language='javascript' type='text/javascript' src='".prefix."js/winner.js'></script>
+    <div id='sketch-holder' style='padding-top: 40px;'>
+    <h1 class='display-4' style='text-align: center;'>Grattis</h1>
+    <h2 class='display-8' style='text-align: center;'>".$score."</h2>
+    </div>";
+    return $text;
+}
 ?>

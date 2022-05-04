@@ -6,6 +6,7 @@ class BooksModel extends PDOHandler
     {
         
     }
+    
     public function GetBook($id)
     {
         $stmt = $this->Connect()->prepare("SELECT b.Id, b.Title,b.PublicationYear, b.Description, IF(g.IsDeleted=1,'n/a',g.Name) AS GenreName, 

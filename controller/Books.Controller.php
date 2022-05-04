@@ -250,8 +250,8 @@ class BooksController extends BaseController
 
     function SaveGenre()
     {
-        //Slarvig funktion men funkar.
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $arr = array(
                 $this->ScrubInputs($_POST['BookGenre']),
@@ -261,7 +261,6 @@ class BooksController extends BaseController
             if ($this->ValidateSaveGenre($arr))
             {
                 $this->db->SetGenre($arr);
-                echo "Genre lades till";
                 header("Location:".prefix."books/showallgenre");
             }
             else
@@ -493,14 +492,18 @@ class BooksController extends BaseController
 
     public function DeleteGenre()
     {
-        if ($this->VerifyUserRole("Admin"))
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
         {
             $cleanId = $this->ScrubInputs($_POST['id']);
-            $result = $this->db->DeleteGenre
-            ($cleanId);
+            $result = $this->db->DeleteGenre($cleanId);
             if ($result)
             {
                 $this->ShowAllGenre();
+            }
+            else
+            {
+                $this->ShowError("Kunde inte radera genre");
             }
         }
         else

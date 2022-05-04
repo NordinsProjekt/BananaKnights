@@ -14,19 +14,5 @@ class DefaultController
         
     }
 
-    private function CheckUserInputs($notsafeText)
-    {
-      $banlist = array("\t",".",";"," ","/",",","<",">",")","(","=","[","]","+","*");
-      $safe = str_replace($banlist,"",$notsafeText);
-      return $safe;
-    }
-
-    //Mellanslag tillåtna
-    private function CheckUserName($notsafeText)
-    {
-        $banlist = array("\t",".",";","/",",","<",">",")","(","=","[","]","+","*");
-        $safe = str_replace($banlist,"",$notsafeText);
-        return $safe;
-    }
 }
 ?>
