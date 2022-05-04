@@ -144,6 +144,19 @@ class ReviewsController extends BaseController
                 echo ShowAllReviews($result,$user['Roles']);
                 echo EndPage();
             }
+            else
+            {
+                require_once "views/reviews.php";
+                require_once "views/default.php";
+                echo StartPage("Alla reviews");
+                IndexNav($user['Roles'],$user['Username']);
+                if(str_contains($user['Roles'],"Moderator"))
+                {
+                    echo SearchReview();
+                }
+                echo ShowAllReviews($result,$user['Roles']);
+                echo EndPage();
+            }
 
         }
         else
@@ -197,7 +210,7 @@ class ReviewsController extends BaseController
                 unset($_SESSION['ReviewId']); //Raderar backupvärdet.
                 $user = $this->GetUserInformation();
                 $safe = $this->CheckUserInputs($_POST['id']);
-                if (str_contains($user['Roles'],"User") && $safe > 0)
+                if (str_contains($user['Roles'],"User") || str_contains($user['Roles'],"Moderator") || str_contains($user['Roles'],"Admin") && $safe > 0)
                 {
                     //Kollar om det användaren har tryckt på knappen eller inte
                     $result = $this->db->IsUsefullSet($safe,$user['Id']);
