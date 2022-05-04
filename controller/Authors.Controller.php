@@ -40,7 +40,7 @@ class AuthorsController extends BaseController
             require_once "views/default.php";
             $page = "";
             $page .= StartPage("Fel vid inläsning");
-            $page .= "<h1>FEL</h1><p>Kunde inte hämta några författare</p>";
+            $page .= "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>FEL</h1><p style='text-align: center;'>Kunde inte hämta några författare</p>";
             $page .= EndPage();
         }
 
@@ -126,7 +126,6 @@ class AuthorsController extends BaseController
     
             for($i=0; $i < count($cleanArr); $i++)
             {
-                //saknas validering för tom input
                 if(is_numeric($cleanArr[$i]))
                 {
                     $this->ShowError("Wrong input! Try again");

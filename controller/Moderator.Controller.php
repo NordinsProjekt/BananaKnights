@@ -2,11 +2,9 @@
 require_once "classes/Base.Controller.class.php";
 class moderatorController extends BaseController
 {
-    //private $db;
 
     function __construct()
     {
-        //$this->db = new DefaultModel();
     }
 
     function __destruct()

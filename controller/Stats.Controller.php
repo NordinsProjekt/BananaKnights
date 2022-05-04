@@ -36,11 +36,7 @@ class StatsController extends BaseController
             IndexNav($user['Roles'],$user['Username']);
             echo StatsPanel($statsArr);
             echo EndPage();
-            //Test för strukturen
-            // $chartArr = array("labels"=>"['Totalt','Senaste(7)']");
-            // $chartArr += array("label"=>"'Kommentarer'");
-            // $chartArr += array("data"=>"[7,3]");
-            // $this->APICharts($chartArr,"bar");
+
             //Skriver ut den totala aktiviteten på sidan
             $chartArr = array("labels"=>"['Books','Authors','Genre','Users','Reviews','Comments']");
             $chartArr += array("label"=>"'Aktiviteter'");
