@@ -2,12 +2,14 @@
 
 function SignUpForm($message)
 {
-    $text ="<h1>Skapa Användarkonto (Vanlig användare)</h1>";
+    $text = "";
+    $text .= "<div class='container' style='text-align: center;'>";
+    $text .="<h1 class='display-4' style='padding: 40px 0 30px 0;'>Skapa Användarkonto</h1>";
     if ($message != "")
     {
         $text.= "<p>" . $message . "</p>";
     }
-    $text .= "<form method='post' action='".prefix."user/SaveUser'><table>";
+    $text .= "<form method='post' action='".prefix."user/SaveUser' style='padding: 0 0 0 450px;'><table>";
     $text .= "<tr> <th></th><th></th> </tr>";
     $text .= "<tr> <td><label for='txtUsername' />Användarnamn </label></td>
     <td><input type='text' class='form-control' id='txtUsername'name='Username' pattern='.{4,}' placeholder='Minst 4 tecken' required /></td></tr>";
@@ -18,19 +20,23 @@ function SignUpForm($message)
     $text .= "<tr> <td><label for='txtEmail' />Email </label></td>
     <td><input type='email' class='form-control' id='txtEmail'name='Email' pattern='.{5,}' placeholder='ex user@gmail.com' required /></td></tr>";
     $text .= "<tr> <td></td><td><input type='submit' id='btnRegisterUser 'name='RegisterUser' class='btn btn-outline-primary' value='Registrera konto' /></td></tr>";
+    $text .= "</div>";
     return $text;
 }
 
 function LoginForm()
 {
-    $text ="<h1>Logga in</h1>";
-    $text .= "<form method='post' action='".prefix."user/loginuser'><table>";
+    $text = "";
+    $text .= "<div class='container' style='text-align: center;'>";
+    $text .="<h1 class='display-4' style='padding: 40px 0 30px 0;'>Logga in</h1>";
+    $text .= "<form method='post' action='".prefix."user/loginuser' style='padding: 0 0 0 470px;'><table>";
     $text .= "<tr> <th></th><th></th> </tr>";
     $text .= "<tr> <td><label for='txtUsername' />Användarnamn </label></td>
     <td><input type='text' class='form-control' id='txtUsername' name='Username' required /></td></tr>";
     $text .= "<tr> <td><label for='txtPassword' />Lösenord </label></td>
     <td><input type='password' class='form-control' id='txtPassword'name='Password' required /></td></tr>";
     $text .= "<tr> <td></td><td><input type='submit' id='btnLoginUser' class='btn btn-outline-primary' name='LoginUser' value='Logga in' /></td></tr>";
+    $text .= "</div>";
     return $text;
 }
 
