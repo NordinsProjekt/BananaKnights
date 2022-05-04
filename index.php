@@ -305,6 +305,22 @@ if (key_exists('url',$_GET))
                 $controller->AddReply($_POST['id'],$_SESSION['ReviewId']);
             }
             break;
+        case "review/editcomment":
+            require_once "controller/Comments.Controller.php";
+            if (key_exists('id',$_POST) && key_exists('ReviewId',$_SESSION))
+            {
+                $controller = new CommentsController();
+                $controller->EditComment($_POST['id']);
+            }
+            break;
+            case "review/editreply":
+                require_once "controller/Comments.Controller.php";
+                if (key_exists('id',$_POST) && key_exists('ReviewId',$_SESSION))
+                {
+                    $controller = new CommentsController();
+                    $controller->EditReply($_POST['id']);
+                }
+                break;
         case "review/search":
             require_once "controller/Reviews.Controller.php";
             require_once "controller/Books.Controller.php";
