@@ -49,6 +49,7 @@ class CommentsController extends BaseController
 
     function AddReply($commentId, $reviewId)
     {
+        unset($_SESSION['ReviewId']);
         $safeCommentId = $this->ScrubIndexNumber($commentId);
         $user = $this->GetUserInformation();
         $safereply = $this->ScrubInputs($_POST['reply']);
@@ -279,14 +280,67 @@ class CommentsController extends BaseController
         }
     }
 
-    public function UpdateComment($id)
+    public function EditComment($id)
     {
-
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safeId = $this->ScrubIndexNumber($id);
+            $reviewId = $_SESSION['ReviewId'];
+            unset($_SESSION['ReviewId']);
+            $arr = array(
+                $_POST['reply'],$safeId
+            );
+            $arr = $this->ScrubText($arr);
+            if ($this->ValidateArray($arr))
+            {
+                $this->db->UpdateComment($arr);
+                require_once "controller/Reviews.Controller.php";
+                $reviewController = new ReviewsController();
+                $reviewController->ShowReview($reviewId);
+            }
+            else
+            {
+                $this->ShowError("Data gick inte att validera!!");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
     }
 
-    public function UpdateReply($id)
+    public function EditReply($id)
     {
-        
+        var_dump($id);
+        $user = $this->GetUserInformation();
+        if (str_contains($user['Roles'],"Admin"))
+        {
+            $safeId = $this->ScrubIndexNumber($id);
+            $reviewId = $_SESSION['ReviewId'];
+            unset($_SESSION['ReviewId']);
+            $arr = array(
+                $_POST['reply'],$safeId
+            );
+            $arr = $this->ScrubText($arr);
+            if ($this->ValidateArray($arr))
+            {
+                $this->db->UpdateReply($arr);
+                require_once "controller/Reviews.Controller.php";
+                $reviewController = new ReviewsController();
+                $reviewController->ShowReview($reviewId);
+            }
+            else
+            {
+                $this->ShowError("Data gick inte att validera!!");
+            }
+            
+        }
+        else
+        {
+            $this->ShowError("Du har inte rättighet för detta");
+        }
     }
 
     private function ScrubSaveArr($arr)
@@ -310,6 +364,31 @@ class CommentsController extends BaseController
       $banlist = array("\t",".",";","/","<",">",")","(","=","[","]","+","*","#");
       $safe = trim(str_replace($banlist,"",$notsafeText));
       return $safe;
+    }
+
+    //Mellanslag, comma och punkt tillåtna
+    private function ScrubText($arr)
+    {
+        $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
+        $safeArr = array();
+        foreach($arr as $key => $value) 
+        {
+            $safe = str_replace($banlist,"",$value);
+            $safeArr[] = $safe;
+        }
+        return $safeArr;
+    }
+
+    private function ValidateArray($arr)
+    {
+        foreach ($arr as $key => $value) 
+        {
+            if ($value == NULL || $value = "")
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

@@ -51,22 +51,22 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
         $text .="   <p>".$commentrow['Comment']."</p>";
         $text .="   <div class='pad-ver'>";
 
-        $text .= "<form method='post' action='".prefix."review/replycomment'>";
+        $text .= "<div><form method='post' action='".prefix."review/replycomment'>";
         $text .= "<ul style='display:none;'>";
         $text .="<textarea class='form-control' type='text' name='reply' placeholder='reply...'></textarea>";
         $text .="<button class='btn btn-primary' type='submit' name='id' value='".$commentrow['Id']."'>svara</button>";
         $text .="</ul>";
         $text .="</form>";
-
-        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Svara</a>";
+        $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Svara</a></div>";
         if (str_contains($role,"Admin"))
         {
-            $text.= "<form method='post' action='".prefix."comment/edit'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Edit</button>
-            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
-            </form>";
-            $text.= "<form method='post' action='".prefix."comment/delete'><button style='color: white; float:left;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$commentrow['Id']."'>Radera</button>
-            <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
-            </form>";
+            $text .= "<div><form method='post' action='".prefix."review/editcomment'>";
+            $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Edit</a>";
+            $text .= "<ul style='display:none;'>";
+            $text .="<textarea class='form-control' type='text' name='reply' placeholder='Texten här ersätter den ovanför'></textarea>";
+            $text .="<button class='btn btn-primary' type='submit' name='id' value='".$commentrow['Id']."'>Spara</button>";
+            $text .="</ul>";
+            $text .="</form></div>";
         }
         if(str_contains($role,"Moderator"))
         {
@@ -94,12 +94,13 @@ function ShowAllCommentsReplies($commentArr,$replyArr,$role)
                 $text .="<div class='btn-group'>";
                 if (str_contains($role,"Admin"))
                 {
-                $text.= "<form method='post' action='".prefix."reply/edit'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Edit</button>
-                <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
-                </form>";
-                $text.= "<form method='post' action='".prefix."reply/delete'><button style='color: white;' class='btn btn-sm btn-default btn-hover-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Radera</button>
-                <input type='hidden' name='ReviewId' value='".$commentrow['ReviewId']."' />
-                </form>";
+                    $text .= "<div><form method='post' action='".prefix."review/editreply'>";
+                    $text .=" <a class='btn btn-sm btn-default btn-hover-primary toggle-button' style='color: white; float:left;'>Edit</a>";
+                    $text .= "<ul style='display:none;'>";
+                    $text .="<textarea class='form-control' type='text' name='reply' placeholder='Texten här ersätter den ovanför'></textarea>";
+                    $text .="<button class='btn btn-primary' type='submit' name='id' value='".$replyrow['ReplyId']."'>Spara</button>";
+                    $text .="</ul>";
+                    $text .="</form></div>";
                 }
                 if(str_contains($role,"Moderator"))
                 {

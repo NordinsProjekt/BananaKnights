@@ -166,7 +166,7 @@ class QuizController extends BaseController
                     $_POST['question'][$i],$_POST['answer1'][$i],$_POST['answer2'][$i],
                     $_POST['answer3'][$i],$_POST['answer4'][$i],$_POST['realanswer'][$i],$quizId
                 );
-                $this->ScrubText($arr);
+                $arr = $this->ScrubText($arr);
                 //Kastar användaren till errorsidan och avbryter allt.
                 if (!$this->ValidateArray($arr))
                 {            
@@ -289,15 +289,13 @@ class QuizController extends BaseController
     private function ScrubText($arr)
     {
         $banlist = array("\t",";","/","<",">",")","(","=","[","]","+","*");
-        foreach ($arr as $key => $row) 
+        $safeArr = array();
+        foreach($arr as $key => $value) 
         {
-            foreach($row as $key => $value) 
-            {
-                $safe = str_replace($banlist,"",$value);
-                $value = $safe;
-            }
+            $safe = str_replace($banlist,"",$value);
+            $safeArr[] = $safe;
         }
-        return $arr;
+        return $safeArr;
     }
     //Mellanslag, comma och punkt tillåtna
     private function ScrubVar($notsafe)
