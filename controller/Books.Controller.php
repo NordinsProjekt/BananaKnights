@@ -201,7 +201,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
             IndexNav($user['Roles'],$user['Username']);
-            echo "<h1>Sök Resultat</h1><p>Hittade ingenting</p>";
+            echo "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>Sök Resultat</h1><p style='text-align: center;'>Hittade ingenting</p>";
             echo EndPage();
         }
     }
@@ -224,7 +224,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
             IndexNav($user['Roles'],$user['Username']);
-            echo "<h1>Visa alla böcker</h1><p>Finns inga böcker att visa</p>";
+            echo "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>Visa alla böcker</h1><p style='text-align: center;'>Finns inga böcker att visa</p>";
             echo EndPage();
         }
     }
@@ -362,7 +362,7 @@ class BooksController extends BaseController
             require_once "views/default.php";
             echo StartPage("Fel vid inläsning");
             IndexNav($user['Roles'],$user['Username']);
-            echo "<h1>Visa alla genre</h1><p>Finns inga genre att visa</p>";
+            echo "<h1 class='display-4' style='text-align: center; padding-top: 50px;'>Visa alla genre</h1><p style='text-align: center;'>Finns inga genre att visa</p>";
             echo EndPage();
         }
     }

@@ -19,31 +19,23 @@ function StartPage($titel)
 
 function EndPage()
 {
-    $text= "";
-    /*
-    $text .= "<div id='google_element'></div>";
-    $text .= "<script src='http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>";
-    $text .= " </script>";
-    $text .= "<script>
-    function loadGoogleTranslate(){
-            new google.translate.TranslateElement('google_element');
-    }
-    </script>";
-    */
+    $text = "";
     $text .= "</body></html>";
     return $text;
 }
 
-function ReviewNavigation()
-{
-    $text = "<div>";
-    $text .= "<a href='newreview'>Skriv en recension</a>";
-    $text .= "<a href='readreviews'>Visa alla recensioner</a>";
-    $text .= "<div>";
-    return $text;
+/*
+$text .= "<div class='container' style='text-align: center;'>";
+$text .= "<div id='google_element'></div>";
+$text .= "<script src='http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>";
+$text .= " </script>";
+$text .= "<script>
+function loadGoogleTranslate(){
+        new google.translate.TranslateElement('google_element');
 }
-
-
+</script>";
+$text .= "</div>";
+*/
 function IndexNav($role,$username)
 {
     $text = "
@@ -64,6 +56,27 @@ function IndexNav($role,$username)
                 </li>
                 <li class='nav-item'>
                 <a class='nav-link' href='".prefix."contact'>Contact</a>
+                </li>
+                <li class='nav-item'>
+                <div class='dropdown'>
+                <a data-bs-toggle='dropdown' style='display: inline-block; padding-top: 8px; cursor: pointer; color: white; text-decoration:none;'>
+                    <img src='".prefix."/img/icons/icons8-google-translate-48.png' alt='översätt' width='25' height='25'>
+                </a>
+                <ul class='dropdown-menu' aria-labelledby='dropdownMenuButton1'>
+                    <li>
+                        <div class='container' style='text-align: center;'>
+                        <div id='google_element'></div>
+                        <script src='http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate'>
+                        </script>
+                        <script>
+                        function loadGoogleTranslate(){
+                                new google.translate.TranslateElement('google_element');
+                        }
+                        </script>
+                        </div>
+                    </li>
+                </ul>
+                </div>
                 </li>
             </ul>
             <form class='d-flex me-auto' method='post' action='".prefix."books/search'>
